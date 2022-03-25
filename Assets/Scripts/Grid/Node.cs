@@ -1,0 +1,89 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Node : IHeapItem<Node>
+{
+    //The position of the node
+    public Vector3 worldPosition;
+
+    //Bool to determine if a wall is on the node
+    public bool isWalkable;
+
+    public string onTop;
+
+    public int tileValue;
+
+    private int indexHeap;
+
+    //The x and y value of the node in the grid
+    public int gridX;
+    public int gridY;
+
+    public Node parent;
+
+    public int gCost;
+    public int hCost;
+
+    public bool selected;
+
+    //Constructor
+    public Node(Vector3 worldPos, bool walkable, int x, int y)
+    {
+        worldPosition = worldPos;
+        isWalkable = walkable;
+        gridX = x;
+        gridY = y;
+        tileValue = 0;
+        selected = false;
+        onTop = null;
+
+    }
+
+    public void setItemOnTop(string itemOnTop)
+    {
+        onTop = itemOnTop;
+        if(itemOnTop == "House" || itemOnTop == "Dungeon")
+        {
+            isWalkable = false;
+        }
+    }
+
+
+    public int fCost
+    {
+        get
+        {
+            return gCost + hCost;
+        }
+    }
+    public int IndexHeap
+    {
+        get
+        {
+            return indexHeap;
+        }
+        set
+        {
+            indexHeap = value;
+        }
+    }
+
+
+    //compare the fcost of the current node with another
+    public int CompareTo(Node other)
+    {
+        int compare = fCost.CompareTo(other.fCost);
+        if (compare == 0)
+        {
+            compare = hCost.CompareTo(other.hCost);
+        }
+        return -compare;
+    }
+
+
+    public void increaseTileValue(int value)
+    {
+        tileValue += value;
+    }
+}
