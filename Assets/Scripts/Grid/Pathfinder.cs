@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(GridField))]
+//[RequireComponent(typeof(GridField))]
 public class Pathfinder : MonoBehaviour
 {
-    private GridField _grid;
+    public GridField _grid;
     public List<Node> path;
-
+    /*
     void Awake()
     {
         _grid = GetComponent<GridField>();
-    }
+    }*/
 
     //With the use of the heap, FindPath finds a path between startPos and targetPos
     public List<Node> FindPath(Vector3 startPos, Vector3 targetPos)
@@ -26,7 +26,7 @@ public class Pathfinder : MonoBehaviour
         {
             targetNode = _grid.grid[targetNode.gridX, targetNode.gridY-1];
         }
-        if (!startNode.isWalkable)
+        if(!startNode.isWalkable)
         {
             startNode = _grid.grid[startNode.gridX, startNode.gridY-1];
         }
@@ -96,6 +96,7 @@ public class Pathfinder : MonoBehaviour
     {
         int distanceX = Mathf.Abs(to.gridX - from.gridX);
         int distanceY = Mathf.Abs(to.gridY - from.gridY);
+        
         return distanceX + distanceY;
     }
 

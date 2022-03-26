@@ -64,6 +64,19 @@ public class GridField : MonoBehaviour
         }*/
         
     }
+
+    public Node dungeonNode()
+    {
+        Node dungeon = null;
+        foreach(Node node in grid)
+        {
+            if(node.onTop == "Dungeon")
+            {
+                dungeon = node;
+            }
+        }
+        return dungeon;
+    }
     
     //Getter for the total number of nodes in the grid
     public int GetMaxGridSize

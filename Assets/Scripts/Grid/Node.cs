@@ -43,7 +43,7 @@ public class Node : IHeapItem<Node>
     public void setItemOnTop(string itemOnTop)
     {
         onTop = itemOnTop;
-        if(itemOnTop == "House" || itemOnTop == "Dungeon")
+        if(itemOnTop == "House" || itemOnTop == "Dungeon" || itemOnTop == "Tree")
         {
             isWalkable = false;
         }
@@ -68,7 +68,6 @@ public class Node : IHeapItem<Node>
             indexHeap = value;
         }
     }
-
 
     //compare the fcost of the current node with another
     public int CompareTo(Node other)

@@ -3,16 +3,16 @@ guid: cff61fa96fefdc5448d2bc02f3271de9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5281422124547630143
+      213: 21300000
     second: Chest_0
   - first:
-      213: 4714410783012859700
+      213: 21300002
     second: Chest_1
   - first:
-      213: -4685547431992939551
+      213: 21300004
     second: Chest_2
   - first:
-      213: 8985439187258846068
+      213: 21300006
     second: Chest_3
   externalObjects: {}
   serializedVersion: 11
@@ -73,7 +73,7 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -86,7 +86,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 2048
@@ -98,7 +98,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
     buildTarget: Windows Store Apps
     maxTextureSize: 2048
@@ -110,7 +110,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
     buildTarget: Android
     maxTextureSize: 2048
@@ -122,7 +122,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   - serializedVersion: 3
     buildTarget: WebGL
     maxTextureSize: 2048
@@ -134,7 +134,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 1
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -154,7 +154,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 1cb13755f8e94b6b0800000000000000
-      internalID: -5281422124547630143
+      internalID: 21300000
       vertices: []
       indices: 
       edges: []
@@ -175,7 +175,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 43fa0ce01a3fc6140800000000000000
-      internalID: 4714410783012859700
+      internalID: 21300002
       vertices: []
       indices: 
       edges: []
@@ -196,7 +196,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 1eb21d98f6799feb0800000000000000
-      internalID: -4685547431992939551
+      internalID: 21300004
       vertices: []
       indices: 
       edges: []
@@ -217,7 +217,7 @@ TextureImporter:
       tessellationDetail: 0
       bones: []
       spriteID: 47b207b7551b2bc70800000000000000
-      internalID: 8985439187258846068
+      internalID: 21300006
       vertices: []
       indices: 
       edges: []

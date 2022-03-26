@@ -46,6 +46,10 @@ public class Upperworld : MonoBehaviour
         for(int i = 0; i < houses.transform.childCount; i++)
         {
             int index = Random.Range(0, houses.transform.childCount - 1);
+            while(index == i)
+            {
+                index = Random.Range(0, houses.transform.childCount - 1);
+            }
             List<Node> path = pathFinder.FindPath(houses.transform.GetChild(i).transform.localPosition, houses.transform.GetChild(index).transform.localPosition);
             for (int k = 0; k < path.Count; k++)
             {
@@ -85,7 +89,7 @@ public class Upperworld : MonoBehaviour
             foreach(Node neighbours in grid.GetNodeNeighbours(neighbour))
             {
 
-                if (neighbours.onTop == "Tree")
+                if (neighbours.onTop == "House" || neighbours.onTop == "Dungeon" || neighbour.onTop == "House" || neighbour.onTop == "Dungeon")
                 {
                     return false;
                 }
