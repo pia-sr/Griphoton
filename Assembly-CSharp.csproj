@@ -58,6 +58,8 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Upperworld.cs" />
     <Compile Include="Assets\Scripts\Puzzles\PiecesOf8.cs" />
+    <Compile Include="Assets\Scripts\FollowPlayer.cs" />
+    <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CornerMaze.cs" />
     <Compile Include="Assets\Scripts\Grid\Node.cs" />
     <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle.cs" />
@@ -78,8 +80,10 @@
     <Compile Include="Assets\Scripts\Puzzles\CornerMaze2.cs" />
     <Compile Include="Assets\Scripts\Puzzles\PiecesOf8_2.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries.cs" />
-    <Compile Include="Assets\Scripts\Player.cs" />
-    <Compile Include="Assets\Scripts\FollowPlayer.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level1.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level2.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level3.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Skeleton1.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\ProjectSettings\ProjectVersion.txt" />

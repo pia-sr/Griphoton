@@ -190,4 +190,42 @@ public class GridField : MonoBehaviour
             }
         }
     }
+
+    public void spikes(Node node)
+    {
+        for(int i = -1; i < 2; i++)
+        {
+            for(int j = -1; j < 2; j++)
+            {
+                grid[node.gridX + i, node.gridY + j].onTop = "Spikes";
+            }
+        }
+    }
+    
+    public void house(Node node)
+    {
+        for (int i = -1; i < 2; i++)
+        {
+            for (int j = -1; j < 2; j++)
+            {
+                grid[node.gridX + i, node.gridY + j].onTop = "House";
+            }
+        }
+    }
+
+    public void door(Node node, string direction)
+    {
+        for(int i = -1; i < 2; i++)
+        {
+            if(direction == "vertical")
+            {
+                grid[node.gridX, node.gridY + i].onTop = "Door";
+            }
+            else
+            {
+                grid[node.gridX+i, node.gridY].onTop = "Door";
+            }
+        }
+    }
+
 }

@@ -10,9 +10,11 @@ public class Player : MonoBehaviour
     private Node dungeon;
     private List<Node> path;
     private int counter;
-    private CharacterController controller;
     private Vector2 diff;
     private Node existingTarget;
+    private float strength;
+    public bool lost = false;
+    private bool upperWorld = false;
 
     // Start is called before the first frame update
     void Start()
@@ -21,19 +23,20 @@ public class Player : MonoBehaviour
         counter = 0;
         targetNode = null;
         existingTarget = null;
-        //controller = gameObject.AddComponent<CharacterController>();
-        /*
-        Node dungeon = grid.dungeonNode();
-        Node startNode = grid.grid[dungeon.gridX, dungeon.gridY - 2];
-        transform.position = startNode.worldPosition;*/
-        //pathFinder = grid.GetComponent<Pathfinder>();
+        strength = 100;
+        if (!upperWorld)
+        {
+            int middleX = Mathf.RoundToInt(grid.getGridSizeX() / 2);
+            transform.position = grid.grid[middleX, 1].worldPosition - new Vector3(0,0,1);
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if (dungeon == null && grid.dungeonNode() != null)
+        if (dungeon == null && grid.dungeonNode() != null && upperWorld)
         {
             dungeon = grid.dungeonNode();
             Node startPos = grid.grid[dungeon.gridX, dungeon.gridY - 2];
@@ -41,24 +44,22 @@ public class Player : MonoBehaviour
         }
         else if (targetNode != null)
         {
-            if (path == null || (targetNode != existingTarget && diff == Vector2.zero))
+            path = pathFinder.FindPath(transform.position, targetNode.worldPosition);
+            if(path.Count > 1)
             {
-                existingTarget = targetNode;
-                path = pathFinder.FindPath(transform.position, targetNode.worldPosition);
-                counter = 0;
-            }
-            else if (counter < path.Count)
-            {
-                diff = path[counter].worldPosition - transform.position;
-                if (diff == Vector2.zero && targetNode == existingTarget)
+                Node currentNode = grid.GetNodeFromWorldPos(transform.position);
+                if(currentNode.gridX - path[1].gridX == 0)
                 {
-                    counter++;
-                    diff = path[counter].worldPosition - transform.position;
+                    diff = new Vector2(0, path[1].worldPosition.y - transform.position.y);
                 }
+                else
+                {
+                    diff = new Vector2(path[1].worldPosition.x - transform.position.x,0);
+                }
+           
 
-                //controller.Move(diff * Time.deltaTime * 20);
-                //transform.Translate(diff * 20f * Time.deltaTime);
-                transform.position = Vector2.MoveTowards(transform.position, path[counter].worldPosition, 0.05f);
+                transform.Translate(diff * 4f * Time.deltaTime);
+
             }
         }
         if (Input.GetMouseButton(0))
@@ -66,6 +67,16 @@ public class Player : MonoBehaviour
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             targetNode = grid.GetNodeFromWorldPos(touchPosition);
 
+        }
+
+    }
+
+    public void reduceStrength(float hit)
+    {
+        strength -= hit;
+        if(strength <= 0)
+        {
+            lost = true;
         }
 
     }
