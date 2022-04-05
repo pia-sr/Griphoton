@@ -20,7 +20,7 @@ public class Level16 : MonoBehaviour
     {
         int middleX = Mathf.RoundToInt(grid.getGridSizeX() / 2);
         int middleY = Mathf.RoundToInt(grid.getGridSizeY() / 2);
-        grid.door(grid.grid[grid.getGridSizeX()-1, grid.getGridSizeY()-4], "vertical", false);
+        grid.door(grid.grid[grid.getGridSizeX()-1, grid.getGridSizeY()-5], "vertical", false);
         grid.door(grid.grid[middleX, 0], "horizontal", true);
         grid.spikesLarger(grid.grid[3, middleY-2], 2);
         grid.spikesCustom(grid.grid[1, 1], middleX, 3);
@@ -41,7 +41,7 @@ public class Level16 : MonoBehaviour
 
                 door.transform.localScale = new Vector3(size * 3, size, 0);
             }
-            else if (node == grid.grid[grid.getGridSizeX() - 1, grid.getGridSizeY() - 4])
+            else if (node == grid.grid[grid.getGridSizeX() - 1, grid.getGridSizeY() - 5])
             {
                 Instantiate(door, node.worldPosition, Quaternion.Euler(0, 0, -90), this.transform);
 

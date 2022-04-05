@@ -8,7 +8,7 @@ public class Node : IHeapItem<Node>
     public Vector3 worldPosition;
 
     //Bool to determine if a wall is on the node
-    public bool isWalkable;
+    public bool isWalkable = true;
 
     public string onTop;
 
@@ -38,10 +38,9 @@ public class Node : IHeapItem<Node>
     public bool selected;
 
     //Constructor
-    public Node(Vector3 worldPos, bool walkable, int x, int y)
+    public Node(Vector3 worldPos, int x, int y)
     {
         worldPosition = worldPos;
-        isWalkable = walkable;
         gridX = x;
         gridY = y;
         tileValue = 0;

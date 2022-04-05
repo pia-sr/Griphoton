@@ -22,11 +22,11 @@ public class Pathfinder : MonoBehaviour
         Heap<Node> openList = new Heap<Node>(_grid.GetMaxGridSize);
         HashSet<Node> closedList = new HashSet<Node>();
         List<Node> path = new List<Node>();
-        if (!targetNode.isWalkable)
+        while (!targetNode.isWalkable)
         {
             targetNode = _grid.grid[targetNode.gridX, targetNode.gridY-1];
         }
-        if(!startNode.isWalkable)
+        while(!startNode.isWalkable)
         {
             startNode = _grid.grid[startNode.gridX, startNode.gridY-1];
         }
@@ -65,7 +65,10 @@ public class Pathfinder : MonoBehaviour
         }
         return path;
 
-    }public List<Node> FindPathPlayer(Vector3 startPos, Vector3 targetPos)
+    }
+    
+    
+    public List<Node> FindPathPlayer(Vector3 startPos, Vector3 targetPos)
     {
         Node startNode = _grid.GetNodeFromWorldPos(startPos);
         Node targetNode = _grid.GetNodeFromWorldPos(targetPos);
@@ -73,14 +76,20 @@ public class Pathfinder : MonoBehaviour
         Heap<Node> openList = new Heap<Node>(_grid.GetMaxGridSize);
         HashSet<Node> closedList = new HashSet<Node>();
         List<Node> path = new List<Node>();
-        if (!targetNode.isWalkable)
+        List<Node> neighboursTarget = _grid.GetNodeNeighboursDiagonal(targetNode);
+        List<Node> neighboursStart = _grid.GetNodeNeighboursDiagonal(startNode);
+        int counterTarget = 0;
+        int counterStart = 0;/*
+        while (!targetNode.isWalkable)
         {
-            targetNode = _grid.grid[targetNode.gridX, targetNode.gridY-1];
+            targetNode = neighboursTarget[counterTarget];
+            counterTarget++;
         }
-        if(!startNode.isWalkable)
+        while(!startNode.isWalkable)
         {
-            startNode = _grid.grid[startNode.gridX, startNode.gridY-1];
-        }
+            startNode = neighboursStart[counterStart];
+            counterStart++;
+        }*/
 
         openList.insert(startNode);
         while (openList.count > 0)

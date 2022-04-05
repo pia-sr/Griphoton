@@ -61,7 +61,7 @@ public class GridField : MonoBehaviour
             {
                 Gizmos.color = Color.cyan;
             }
-            Gizmos.DrawCube(node.worldPosition, Vector3.one * (_nodeDiameter - 0.05f));
+            Gizmos.DrawCube(node.worldPosition, new Vector3(1,1,1) * (_nodeDiameter - 0.05f));
         }*/
         
     }
@@ -101,11 +101,11 @@ public class GridField : MonoBehaviour
     //Returns a node based on a given Vector3 in the grid
     public Node GetNodeFromWorldPos(Vector3 worldPos)
     {
-        Vector3 gridPos = worldPos - transform.position;
+        Vector3 gridPos = worldPos - transform.localPosition;
         float X0_1 = Mathf.Clamp01((gridPos.x + (gridWorldSize.x / 2)) / gridWorldSize.x);
         float Y0_1 = Mathf.Clamp01((gridPos.y + (gridWorldSize.y / 2)) / gridWorldSize.y);
-        int x = Mathf.RoundToInt(X0_1 * (_gridSizeX - 1));
-        int y = Mathf.RoundToInt(Y0_1 * (_gridSizeY - 1));
+        int x = (int)(X0_1 * (_gridSizeX - 1));
+        int y = (int)(Y0_1 * (_gridSizeY - 1));
         return grid[x, y];
     }
 
@@ -217,12 +217,19 @@ public class GridField : MonoBehaviour
                 Vector3 nodeWorldPos = gridBottomLeftWordPos + Vector3.right * (x * _nodeDiameter + nodeRadius) + Vector3.up * (y * _nodeDiameter + nodeRadius);
 
                 //nodes which are on either ghostHouse or unwalkable layers are marked
-                bool walkable = !Physics.CheckSphere(nodeWorldPos, nodeRadius, unwalkableMask);
+                //bool walkable = !Physics.CheckSphere(nodeWorldPos, nodeRadius, unwalkableMask);
 
                 //all the nodes of the grid are added to the grid array
-                grid[x, y] = new Node(nodeWorldPos, walkable, x, y);
+                grid[x, y] = new Node(nodeWorldPos, x, y);
             }
         }
+    }
+
+    public Rect bounds()
+    {
+        Vector3 gridBottomLeftWordPos = transform.position - Vector3.right * (gridWorldSize.x / 2) - Vector3.up * (gridWorldSize.y / 2);
+        Rect rectGrid = new Rect(gridBottomLeftWordPos, new Vector2(getGridSizeX(), getGridSizeY()));
+        return rectGrid;
     }
 
     public void spikes(Node node)

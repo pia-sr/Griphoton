@@ -11,7 +11,7 @@ public class Skeleton2 : MonoBehaviour
     public GameObject player;
     public Pathfinder pathFinder;
     private List<Node> path2Player;
-    public float hitValue = 40;
+    public float hitValue;
     private float healthValue;
     private bool blockPlayer = false;
     private Vector2 diff;
@@ -21,7 +21,7 @@ public class Skeleton2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        hitValue = 50;
         pos = new List<int[]>();
         for(int i = 0; i < xPos.Length; i++)
         {
@@ -101,7 +101,7 @@ public class Skeleton2 : MonoBehaviour
             else
             {
                 posCounter++;
-                if(posCounter == pos.Count-1)
+                if(posCounter == pos.Count)
                 {
                     posCounter = 0;
                 }

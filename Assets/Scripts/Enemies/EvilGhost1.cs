@@ -76,6 +76,7 @@ public class EvilGhost1 : MonoBehaviour
             {
                 moveAway = false;
                 hitSpeed = 0;
+                visitedNodes.Clear();
                 targetNode = grid.grid[Random.Range(0, grid.getGridSizeX() - 1), Random.Range(0, grid.getGridSizeY() - 1)];
                 while (!(targetNode.onTop == "Floor" || targetNode.onTop == "Spikes"))
                 {
@@ -88,7 +89,7 @@ public class EvilGhost1 : MonoBehaviour
         if (back2Pos.Count > 1 && !stay)
         {
             hitSpeed = visitedNodes.Count;
-            if (visitedNodes.Count == 0 || visitedNodes[visitedNodes.Count - 1] != grid.GetNodeFromWorldPos(transform.position))
+            if (visitedNodes.Count == 0 || visitedNodes[visitedNodes.Count - 1] != grid.GetNodeFromWorldPos(transform.position) && attackPlayer)
             {
                 visitedNodes.Add(grid.GetNodeFromWorldPos(transform.position));
             }
@@ -106,7 +107,7 @@ public class EvilGhost1 : MonoBehaviour
             if (attackPlayer)
             {
 
-                speed = 2 + (0.3f * hitSpeed);
+                speed = 2 + (0.1f * hitSpeed);
             }
             else
             {

@@ -15,7 +15,6 @@ public class Skeleton1 : MonoBehaviour
     private bool startPos;
     public float hitValue = 25;
     private float healthValue;
-    private int axis;
     private Vector2 diff;
     private bool hitPlayer = false;
 
@@ -25,17 +24,31 @@ public class Skeleton1 : MonoBehaviour
         healthValue = 100;
         startNode = grid.grid[start[0], start[1]];
         endNode = grid.grid[end[0], end[1]];
-        transform.position = startNode.worldPosition;
+        transform.position = startNode.worldPosition - new Vector3(0,0,1);
         startPos = true;
-        if(start[1] -end[1] == 0)
+        
+
+    }
+    private bool checkAxis()
+    {
+        int axis;
+        if (start[1] - end[1] == 0)
         {
             axis = start[1];
+            if(grid.GetNodeFromWorldPos(transform.position).gridY == axis)
+            {
+                return true;
+            }
         }
         else
         {
             axis = start[0];
+            if (grid.GetNodeFromWorldPos(transform.position).gridX == axis)
+            {
+                return true;
+            }
         }
-
+        return false;
     }
 
     // Update is called once per frame
@@ -77,7 +90,7 @@ public class Skeleton1 : MonoBehaviour
         }
         else
         {
-            if(grid.GetNodeFromWorldPos(transform.position).gridY != axis)
+            if(!checkAxis())
             {
                 List<Node> back2Pos = pathFinder.FindPath(transform.position, startNode.worldPosition);
                 if(back2Pos.Count > 1)
@@ -95,7 +108,7 @@ public class Skeleton1 : MonoBehaviour
 
                     transform.Translate(diff * 2f * Time.deltaTime);
                 }
-                if(grid.GetNodeFromWorldPos(transform.position).gridY == axis)
+                if(checkAxis())
                 {
                     startPos = true;
                 }

@@ -92,7 +92,7 @@ public class EvilGhost2 : MonoBehaviour
             if (attackPlayer)
             {
 
-                speed = 2.5f + (0.1f * hitSpeed);
+                speed = 2.5f + (0.15f * hitSpeed);
             }
             else
             {

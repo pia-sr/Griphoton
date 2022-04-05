@@ -20,34 +20,50 @@ public class Player : MonoBehaviour
     public bool enemyHit;
     public bool blockEnemy = false;
     private bool ready = true;
+    private bool foundPos = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        List<Node> path = new List<Node>();
         enemyHit = false;
         counter = 0;
         hitValue = 25;
         targetNode = null;
         existingTarget = null;
         strength = 100;
-        if (!upperWorld)
-        {
-            int middleX = Mathf.RoundToInt(grid.getGridSizeX() / 2);
-            transform.position = grid.grid[middleX, 1].worldPosition - new Vector3(0,0,1);
-        }
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (dungeon == null && grid.dungeonNode() != null && upperWorld)
+        if (!foundPos)
         {
-            dungeon = grid.dungeonNode();
-            Node startPos = grid.grid[dungeon.gridX, dungeon.gridY - 2];
-            transform.position = startPos.worldPosition;
+            if (dungeon == null && grid.dungeonNode() != null && upperWorld)
+            {
+                dungeon = grid.dungeonNode();
+                Node startPos = grid.grid[dungeon.gridX, dungeon.gridY - 2];
+                transform.position = startPos.worldPosition;
+                foundPos = true;
+            }
+            else if (!upperWorld)
+            {
+                List<Node> entraceNodes = new List<Node>();
+                foreach (Node node in grid.grid)
+                {
+                    if(node.onTop == "Entrance")
+                    {
+                        entraceNodes.Add(node);
+                    }
+                }
+                if (entraceNodes.Count != 0)
+                {
+                    transform.position = entraceNodes[1].worldPosition - new Vector3(0,0,1);
+                    foundPos = true;
+                }
+            }
         }
+        
         else if (targetNode != null)
         {
             path = pathFinder.FindPathPlayer(transform.position, targetNode.worldPosition);
@@ -71,7 +87,14 @@ public class Player : MonoBehaviour
         if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            targetNode = grid.GetNodeFromWorldPos(touchPosition);
+            if (grid.bounds().Contains(touchPosition))
+            {
+                targetNode = grid.GetNodeFromWorldPos(touchPosition);
+                Debug.Log("Coords: " + targetNode.gridX + "," + targetNode.gridY);
+
+            }
+
+            
         }
 
     }
