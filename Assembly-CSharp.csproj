@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Upperworld.cs" />
     <Compile Include="Assets\Scripts\Puzzles\PiecesOf8.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Skeleton2.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level1.cs" />
     <Compile Include="Assets\Scripts\FollowPlayer.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Assets\Scripts\Enemies\Skeleton1.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level14.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level5.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EvilGhost1.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level4.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level6.cs" />
     <Compile Include="Assets\Scripts\Grid\Heap.cs" />
@@ -101,8 +103,7 @@
     <Compile Include="Assets\Scripts\DungeonLevels\Level13.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level9.cs" />
-    <Compile Include="Assets\Scripts\Enemies\Skeleton2.cs" />
-    <Compile Include="Assets\Scripts\Enemies\EvilGhost1.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EvilGhost2.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\ProjectSettings\ProjectVersion.txt" />

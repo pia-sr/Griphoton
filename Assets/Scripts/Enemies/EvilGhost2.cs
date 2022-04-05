@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EvilGhost1 : MonoBehaviour
+public class EvilGhost2 : MonoBehaviour
 {
     public int[] startPos = new int[2];
     public GridField grid;
@@ -23,7 +23,7 @@ public class EvilGhost1 : MonoBehaviour
     void Start()
     {
         
-        healthValue = 200;
+        healthValue = 500;
         Node startNode = grid.grid[startPos[0], startPos[1]];
         transform.position = startNode.worldPosition - new Vector3(0, 0, 1);
         targetNode = startNode;
@@ -40,7 +40,7 @@ public class EvilGhost1 : MonoBehaviour
             if (!stay)
             {
                 stay = true;
-                hitValue = 50 + (10 * hitSpeed);
+                hitValue = 100 + (10 * hitSpeed);
 
                 Debug.Log("Hitvalue: "+ hitValue + ", hitSpeed: " + hitSpeed);
                 if (player.GetComponent<Player>().blockEnemy)
@@ -64,31 +64,17 @@ public class EvilGhost1 : MonoBehaviour
             }
 
         }
-        else if (path2Player.Count < 9 && path2Player.Count > 1 && !moveAway)
+        else if (path2Player.Count > 1 && !moveAway)
         {
             attackPlayer = true;
             targetNode = grid.GetNodeFromWorldPos(player.transform.position);
-
-        }
-        else
-        {
-            if (grid.GetNodeFromWorldPos(transform.position) == targetNode)
-            {
-                moveAway = false;
-                hitSpeed = 0;
-                targetNode = grid.grid[Random.Range(0, grid.getGridSizeX() - 1), Random.Range(0, grid.getGridSizeY() - 1)];
-                while (!(targetNode.onTop == "Floor" || targetNode.onTop == "Spikes"))
-                {
-                    targetNode = grid.grid[Random.Range(0, grid.getGridSizeX() - 1), Random.Range(0, grid.getGridSizeY() - 1)];
-                }
-            }
 
         }
         List<Node> back2Pos = pathFinder.FindPath(transform.position, targetNode.worldPosition);
         if (back2Pos.Count > 1 && !stay)
         {
             hitSpeed = visitedNodes.Count;
-            if (visitedNodes.Count == 0 || visitedNodes[visitedNodes.Count - 1] != grid.GetNodeFromWorldPos(transform.position))
+            if(visitedNodes.Count == 0 || visitedNodes[visitedNodes.Count-1] != grid.GetNodeFromWorldPos(transform.position))
             {
                 visitedNodes.Add(grid.GetNodeFromWorldPos(transform.position));
             }
@@ -106,7 +92,7 @@ public class EvilGhost1 : MonoBehaviour
             if (attackPlayer)
             {
 
-                speed = 2 + (0.3f * hitSpeed);
+                speed = 2.5f + (0.1f * hitSpeed);
             }
             else
             {
@@ -114,6 +100,10 @@ public class EvilGhost1 : MonoBehaviour
                 speed = 2.5f;
             }
             transform.Translate(diff * speed * Time.deltaTime);
+            if(grid.GetNodeFromWorldPos(transform.position) == targetNode)
+            {
+                moveAway = false;
+            }
         }
     }
 
