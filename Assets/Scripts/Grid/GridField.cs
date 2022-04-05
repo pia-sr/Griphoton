@@ -12,6 +12,7 @@ public class GridField : MonoBehaviour
 
     //Areas where pac man should not walk
     public LayerMask unwalkableMask;
+    public LayerMask buttonMask;
     //Array of nodes in the grid
     public float nodeRadius;
 
@@ -140,6 +141,39 @@ public class GridField : MonoBehaviour
         }
         return neighbours;
     }
+    //Returns a list of nodes which are up, left, down and right of a given node
+    //Since the play can walk through a passage to end up on the other side of
+    //the field, two extra nodes are added in a special case
+    public List<Node> GetNodeNeighboursDiagonal(Node node)
+    {
+        List<Node> neighbours = new List<Node>();
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (x == 0 && y == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    int neighbourX = node.gridX + x;
+                    int neighbourY = node.gridY + y;
+
+                    if (neighbourX >= 0 && neighbourX < _gridSizeX && neighbourY >= 0 && neighbourY < _gridSizeY)
+                    {
+                        neighbours.Add(grid[neighbourX, neighbourY]);
+                    }
+
+
+                }
+
+
+            }
+        }
+        return neighbours;
+    }
+   
 
     //Returns a neighbour node from a given Vector3 on the grid, based on a given rotation
     public Node GetNextNeighbour(Vector3 position, Vector3 rotation)
@@ -197,7 +231,31 @@ public class GridField : MonoBehaviour
         {
             for(int j = -1; j < 2; j++)
             {
-                grid[node.gridX + i, node.gridY + j].onTop = "Spikes";
+                grid[node.gridX + i, node.gridY + j].setItemOnTop("Spikes");
+            }
+        }
+    }
+    public void spikesLarger(Node node, int size)
+    {
+        for(int i = -size; i <= size; i++)
+        {
+            for(int j = -size; j <= size; j++)
+            {
+                grid[node.gridX + i, node.gridY + j].setItemOnTop("Spikes");
+            }
+        }
+    }
+    public void spikesCustom(Node node, int x, int y)
+    {
+        for(int i = 0; i <= x; i++)
+        {
+            for(int j = 0; j <= y; j++)
+            {
+                if(grid[node.gridX + i, node.gridY + j].onTop == null)
+                {
+
+                    grid[node.gridX + i, node.gridY + j].setItemOnTop("Spikes");
+                }
             }
         }
     }
@@ -208,22 +266,31 @@ public class GridField : MonoBehaviour
         {
             for (int j = -1; j < 2; j++)
             {
-                grid[node.gridX + i, node.gridY + j].onTop = "House";
+                grid[node.gridX + i, node.gridY + j].setItemOnTop("House");
             }
         }
     }
 
-    public void door(Node node, string direction)
+    public void door(Node node, string direction, bool entrance)
     {
+        string tag;
+        if (entrance)
+        {
+            tag = "Entrance";
+        }
+        else
+        {
+            tag = "Exit";
+        }
         for(int i = -1; i < 2; i++)
         {
             if(direction == "vertical")
             {
-                grid[node.gridX, node.gridY + i].onTop = "Door";
+                grid[node.gridX, node.gridY + i].setItemOnTop(tag);
             }
             else
             {
-                grid[node.gridX+i, node.gridY].onTop = "Door";
+                grid[node.gridX+i, node.gridY].setItemOnTop(tag);
             }
         }
     }

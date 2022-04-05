@@ -19,8 +19,8 @@ public class Level2 : MonoBehaviour
     void Start()
     {
         int middleX = Mathf.RoundToInt(grid.getGridSizeX() / 2);
-        grid.door(grid.grid[middleX, 0], "horizontal");
-        grid.door(grid.grid[middleX, grid.getGridSizeY()-1], "horizontal");
+        grid.door(grid.grid[middleX, 0], "horizontal", true);
+        grid.door(grid.grid[middleX, grid.getGridSizeY()-1], "horizontal", false);
         grid.spikes(grid.grid[middleX, 8]);
 
         size = 2 * grid.nodeRadius;
@@ -28,7 +28,7 @@ public class Level2 : MonoBehaviour
         {
             if (node.gridX == 0 || node.gridX == grid.getGridSizeX() - 1 || node.gridX == 1 || node.gridX == grid.getGridSizeX() - 2)
             {
-                node.onTop = "Nothing";
+                node.setItemOnTop("Nothing");
             }
             else if (node.onTop == "Spikes")
             {
@@ -51,8 +51,7 @@ public class Level2 : MonoBehaviour
 
                 if ((neighbour.onTop == "Nothing" || (node.gridY == 0 || node.gridY == grid.getGridSizeY() - 1)) && node.onTop == null)
                 {
-
-                    node.onTop = "Wall";
+                    node.setItemOnTop("Wall");
                     Instantiate(wall, node.worldPosition, Quaternion.identity, wallManager.transform);
 
                     wall.transform.localScale = new Vector3(size, size, 0);
@@ -63,7 +62,7 @@ public class Level2 : MonoBehaviour
         {
             if (node.onTop == null)
             {
-                node.onTop = "Floor";
+                node.setItemOnTop("Floor");
                 Instantiate(floorTile, node.worldPosition, Quaternion.identity, tileManager.transform);
                 floorTile.transform.localScale = new Vector3(size, size, 0);
 

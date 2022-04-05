@@ -3,11 +3,29 @@ using UnityEngine;
 public class FollowPlayer : MonoBehaviour
 {
 
-    public Transform player;
+    // camera will follow this object
+    public Transform Target;
+    //camera transform
+    private Transform camTransform;
+    // offset between camera and target
+    private Vector3 Offset;
+    // change this value to get desired smoothness
+    public float SmoothTime;
 
-    // Update is called once per frame
-    void Update()
+    // This value will change at the runtime depending on target movement. Initialize with zero vector.
+    private Vector3 velocity = Vector3.zero;
+
+    private void Start()
     {
-        transform.position = player.transform.position + new Vector3(0, 1, -5);
+        camTransform = this.transform;
+        Offset = camTransform.position - Target.position;
+    }
+
+    private void LateUpdate()
+    {
+        // update position
+        Vector3 targetPosition = Target.position + Offset;
+        camTransform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, 3f * Time.deltaTime);
+
     }
 }

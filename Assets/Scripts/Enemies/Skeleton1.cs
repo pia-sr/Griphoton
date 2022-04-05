@@ -13,12 +13,16 @@ public class Skeleton1 : MonoBehaviour
     public Pathfinder pathFinder;
     private List<Node> path2Player;
     private bool startPos;
-    public float levelStrength;
+    public float hitValue = 25;
+    private float healthValue;
     private int axis;
+    private Vector2 diff;
+    private bool hitPlayer = false;
 
     // Start is called before the first frame update
     void Start()
     {
+        healthValue = 100;
         startNode = grid.grid[start[0], start[1]];
         endNode = grid.grid[end[0], end[1]];
         transform.position = startNode.worldPosition;
@@ -38,20 +42,61 @@ public class Skeleton1 : MonoBehaviour
     void Update()
     {
         path2Player = pathFinder.FindPath(transform.position, player.transform.position);
-        if(path2Player.Count < 9 && player.active == true)
+        if (next2Player())
         {
-            //transform.Translate(diff * 20f * Time.deltaTime);
-            transform.position = Vector2.MoveTowards(transform.position, path2Player[1].worldPosition, 1f * Time.deltaTime);
+            if (!hitPlayer && !player.GetComponent<Player>().blockEnemy)
+            {
+                hitPlayer = true;
+                StartCoroutine(hit());
+            }
+            if (player.GetComponent<Player>().enemyHit)
+            {
+
+                player.GetComponent<Player>().enemyHit = false;
+                healthValue -= player.GetComponent<Player>().hitValue;
+            }
+        }
+        else if(path2Player.Count < 9 && path2Player.Count > 1)
+        {
+            Node currentNode = grid.GetNodeFromWorldPos(transform.position);
+            if (currentNode.gridX - path2Player[1].gridX == 0)
+            {
+                diff = new Vector2(0, path2Player[1].worldPosition.y - grid.GetNodeFromWorldPos(transform.position).worldPosition.y);
+            }
+            else
+            {
+                diff = new Vector2(path2Player[1].worldPosition.x - grid.GetNodeFromWorldPos(transform.position).worldPosition.x, 0);
+            }
+
+            setPositionGhost(path2Player[1]);
+            transform.Translate(diff * 2f * Time.deltaTime);
         }
         else
         {
             if(grid.GetNodeFromWorldPos(transform.position).gridY != axis)
             {
-                Debug.Log(23456);
                 List<Node> back2Pos = pathFinder.FindPath(transform.position, startNode.worldPosition);
-                transform.position = Vector2.MoveTowards(transform.position, back2Pos[0].worldPosition, 1f * Time.deltaTime);
+                if(back2Pos.Count > 1)
+                {
+                    Node currentNode = grid.GetNodeFromWorldPos(transform.position);
+                    if (currentNode.gridX - back2Pos[1].gridX == 0)
+                    {
+                        diff = new Vector2(0, back2Pos[1].worldPosition.y - grid.GetNodeFromWorldPos(transform.position).worldPosition.y);
+                    }
+                    else
+                    {
+                        diff = new Vector2(back2Pos[1].worldPosition.x - grid.GetNodeFromWorldPos(transform.position).worldPosition.x, 0);
+                    }
+                    setPositionGhost(back2Pos[1]);
+
+                    transform.Translate(diff * 2f * Time.deltaTime);
+                }
+                if(grid.GetNodeFromWorldPos(transform.position).gridY == axis)
+                {
+                    startPos = true;
+                }
             }
-            if(startPos)
+            else if(startPos)
             {
 
                 transform.position = Vector2.MoveTowards(transform.position, endNode.worldPosition, 1f * Time.deltaTime);
@@ -59,6 +104,7 @@ public class Skeleton1 : MonoBehaviour
                 {
                     startPos = false;
                 }
+                setPositionGhost(grid.GetNodeFromWorldPos(transform.position));
             }
             else
             {
@@ -67,14 +113,39 @@ public class Skeleton1 : MonoBehaviour
                 {
                     startPos = true;
                 }
+
+                setPositionGhost(grid.GetNodeFromWorldPos(transform.position));
             }
         }
-        foreach(Node neighbour in grid.GetNodeNeighbours(grid.GetNodeFromWorldPos(transform.position)))
+    }
+
+    private bool next2Player()
+    {
+        foreach (Node neightbour in grid.GetNodeNeighbours(grid.GetNodeFromWorldPos(transform.position)))
         {
-            if(neighbour == grid.GetNodeFromWorldPos(player.transform.position))
+            if(neightbour == grid.GetNodeFromWorldPos(player.transform.position))
             {
-                player.GetComponent<Player>().reduceStrength(levelStrength);
+                return true;
             }
         }
+        return false;
+    }
+    IEnumerator hit()
+    {
+        player.GetComponent<Player>().reduceStrength(hitValue);
+        yield return new WaitForSeconds(2);
+
+        hitPlayer = false;
+    }
+    private void setPositionGhost(Node currentNode)
+    {
+        foreach(Node node in grid.grid)
+        {
+            if(node.onTop == "Enemy")
+            {
+                node.setItemOnTop(null);
+            }
+        }
+        currentNode.setItemOnTop("Enemy");
     }
 }

@@ -65,6 +65,57 @@ public class Pathfinder : MonoBehaviour
         }
         return path;
 
+    }public List<Node> FindPathPlayer(Vector3 startPos, Vector3 targetPos)
+    {
+        Node startNode = _grid.GetNodeFromWorldPos(startPos);
+        Node targetNode = _grid.GetNodeFromWorldPos(targetPos);
+
+        Heap<Node> openList = new Heap<Node>(_grid.GetMaxGridSize);
+        HashSet<Node> closedList = new HashSet<Node>();
+        List<Node> path = new List<Node>();
+        if (!targetNode.isWalkable)
+        {
+            targetNode = _grid.grid[targetNode.gridX, targetNode.gridY-1];
+        }
+        if(!startNode.isWalkable)
+        {
+            startNode = _grid.grid[startNode.gridX, startNode.gridY-1];
+        }
+
+        openList.insert(startNode);
+        while (openList.count > 0)
+        {
+            Node currentNode = openList.deleteFirst();
+            closedList.Add(currentNode);
+            if (currentNode == targetNode)
+            {
+                path = TraceRoute(startNode, targetNode);
+                return path;
+            }
+
+            //Since only the ghosts use pathfinding it only accesses the neighbours the ghosts can walk on
+            foreach (Node neighbour in _grid.GetNodeNeighbours(currentNode))
+            {
+                // For Pac Man neighbour.isGhostHouse must be added!
+                if (!neighbour.isWalkable || closedList.Contains(neighbour) || neighbour.onTop == "Enemy")
+                {
+                    continue;
+                }
+                int movementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
+                if (movementCostToNeighbour < currentNode.gCost || !openList.contains(neighbour))
+                {
+                    neighbour.gCost = movementCostToNeighbour;
+                    neighbour.hCost = GetDistance(neighbour, targetNode);
+                    neighbour.parent = currentNode;
+                    if (!openList.contains(neighbour))
+                    {
+                        openList.insert(neighbour);
+                    }
+                }
+            }
+        }
+        return path;
+
     }
 
     //Returns a path to the script of the ghost who is named

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5980962846314251717}
   - component: {fileID: -6381311943807521416}
   - component: {fileID: 7561828489229345211}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Skeleton1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,6 +101,7 @@ MonoBehaviour:
   grid: {fileID: 0}
   player: {fileID: 0}
   pathFinder: {fileID: 0}
+  levelStrength: 0
 --- !u!114 &7561828489229345211
 MonoBehaviour:
   m_ObjectHideFlags: 0

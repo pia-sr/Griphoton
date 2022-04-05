@@ -16,13 +16,14 @@ public class Node : IHeapItem<Node>
 
     private int indexHeap;
 
+    public bool button;
+
     private List<string> unwalkable = new List<string>()
     {
         "House",
         "Dungeon",
         "Tree",
-        "Wall",
-        "Enemy"
+        "Wall"
     };
 
     //The x and y value of the node in the grid
@@ -55,6 +56,10 @@ public class Node : IHeapItem<Node>
         if(unwalkable.Contains(itemOnTop))
         {
             isWalkable = false;
+        }
+        else
+        {
+            isWalkable = true;
         }
     }
 
