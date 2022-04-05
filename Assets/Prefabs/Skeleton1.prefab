@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 1070955217646457209}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -101,7 +101,7 @@ MonoBehaviour:
   grid: {fileID: 0}
   player: {fileID: 0}
   pathFinder: {fileID: 0}
-  levelStrength: 0
+  hitValue: 25
 --- !u!114 &7561828489229345211
 MonoBehaviour:
   m_ObjectHideFlags: 0

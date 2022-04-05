@@ -54,9 +54,13 @@ public class Skeleton1 : MonoBehaviour
 
                 player.GetComponent<Player>().enemyHit = false;
                 healthValue -= player.GetComponent<Player>().hitValue;
+                if (healthValue <= 0)
+                {
+                    Destroy(this.gameObject);
+                }
             }
         }
-        else if(path2Player.Count < 9 && path2Player.Count > 1)
+        else if(path2Player.Count < 5 && path2Player.Count > 1)
         {
             Node currentNode = grid.GetNodeFromWorldPos(transform.position);
             if (currentNode.gridX - path2Player[1].gridX == 0)
