@@ -20,6 +20,7 @@ public class Skeleton2 : MonoBehaviour
     private Node existingTarget;
     private Node targetNode;
     private bool coroutineStart;
+    private HealthBar healthBar;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +37,8 @@ public class Skeleton2 : MonoBehaviour
         Node startNode = grid.grid[pos[posCounter][0],pos[posCounter][1]];
         transform.position = startNode.worldPosition - new Vector3(0,0,1);
         coroutineStart = false;
+        healthBar = this.transform.GetChild(0).GetChild(0).GetComponent<HealthBar>();
+        healthBar.SetHealthBarValue(1);
 
     }
 
@@ -57,7 +60,10 @@ public class Skeleton2 : MonoBehaviour
                 {
                     player.GetComponent<Player>().enemyHit = false;
                     healthValue -= player.GetComponent<Player>().hitValue;
-                    if(healthValue <= 0)
+                    float playerHitvalue = player.GetComponent<Player>().hitValue;
+                    float healthReduc = playerHitvalue / 100;
+                    healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
+                    if (healthValue <= 0)
                     {
                         Destroy(this.gameObject);
                     }
@@ -150,6 +156,7 @@ public class Skeleton2 : MonoBehaviour
 
         }
         coroutineStart = false;
+        setPositionGhost(path[1]);
 
     }
 

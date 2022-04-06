@@ -21,6 +21,7 @@ public class EvilGhost2 : MonoBehaviour
     private Node existingTarget;
     private bool coroutineStart;
     private Node playerPos;
+    private HealthBar healthBar;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +31,8 @@ public class EvilGhost2 : MonoBehaviour
         Node startNode = grid.grid[startPos[0], startPos[1]];
         transform.position = startNode.worldPosition - new Vector3(0, 0, 1);
         targetNode = startNode;
+        healthBar = this.transform.GetChild(0).GetChild(0).GetComponent<HealthBar>();
+        healthBar.SetHealthBarValue(1);
     }
 
     // Update is called once per frame
@@ -49,7 +52,6 @@ public class EvilGhost2 : MonoBehaviour
                 stay = true;
                 hitValue = 100 + (10 * hitSpeed);
 
-                Debug.Log("Hitvalue: "+ hitValue + ", hitSpeed: " + hitSpeed);
                 if (player.GetComponent<Player>().blockEnemy)
                 {
                     player.GetComponent<Player>().reduceStrength(hitValue / 2);
@@ -64,6 +66,9 @@ public class EvilGhost2 : MonoBehaviour
             {
                 player.GetComponent<Player>().enemyHit = false;
                 healthValue -= player.GetComponent<Player>().hitValue;
+                float playerHitvalue = player.GetComponent<Player>().hitValue;
+                float healthReduc = playerHitvalue / 100;
+                healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
                 if (healthValue <= 0)
                 {
                     Destroy(this.gameObject);
@@ -146,6 +151,7 @@ public class EvilGhost2 : MonoBehaviour
 
         }
         coroutineStart = false;
+        setPositionGhost(path[1]);
 
     }
 

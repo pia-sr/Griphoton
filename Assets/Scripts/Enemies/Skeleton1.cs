@@ -18,6 +18,7 @@ public class Skeleton1 : MonoBehaviour
     private Node existingTarget;
     private Node targetNode;
     private bool coroutineStart;
+    private HealthBar healthBar;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,8 @@ public class Skeleton1 : MonoBehaviour
         transform.position = startNode.worldPosition - new Vector3(0,0,1);
         existingTarget = null;
         coroutineStart = false;
+        healthBar = this.transform.GetChild(0).GetChild(0).GetComponent<HealthBar>();
+        healthBar.SetHealthBarValue(1);
 
     }
 
@@ -37,6 +40,7 @@ public class Skeleton1 : MonoBehaviour
         path2Player = pathFinder.FindPath(transform.position, player.transform.position);
         if (next2Player())
         {
+            Debug.Log(player.GetComponent<Player>().enemyHit);
             if (!hitPlayer && !player.GetComponent<Player>().blockEnemy)
             {
                 hitPlayer = true;
@@ -47,6 +51,9 @@ public class Skeleton1 : MonoBehaviour
 
                 player.GetComponent<Player>().enemyHit = false;
                 healthValue -= player.GetComponent<Player>().hitValue;
+                float playerHitvalue = player.GetComponent<Player>().hitValue;
+                float healthReduc = playerHitvalue/ 100;
+                healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
                 if (healthValue <= 0)
                 {
                     Destroy(this.gameObject);
@@ -135,6 +142,7 @@ public class Skeleton1 : MonoBehaviour
 
         }
         coroutineStart = false;
+        setPositionGhost(path[1]);
 
     }
 

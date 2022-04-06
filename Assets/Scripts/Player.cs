@@ -21,6 +21,9 @@ public class Player : MonoBehaviour
     private bool ready = true;
     private bool foundPos = false;
     private bool coroutineStart;
+    private int fullHealth;
+
+    public HealthBar healthBar;
 
     // Start is called before the first frame update
     void Start()
@@ -29,8 +32,13 @@ public class Player : MonoBehaviour
         hitValue = 25;
         targetNode = null;
         existingTarget = null;
-        strength = 100;
+        strength = 1000;
+        fullHealth = 1000;
         coroutineStart = false;
+        if (!upperWorld)
+        {
+            healthBar.SetHealthBarValue(1);
+        }
     }
 
     // Update is called once per frame
@@ -135,14 +143,14 @@ public class Player : MonoBehaviour
 
     public void reduceStrength(float hit)
     {
-
+        float healthReduc = hit / fullHealth;
         
         strength -= hit;
+        healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
         if(strength <= 0)
         {
             lost = true;
         }
-        Debug.Log("Player: " + strength);
 
     }
 

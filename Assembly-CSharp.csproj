@@ -80,6 +80,7 @@
     <Compile Include="Assets\Scripts\DungeonLevels\Level5.cs" />
     <Compile Include="Assets\Scripts\Enemies\EvilGhost1.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level4.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EvilGhost2.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level6.cs" />
     <Compile Include="Assets\Scripts\Grid\Heap.cs" />
     <Compile Include="Assets\Scripts\Puzzles\RoomPuzzle.cs" />
@@ -103,7 +104,7 @@
     <Compile Include="Assets\Scripts\DungeonLevels\Level13.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level9.cs" />
-    <Compile Include="Assets\Scripts\Enemies\EvilGhost2.cs" />
+    <Compile Include="Assets\Scripts\HealthBar.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\ProjectSettings\ProjectVersion.txt" />
