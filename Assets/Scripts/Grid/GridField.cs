@@ -101,11 +101,12 @@ public class GridField : MonoBehaviour
     //Returns a node based on a given Vector3 in the grid
     public Node GetNodeFromWorldPos(Vector3 worldPos)
     {
-        Vector3 gridPos = worldPos - transform.localPosition;
-        float X0_1 = Mathf.Clamp01((gridPos.x + (gridWorldSize.x / 2)) / gridWorldSize.x);
-        float Y0_1 = Mathf.Clamp01((gridPos.y + (gridWorldSize.y / 2)) / gridWorldSize.y);
-        int x = (int)(X0_1 * (_gridSizeX - 1));
-        int y = (int)(Y0_1 * (_gridSizeY - 1));
+
+        float xShift = worldPos.x + (gridWorldSize.x / 2);
+        float yShift = worldPos.y + (gridWorldSize.y / 2);
+       
+        int x = Mathf.FloorToInt(xShift/ _nodeDiameter);
+        int y = Mathf.FloorToInt(yShift/ _nodeDiameter);
         return grid[x, y];
     }
 
@@ -141,6 +142,7 @@ public class GridField : MonoBehaviour
         }
         return neighbours;
     }
+
     //Returns a list of nodes which are up, left, down and right of a given node
     //Since the play can walk through a passage to end up on the other side of
     //the field, two extra nodes are added in a special case

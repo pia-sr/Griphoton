@@ -17,6 +17,9 @@ public class Skeleton2 : MonoBehaviour
     private Vector2 diff;
     private bool hitPlayer = false;
     private int posCounter;
+    private Node existingTarget;
+    private Node targetNode;
+    private bool coroutineStart;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +35,7 @@ public class Skeleton2 : MonoBehaviour
         posCounter = 0;
         Node startNode = grid.grid[pos[posCounter][0],pos[posCounter][1]];
         transform.position = startNode.worldPosition - new Vector3(0,0,1);
+        coroutineStart = false;
 
     }
 
@@ -63,18 +67,19 @@ public class Skeleton2 : MonoBehaviour
         }
         else if(path2Player.Count < 9 && path2Player.Count > 1)
         {
-            Node currentNode = grid.GetNodeFromWorldPos(transform.position);
-            if (currentNode.gridX - path2Player[1].gridX == 0)
+            if (targetNode == existingTarget)
             {
-                diff = new Vector2(0, path2Player[1].worldPosition.y - grid.GetNodeFromWorldPos(transform.position).worldPosition.y);
-            }
-            else
-            {
-                diff = new Vector2(path2Player[1].worldPosition.x - grid.GetNodeFromWorldPos(transform.position).worldPosition.x, 0);
-            }
+                if (!coroutineStart)
+                {
+                    coroutineStart = true;
+                    StartCoroutine(move(path2Player));
+                }
 
-            setPositionGhost(path2Player[1]);
-            transform.Translate(diff * 2.5f * Time.deltaTime);
+            }
+            else if (!coroutineStart)
+            {
+                existingTarget = targetNode;
+            }
         }
         else
         {
@@ -84,18 +89,19 @@ public class Skeleton2 : MonoBehaviour
                 List<Node> back2Pos = pathFinder.FindPath(transform.position, targetNode.worldPosition);
                 if(back2Pos.Count > 1)
                 {
-                    Node currentNode = grid.GetNodeFromWorldPos(transform.position);
-                    if (currentNode.gridX - back2Pos[1].gridX == 0)
+                    if (targetNode == existingTarget)
                     {
-                        diff = new Vector2(0, back2Pos[1].worldPosition.y - grid.GetNodeFromWorldPos(transform.position).worldPosition.y);
-                    }
-                    else
-                    {
-                        diff = new Vector2(back2Pos[1].worldPosition.x - grid.GetNodeFromWorldPos(transform.position).worldPosition.x, 0);
-                    }
-                    setPositionGhost(back2Pos[1]);
+                        if (!coroutineStart)
+                        {
+                            coroutineStart = true;
+                            StartCoroutine(move(back2Pos));
+                        }
 
-                    transform.Translate(diff * 2.5f * Time.deltaTime);
+                    }
+                    else if (!coroutineStart)
+                    {
+                        existingTarget = targetNode;
+                    }
                 }
             }
             else
@@ -108,6 +114,43 @@ public class Skeleton2 : MonoBehaviour
             }
 
         }
+    }
+
+    private IEnumerator move(List<Node> path)
+    {
+        //source: https://forum.unity.com/threads/transform-position-speed.744293/
+        if (existingTarget == null)
+        {
+            existingTarget = targetNode;
+        }
+        Vector3 pos = transform.position;
+        Node currentNode = grid.GetNodeFromWorldPos(transform.position);
+        float goal;
+        if (pos.x == path[1].worldPosition.x)
+        {
+            goal = path[1].worldPosition.y;
+            while (pos.y != goal)
+            {
+                pos.y = Mathf.MoveTowards(pos.y, goal, 1.5f * Time.deltaTime);
+                transform.localPosition = pos;
+                yield return null;
+            }
+        }
+        else if (pos.y == path[1].worldPosition.y)
+        {
+            goal = path[1].worldPosition.x;
+
+            while (pos.x != goal)
+            {
+                pos.x = Mathf.MoveTowards(pos.x, goal, 1.5f * Time.deltaTime);
+                transform.localPosition = pos;
+                yield return null;
+            }
+
+
+        }
+        coroutineStart = false;
+
     }
 
     private bool next2Player()

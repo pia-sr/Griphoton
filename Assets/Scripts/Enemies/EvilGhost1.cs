@@ -18,6 +18,9 @@ public class EvilGhost1 : MonoBehaviour
     private bool stay = false;
     private bool attackPlayer = false;
     private List<Node> visitedNodes = new List<Node>();
+    private Node existingTarget;
+    private bool coroutineStart;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +30,7 @@ public class EvilGhost1 : MonoBehaviour
         Node startNode = grid.grid[startPos[0], startPos[1]];
         transform.position = startNode.worldPosition - new Vector3(0, 0, 1);
         targetNode = startNode;
+        coroutineStart = false;
     }
 
     // Update is called once per frame
@@ -93,31 +97,67 @@ public class EvilGhost1 : MonoBehaviour
             {
                 visitedNodes.Add(grid.GetNodeFromWorldPos(transform.position));
             }
-            Node currentNode = grid.GetNodeFromWorldPos(transform.position);
-            if (currentNode.gridX - back2Pos[1].gridX == 0)
+            if (targetNode == existingTarget)
             {
-                diff = new Vector2(0, back2Pos[1].worldPosition.y - grid.GetNodeFromWorldPos(transform.position).worldPosition.y);
-            }
-            else
-            {
-                diff = new Vector2(back2Pos[1].worldPosition.x - grid.GetNodeFromWorldPos(transform.position).worldPosition.x, 0);
-            }
-            setPositionGhost(back2Pos[1]);
-            float speed;
-            if (attackPlayer)
-            {
+                if (!coroutineStart)
+                {
+                    coroutineStart = true;
+                    StartCoroutine(move(back2Pos));
+                }
 
-                speed = 2 + (0.1f * hitSpeed);
             }
-            else
+            else if (!coroutineStart)
             {
-
-                speed = 2.5f;
+                existingTarget = targetNode;
             }
-            transform.Translate(diff * speed * Time.deltaTime);
         }
     }
+    private IEnumerator move(List<Node> path)
+    {
+        //source: https://forum.unity.com/threads/transform-position-speed.744293/
+        if (existingTarget == null)
+        {
+            existingTarget = targetNode;
+        }
+        Vector3 pos = transform.position;
+        float goal;
+        float speed;
+        if (attackPlayer)
+        {
 
+            speed = 1 + (0.1f * hitSpeed);
+        }
+        else
+        {
+
+            speed = 1.5f;
+        }
+        if (pos.x == path[1].worldPosition.x)
+        {
+            goal = path[1].worldPosition.y;
+            while (pos.y != goal)
+            {
+                pos.y = Mathf.MoveTowards(pos.y, goal, speed * Time.deltaTime);
+                transform.localPosition = pos;
+                yield return null;
+            }
+        }
+        else if (pos.y == path[1].worldPosition.y)
+        {
+            goal = path[1].worldPosition.x;
+
+            while (pos.x != goal)
+            {
+                pos.x = Mathf.MoveTowards(pos.x, goal, speed * Time.deltaTime);
+                transform.localPosition = pos;
+                yield return null;
+            }
+
+
+        }
+        coroutineStart = false;
+
+    }
     private bool next2Player()
     {
         foreach (Node neightbour in grid.GetNodeNeighbours(grid.GetNodeFromWorldPos(transform.position)))

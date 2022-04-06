@@ -33,7 +33,7 @@ public class Level14 : MonoBehaviour
 
                 spikes.transform.localScale = new Vector3(size, size, 0);
             }
-            else if (node == grid.grid[middleX, grid.getGridSizeY() - 1] || node == grid.grid[middleX, 0])
+            else if (node == grid.grid[middleX, grid.getGridSizeY() - 1])
             {
                 Instantiate(door, node.worldPosition, Quaternion.identity, this.transform);
 
@@ -61,9 +61,13 @@ public class Level14 : MonoBehaviour
         }
         foreach (Node node in grid.grid)
         {
-            if (node.onTop == null)
+            if (node.onTop == null || node.onTop == "Entrance")
             {
-                node.setItemOnTop("Floor");
+                if (node.onTop == null)
+                {
+
+                    node.setItemOnTop("Floor");
+                }
                 Instantiate(floorTile, node.worldPosition, Quaternion.identity, tileManager.transform);
                 floorTile.transform.localScale = new Vector3(size, size, 0);
 

@@ -79,7 +79,7 @@ public class Pathfinder : MonoBehaviour
         List<Node> neighboursTarget = _grid.GetNodeNeighboursDiagonal(targetNode);
         List<Node> neighboursStart = _grid.GetNodeNeighboursDiagonal(startNode);
         int counterTarget = 0;
-        int counterStart = 0;/*
+        int counterStart = 0;
         while (!targetNode.isWalkable)
         {
             targetNode = neighboursTarget[counterTarget];
@@ -89,7 +89,7 @@ public class Pathfinder : MonoBehaviour
         {
             startNode = neighboursStart[counterStart];
             counterStart++;
-        }*/
+        }
 
         openList.insert(startNode);
         while (openList.count > 0)
@@ -106,7 +106,7 @@ public class Pathfinder : MonoBehaviour
             foreach (Node neighbour in _grid.GetNodeNeighbours(currentNode))
             {
                 // For Pac Man neighbour.isGhostHouse must be added!
-                if (!neighbour.isWalkable || closedList.Contains(neighbour) || neighbour.onTop == "Enemy")
+                if (!neighbour.isWalkable || closedList.Contains(neighbour))
                 {
                     continue;
                 }

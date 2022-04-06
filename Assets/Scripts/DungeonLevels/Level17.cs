@@ -7,6 +7,8 @@ public class Level17 : MonoBehaviour
     public GridField grid;
     public GameObject wall;
     public GameObject wallManager;
+    public GameObject floorTile;
+    public GameObject tileManager;
     public GameObject door;
     public GameObject spikes;
     public GameObject spikesManager;
@@ -25,7 +27,12 @@ public class Level17 : MonoBehaviour
         size = 2 * grid.nodeRadius;
         foreach (Node node in grid.grid)
         {
-            if (node == grid.grid[grid.getGridSizeX() - 1, middleY] || node == grid.grid[0, middleY])
+            if(node.onTop == "Entrance")
+            {
+                Instantiate(floorTile, node.worldPosition, Quaternion.identity, tileManager.transform);
+                floorTile.transform.localScale = new Vector3(size, size, 0);
+            }
+            if (node == grid.grid[grid.getGridSizeX() - 1, middleY])
             {
                 Instantiate(door, node.worldPosition, Quaternion.Euler(0, 0, -90), this.transform);
 

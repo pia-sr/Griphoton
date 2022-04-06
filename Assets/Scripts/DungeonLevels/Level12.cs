@@ -39,12 +39,6 @@ public class Level12 : MonoBehaviour
 
                 door.transform.localScale = new Vector3(size * 3, size, 0);
             }
-            else if (node == grid.grid[0, middleY])
-            {
-                Instantiate(door, node.worldPosition, Quaternion.Euler(0, 0, -90), this.transform);
-
-                door.transform.localScale = new Vector3(size * 3, size, 0);
-            }
         }
         foreach (Node node in grid.grid)
         {
@@ -63,9 +57,13 @@ public class Level12 : MonoBehaviour
         }
         foreach (Node node in grid.grid)
         {
-            if (node.onTop == null)
+            if (node.onTop == null || node.onTop == "Entrance")
             {
-                node.setItemOnTop("Floor");
+                if (node.onTop == null)
+                {
+
+                    node.setItemOnTop("Floor");
+                }
                 Instantiate(floorTile, node.worldPosition, Quaternion.identity, tileManager.transform);
                 floorTile.transform.localScale = new Vector3(size, size, 0);
 

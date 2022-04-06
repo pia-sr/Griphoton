@@ -10,9 +10,8 @@ public class Player : MonoBehaviour
     public Pathfinder pathFinder;
     private Node dungeon;
     private List<Node> path;
-    private int counter;
-    private Vector3 diff;
     private Node existingTarget;
+    public float speed;
     private float strength;
     public bool lost = false;
     public bool upperWorld;
@@ -21,17 +20,17 @@ public class Player : MonoBehaviour
     public bool blockEnemy = false;
     private bool ready = true;
     private bool foundPos = false;
+    private bool coroutineStart;
 
     // Start is called before the first frame update
     void Start()
     {
         enemyHit = false;
-        counter = 0;
         hitValue = 25;
         targetNode = null;
         existingTarget = null;
         strength = 100;
-
+        coroutineStart = false;
     }
 
     // Update is called once per frame
@@ -66,21 +65,23 @@ public class Player : MonoBehaviour
         
         else if (targetNode != null)
         {
+            
             path = pathFinder.FindPathPlayer(transform.position, targetNode.worldPosition);
             if(path.Count > 1)
             {
-                
-                Node currentNode = grid.GetNodeFromWorldPos(transform.position);
-                if(currentNode.gridX - path[1].gridX == 0)
+                if(targetNode == existingTarget)
                 {
-                    diff = new Vector2(0, path[1].worldPosition.y - grid.GetNodeFromWorldPos(transform.position).worldPosition.y);
-                }
-                else
-                {
-                    diff = new Vector2(path[1].worldPosition.x - grid.GetNodeFromWorldPos(transform.position).worldPosition.x, 0);
-                }
+                    if (!coroutineStart)
+                    {
+                        coroutineStart = true;
+                        StartCoroutine(move());
+                    }
 
-                transform.Translate(diff * 3f * Time.deltaTime);
+                }
+                else if (!coroutineStart)
+                {
+                    existingTarget = targetNode;
+                }
 
             }
         }
@@ -90,12 +91,45 @@ public class Player : MonoBehaviour
             if (grid.bounds().Contains(touchPosition))
             {
                 targetNode = grid.GetNodeFromWorldPos(touchPosition);
-                Debug.Log("Coords: " + targetNode.gridX + "," + targetNode.gridY);
-
             }
 
             
         }
+
+    }
+    private IEnumerator move()
+    {
+        //source: https://forum.unity.com/threads/transform-position-speed.744293/
+        if(existingTarget == null)
+        {
+            existingTarget = targetNode;
+        }
+        Vector3 pos = transform.position;
+        float goal;
+        if (pos.x == path[1].worldPosition.x)
+        {
+            goal = path[1].worldPosition.y;
+            while (pos.y != goal)
+            {
+                pos.y = Mathf.MoveTowards(pos.y, goal, 1.5f * Time.deltaTime);
+                transform.localPosition = pos;
+                yield return null;
+            }
+        }
+        else if(pos.y == path[1].worldPosition.y)
+        {
+            goal = path[1].worldPosition.x;
+
+            while (pos.x != goal)
+            {
+                pos.x = Mathf.MoveTowards(pos.x, goal, 1.5f * Time.deltaTime);
+                transform.localPosition = pos;
+                yield return null;
+            }
+
+
+        }
+        coroutineStart = false;
 
     }
 

@@ -18,6 +18,9 @@ public class EvilGhost2 : MonoBehaviour
     private bool stay = false;
     private bool attackPlayer = false;
     private List<Node> visitedNodes = new List<Node>();
+    private Node existingTarget;
+    private bool coroutineStart;
+    private Node playerPos;
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +35,11 @@ public class EvilGhost2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (grid.GetNodeFromWorldPos(this.gameObject.transform.position) == playerPos)
+        {
+            moveAway = false;
+        }
+
         path2Player = pathFinder.FindPath(transform.position, player.transform.position);
         if (next2Player() && !moveAway)
         {
@@ -73,38 +80,73 @@ public class EvilGhost2 : MonoBehaviour
         List<Node> back2Pos = pathFinder.FindPath(transform.position, targetNode.worldPosition);
         if (back2Pos.Count > 1 && !stay)
         {
+
             hitSpeed = visitedNodes.Count;
             if(visitedNodes.Count == 0 || visitedNodes[visitedNodes.Count-1] != grid.GetNodeFromWorldPos(transform.position))
             {
                 visitedNodes.Add(grid.GetNodeFromWorldPos(transform.position));
             }
-            Node currentNode = grid.GetNodeFromWorldPos(transform.position);
-            if (currentNode.gridX - back2Pos[1].gridX == 0)
+            if (targetNode == existingTarget)
             {
-                diff = new Vector2(0, back2Pos[1].worldPosition.y - grid.GetNodeFromWorldPos(transform.position).worldPosition.y);
-            }
-            else
-            {
-                diff = new Vector2(back2Pos[1].worldPosition.x - grid.GetNodeFromWorldPos(transform.position).worldPosition.x, 0);
-            }
-            setPositionGhost(back2Pos[1]);
-            float speed;
-            if (attackPlayer)
-            {
+                if (!coroutineStart)
+                {
+                    coroutineStart = true;
+                    StartCoroutine(move(back2Pos));
+                }
 
-                speed = 2.5f + (0.15f * hitSpeed);
             }
-            else
+            else if (!coroutineStart)
             {
-
-                speed = 2.5f;
-            }
-            transform.Translate(diff * speed * Time.deltaTime);
-            if(grid.GetNodeFromWorldPos(transform.position) == targetNode)
-            {
-                moveAway = false;
+                existingTarget = targetNode;
             }
         }
+    }
+
+    private IEnumerator move(List<Node> path)
+    {
+        //source: https://forum.unity.com/threads/transform-position-speed.744293/
+        if (existingTarget == null)
+        {
+            existingTarget = targetNode;
+        }
+        Vector3 pos = transform.position;
+        float goal;
+        float speed;
+        if (attackPlayer)
+        {
+
+            speed = 1.4f + (0.1f * hitSpeed);
+        }
+        else
+        {
+
+            speed = 1.6f;
+        }
+        if (pos.x == path[1].worldPosition.x)
+        {
+            goal = path[1].worldPosition.y;
+            while (pos.y != goal)
+            {
+                pos.y = Mathf.MoveTowards(pos.y, goal, speed * Time.deltaTime);
+                transform.localPosition = pos;
+                yield return null;
+            }
+        }
+        else if (pos.y == path[1].worldPosition.y)
+        {
+            goal = path[1].worldPosition.x;
+
+            while (pos.x != goal)
+            {
+                pos.x = Mathf.MoveTowards(pos.x, goal, speed * Time.deltaTime);
+                transform.localPosition = pos;
+                yield return null;
+            }
+
+
+        }
+        coroutineStart = false;
+
     }
 
     private bool next2Player()
@@ -141,7 +183,10 @@ public class EvilGhost2 : MonoBehaviour
         while (!(targetNode.onTop == "Floor" || targetNode.onTop == "Spikes"))
         {
             targetNode = grid.grid[Random.Range(0, grid.getGridSizeX() - 1), Random.Range(0, grid.getGridSizeY() - 1)];
+            
         }
+        playerPos = targetNode;
+        Debug.Log(playerPos == null);
         stay = false;
     }
 }
