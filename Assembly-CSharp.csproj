@@ -88,6 +88,7 @@
     <Compile Include="Assets\Scripts\Puzzles\GapPuzzle2.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level10.cs" />
     <Compile Include="Assets\Scripts\Puzzles\GapPuzzle.cs" />
+    <Compile Include="Assets\Scripts\HealthBar.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level16.cs" />
     <Compile Include="Assets\Scripts\Puzzles\HamiltonianMaze2.cs" />
     <Compile Include="Assets\Scripts\Grid\IHeapItem.cs" />
@@ -104,7 +105,9 @@
     <Compile Include="Assets\Scripts\DungeonLevels\Level13.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level9.cs" />
-    <Compile Include="Assets\Scripts\HealthBar.cs" />
+    <Compile Include="Assets\Scripts\Save\Game.cs" />
+    <Compile Include="Assets\Scripts\Save\GameData.cs" />
+    <Compile Include="Assets\Scripts\Save\SaveSystem.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\ProjectSettings\ProjectVersion.txt" />

@@ -19,28 +19,39 @@ public class Skeleton1 : MonoBehaviour
     private Node targetNode;
     private bool coroutineStart;
     private HealthBar healthBar;
+    private bool goBack;
 
     // Start is called before the first frame update
     void Start()
     {
+        begin();
+    }
+    private void begin()
+    {
+        StopAllCoroutines();
+        goBack = false;
+        hitPlayer = false;
         healthValue = 100;
         startNode = grid.grid[start[0], start[1]];
         endNode = grid.grid[end[0], end[1]];
-        transform.position = startNode.worldPosition - new Vector3(0,0,1);
+        transform.position = startNode.worldPosition - new Vector3(0, 0, 1);
         existingTarget = null;
         coroutineStart = false;
-        healthBar = this.transform.GetChild(0).GetChild(0).GetComponent<HealthBar>();
+        healthBar = transform.GetChild(0).GetComponentInChildren<HealthBar>();
         healthBar.SetHealthBarValue(1);
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        path2Player = pathFinder.FindPath(transform.position, player.transform.position);
+        if (player.GetComponent<Player>().leaveLevel)
+        {
+            begin();
+        }
+        setPositionGhost(grid.GetNodeFromWorldPos(transform.position));
+        path2Player = pathFinder.FindPathEnemies(transform.position, player.transform.position);
         if (next2Player())
         {
-            Debug.Log(player.GetComponent<Player>().enemyHit);
             if (!hitPlayer && !player.GetComponent<Player>().blockEnemy)
             {
                 hitPlayer = true;
@@ -56,13 +67,14 @@ public class Skeleton1 : MonoBehaviour
                 healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
                 if (healthValue <= 0)
                 {
-                    Destroy(this.gameObject);
+                    this.gameObject.SetActive(false);
                 }
             }
         }
         else if(path2Player.Count < 6 && path2Player.Count > 1)
         {
-            targetNode = grid.GetNodeFromWorldPos(player.transform.position);
+            goBack = true;
+            targetNode = path2Player[path2Player.Count - 1];
             if (targetNode == existingTarget)
             {
                 if (!coroutineStart)
@@ -88,7 +100,12 @@ public class Skeleton1 : MonoBehaviour
             {
                 targetNode = startNode;
             }
-            List<Node> back2Pos = pathFinder.FindPath(transform.position, targetNode.worldPosition);
+            else if (goBack)
+            {
+                goBack = false;
+                targetNode = startNode;
+            }
+            List<Node> back2Pos = pathFinder.FindPathEnemies(transform.position, targetNode.worldPosition);
             if (back2Pos.Count > 1)
             {
                 if (targetNode == existingTarget)
@@ -142,7 +159,6 @@ public class Skeleton1 : MonoBehaviour
 
         }
         coroutineStart = false;
-        setPositionGhost(path[1]);
 
     }
 

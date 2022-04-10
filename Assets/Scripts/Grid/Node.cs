@@ -23,7 +23,8 @@ public class Node : IHeapItem<Node>
         "House",
         "Dungeon",
         "Tree",
-        "Wall"
+        "Wall",
+        "Exit"
     };
 
     //The x and y value of the node in the grid

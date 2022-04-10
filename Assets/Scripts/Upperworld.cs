@@ -11,6 +11,8 @@ public class Upperworld : MonoBehaviour
     public GameObject pathManager;
     public GameObject tree;
     public GameObject treeManager;
+    public Game data;
+    
 
     void Awake()
     {
@@ -21,60 +23,95 @@ public class Upperworld : MonoBehaviour
     void Start()
     {
         Node center = grid.GetNodeFromWorldPos(new Vector3(0, 0, 0));
-        center.setItemOnTop("Dungeon"); 
-        houses.transform.GetChild(houses.transform.childCount-1).transform.localPosition = center.worldPosition + new Vector3(0, 0, -1);
+        center.setItemOnTop("Dungeon");
+        houses.transform.GetChild(houses.transform.childCount - 1).transform.localPosition = center.worldPosition + new Vector3(0, 0, -1);
         houses.transform.GetChild(houses.transform.childCount - 1).GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 5, grid.nodeRadius * 5, 1);
         Pathfinder pathFinder = this.GetComponent<Pathfinder>();
 
-
-        for (int i = 0; i < houses.transform.childCount-1; i++)
+        if (data.tutorial)
         {
-            int x = Random.Range(1, grid.getGridSizeX());
-            int y = Random.Range(1, grid.getGridSizeY());
-
-            while(grid.grid[x,y].onTop != null)
+            for (int i = 0; i < houses.transform.childCount - 1; i++)
             {
-                x = Random.Range(1, grid.getGridSizeX());
-                y = Random.Range(1, grid.getGridSizeY());
+                int x = Random.Range(1, grid.getGridSizeX());
+                int y = Random.Range(1, grid.getGridSizeY());
+
+                while (grid.grid[x, y].onTop != null)
+                {
+                    x = Random.Range(1, grid.getGridSizeX());
+                    y = Random.Range(1, grid.getGridSizeY());
+                }
+
+                grid.setHouse(grid.grid[x, y], houses.transform.GetChild(i).tag);
+                buildHouse(grid.grid[x, y]);
+
+            }
+            for (int i = 0; i < houses.transform.childCount; i++)
+            {
+                int index = Random.Range(0, houses.transform.childCount - 1);
+                while (index == i)
+                {
+                    index = Random.Range(0, houses.transform.childCount - 1);
+                }
+                List<Node> path = pathFinder.FindPath(houses.transform.GetChild(i).transform.localPosition, houses.transform.GetChild(index).transform.localPosition);
+                for (int k = 0; k < path.Count; k++)
+                {
+                    GameObject pathT = Instantiate(pathTile, path[k].worldPosition, Quaternion.identity, pathManager.transform);
+                    pathT.transform.localScale = new Vector3(grid.nodeRadius * 2, grid.nodeRadius * 2, 1);
+                    path[k].setItemOnTop("Path");
+                }
+            }
+            for (int i = 0; i < 3000; i++)
+            {
+                int x = Random.Range(0, grid.getGridSizeX());
+                int y = Random.Range(1, grid.getGridSizeY());
+
+                while (grid.grid[x, y].onTop != null || !neighboursTree(grid.grid[x, y]))
+                {
+                    x = Random.Range(0, grid.getGridSizeX());
+                    y = Random.Range(1, grid.getGridSizeY());
+
+                }
+                GameObject treeT = Instantiate(tree, grid.grid[x, y].worldPosition, Quaternion.identity, treeManager.transform);
+                treeT.transform.localScale = new Vector3(grid.nodeRadius * 2, grid.nodeRadius * 2, 1);
+                grid.grid[x, y].setItemOnTop("Tree");
+
+            }
+            
+        }
+        else
+        {
+            int counter = 0;
+            foreach (Node node in grid.grid)
+            {
+                node.setItemOnTop(data.nodeTags[counter]);
+                if (grid.ghostNames.Contains(node.onTop))
+                {
+                    buildHouse(node);
+                }
+                else if (node.onTop == "Path")
+                {
+                    GameObject pathT = Instantiate(pathTile, node.worldPosition, Quaternion.identity, pathManager.transform);
+                    pathT.transform.localScale = new Vector3(grid.nodeRadius * 2, grid.nodeRadius * 2, 1);
+                }
+                else if (node.onTop == "Tree")
+                {
+                    GameObject treeT = Instantiate(tree, node.worldPosition, Quaternion.identity, treeManager.transform);
+                    treeT.transform.localScale = new Vector3(grid.nodeRadius * 2, grid.nodeRadius * 2, 1);
+                }
+                counter++;
             }
 
-            grid.grid[x, y].setItemOnTop("House");
-            houses.transform.GetChild(i).transform.localPosition = grid.grid[x, y].worldPosition + new Vector3(0,0,-1);
-            houses.transform.GetChild(i).GetChild(1).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 5, grid.nodeRadius * 5, 1);
 
         }
-        for(int i = 0; i < houses.transform.childCount; i++)
-        {
-            int index = Random.Range(0, houses.transform.childCount - 1);
-            while(index == i)
-            {
-                index = Random.Range(0, houses.transform.childCount - 1);
-            }
-            List<Node> path = pathFinder.FindPath(houses.transform.GetChild(i).transform.localPosition, houses.transform.GetChild(index).transform.localPosition);
-            for (int k = 0; k < path.Count; k++)
-            {
-                GameObject pathT = Instantiate(pathTile, path[k].worldPosition, Quaternion.identity, pathManager.transform);
-                pathT.transform.localScale = new Vector3(grid.nodeRadius * 2, grid.nodeRadius * 2, 1);
-                path[k].setItemOnTop("Path");
-            }
-        }
-        for(int i = 0; i < 3000; i++)
-        {
-            int x = Random.Range(0, grid.getGridSizeX());
-            int y = Random.Range(1, grid.getGridSizeY());
 
-            while (grid.grid[x, y].onTop != null || !neighboursTree(grid.grid[x,y]))
-            {
-                x = Random.Range(0, grid.getGridSizeX());
-                y = Random.Range(1, grid.getGridSizeY());
 
-            }
-            GameObject treeT = Instantiate(tree, grid.grid[x,y].worldPosition, Quaternion.identity, treeManager.transform);
-            treeT.transform.localScale = new Vector3(grid.nodeRadius * 2, grid.nodeRadius * 2, 1);
-            grid.grid[x, y].setItemOnTop("Tree");
+    }
 
-        }
-
+    private void buildHouse(Node node)
+    {
+        GameObject house = GameObject.FindWithTag(node.onTop);
+        house.transform.localPosition = node.worldPosition + new Vector3(0, 0, -1);
+        house.transform.GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 5, grid.nodeRadius * 5, 1);
     }
 
     // Update is called once per frame

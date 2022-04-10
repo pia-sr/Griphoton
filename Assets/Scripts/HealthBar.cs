@@ -14,12 +14,12 @@ public class HealthBar : MonoBehaviour
     /// <param name="value">should be between 0 to 1</param>
     public void SetHealthBarValue(float value)
     {
-        HealthBarImage.fillAmount = value;
-        if (HealthBarImage.fillAmount < 0.3f)
+        this.gameObject.GetComponent<Image>().fillAmount = value;
+        if (this.gameObject.GetComponent<Image>().fillAmount < 0.3f)
         {
             SetHealthBarColor(Color.red);
         }
-        else if (HealthBarImage.fillAmount <= 0.5f)
+        else if (this.gameObject.GetComponent<Image>().fillAmount <= 0.5f)
         {
             SetHealthBarColor(Color.yellow);
         }
@@ -31,7 +31,7 @@ public class HealthBar : MonoBehaviour
 
     public float GetHealthBarValue()
     {
-        return HealthBarImage.fillAmount;
+        return this.gameObject.GetComponent<Image>().fillAmount;
     }
 
     /// <summary>
@@ -40,7 +40,7 @@ public class HealthBar : MonoBehaviour
     /// <param name="healthColor">Color </param>
     public void SetHealthBarColor(Color healthColor)
     {
-        HealthBarImage.color = healthColor;
+        this.gameObject.GetComponent<Image>().color = healthColor;
     }
 
     /// <summary>

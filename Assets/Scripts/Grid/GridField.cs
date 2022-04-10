@@ -25,6 +25,27 @@ public class GridField : MonoBehaviour
 
     public List<Node> listNodes;
 
+    public List<string> ghostNames = new List<string>
+    {
+        "Taylor",
+        "Sutton",
+        "Robin",
+        "Morgan",
+        "Logan",
+        "Hayden",
+        "Dylan",
+        "Carter",
+        "Alexis",
+        "Sam",
+        "Quinn",
+        "Harley",
+        "Remy",
+        "Charlie",
+        "Avery",
+        "Riley"
+    };
+
+
     /*
      * use gismo to draw cubes with spaces inbetween for lines (cubes white, background black)
      * if user taps on space between cubes, draw line from corner of cube to the other
@@ -141,6 +162,19 @@ public class GridField : MonoBehaviour
             }
         }
         return neighbours;
+    }
+    public List<Node> getEnemiesPos()
+    {
+        List<Node> enemiesPos = new List<Node>();
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy.activeSelf)
+            {
+                enemiesPos.Add(GetNodeFromWorldPos(enemy.transform.localPosition));
+            }
+        }
+        return enemiesPos;
     }
 
     //Returns a list of nodes which are up, left, down and right of a given node
@@ -268,38 +302,47 @@ public class GridField : MonoBehaviour
             }
         }
     }
-    
-    public void house(Node node)
+
+    public void door(Node node, string direction, string entrance)
+    {
+        for(int i = -1; i < 2; i++)
+        {
+            if(direction == "vertical")
+            {
+                grid[node.gridX, node.gridY + i].setItemOnTop(entrance);
+            }
+            else
+            {
+                grid[node.gridX+i, node.gridY].setItemOnTop(entrance);
+            }
+        }
+    }
+    public void setHouse(Node node, string name)
     {
         for (int i = -1; i < 2; i++)
         {
             for (int j = -1; j < 2; j++)
             {
-                grid[node.gridX + i, node.gridY + j].setItemOnTop("House");
+                if(i == 0 && j == 0)
+                {
+                    node.setItemOnTop(name);
+                    node.isWalkable = false;
+                }
+                else
+                {
+                    grid[node.gridX + i, node.gridY + j].setItemOnTop("House");
+
+                }
             }
         }
     }
-
-    public void door(Node node, string direction, bool entrance)
+    public void solvedHouse(Node node)
     {
-        string tag;
-        if (entrance)
+        for (int i = -1; i < 2; i++)
         {
-            tag = "Entrance";
-        }
-        else
-        {
-            tag = "Exit";
-        }
-        for(int i = -1; i < 2; i++)
-        {
-            if(direction == "vertical")
+            for (int j = -1; j < 2; j++)
             {
-                grid[node.gridX, node.gridY + i].setItemOnTop(tag);
-            }
-            else
-            {
-                grid[node.gridX+i, node.gridY].setItemOnTop(tag);
+                grid[node.gridX + i, node.gridY + j].setItemOnTop("Solved");
             }
         }
     }

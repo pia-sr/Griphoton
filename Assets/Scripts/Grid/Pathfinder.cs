@@ -65,10 +65,8 @@ public class Pathfinder : MonoBehaviour
         }
         return path;
 
-    }
-    
-    
-    public List<Node> FindPathPlayer(Vector3 startPos, Vector3 targetPos)
+    }//With the use of the heap, FindPath finds a path between startPos and targetPos
+    public List<Node> FindPathEnemies(Vector3 startPos, Vector3 targetPos)
     {
         Node startNode = _grid.GetNodeFromWorldPos(startPos);
         Node targetNode = _grid.GetNodeFromWorldPos(targetPos);
@@ -80,12 +78,16 @@ public class Pathfinder : MonoBehaviour
         List<Node> neighboursStart = _grid.GetNodeNeighboursDiagonal(startNode);
         int counterTarget = 0;
         int counterStart = 0;
-        while (!targetNode.isWalkable)
+        if(targetNode == PlayerNode())
+        {
+            targetNode = closesNode(startNode);
+        }
+        else if (!targetNode.isWalkable)
         {
             targetNode = neighboursTarget[counterTarget];
             counterTarget++;
         }
-        while(!startNode.isWalkable)
+        if (!startNode.isWalkable || targetNode == PlayerNode())
         {
             startNode = neighboursStart[counterStart];
             counterStart++;
@@ -106,7 +108,67 @@ public class Pathfinder : MonoBehaviour
             foreach (Node neighbour in _grid.GetNodeNeighbours(currentNode))
             {
                 // For Pac Man neighbour.isGhostHouse must be added!
-                if (!neighbour.isWalkable || closedList.Contains(neighbour))
+                if (!neighbour.isWalkable || closedList.Contains(neighbour) || neighbour == PlayerNode())
+                {
+                    continue;
+                }
+                int movementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
+                if (movementCostToNeighbour < currentNode.gCost || !openList.contains(neighbour))
+                {
+                    neighbour.gCost = movementCostToNeighbour;
+                    neighbour.hCost = GetDistance(neighbour, targetNode);
+                    neighbour.parent = currentNode;
+                    if (!openList.contains(neighbour))
+                    {
+                        openList.insert(neighbour);
+                    }
+                }
+            }
+        }
+        return path;
+
+    }
+    
+    
+    public List<Node> FindPathPlayer(Vector3 startPos, Vector3 targetPos)
+    {
+        Node startNode = _grid.GetNodeFromWorldPos(startPos);
+        Node targetNode = _grid.GetNodeFromWorldPos(targetPos);
+
+        Heap<Node> openList = new Heap<Node>(_grid.GetMaxGridSize);
+        HashSet<Node> closedList = new HashSet<Node>();
+        List<Node> path = new List<Node>();
+        List<Node> neighboursTarget = _grid.GetNodeNeighboursDiagonal(targetNode);
+        List<Node> neighboursStart = _grid.GetNodeNeighboursDiagonal(startNode);
+        int counterTarget = 0;
+        int counterStart = 0;
+        while (!targetNode.isWalkable || _grid.getEnemiesPos().Contains(targetNode))
+        {
+            targetNode = neighboursTarget[counterTarget];
+            counterTarget++;
+        }
+        while(!startNode.isWalkable || _grid.getEnemiesPos().Contains(startNode))
+        {
+            startNode = neighboursStart[counterStart];
+            counterStart++;
+        }
+
+        openList.insert(startNode);
+        while (openList.count > 0)
+        {
+            Node currentNode = openList.deleteFirst();
+            closedList.Add(currentNode);
+            if (currentNode == targetNode)
+            {
+                path = TraceRoute(startNode, targetNode);
+                return path;
+            }
+
+            //Since only the ghosts use pathfinding it only accesses the neighbours the ghosts can walk on
+            foreach (Node neighbour in _grid.GetNodeNeighbours(currentNode))
+            {
+                // For Pac Man neighbour.isGhostHouse must be added!
+                if (!neighbour.isWalkable || closedList.Contains(neighbour) || _grid.getEnemiesPos().Contains(neighbour))
                 {
                     continue;
                 }
@@ -160,4 +222,28 @@ public class Pathfinder : MonoBehaviour
         return distanceX > distanceY ? 16 * distanceY + 12 * distanceX : 16 * distanceX + 12 * distanceY;
     }
 
+    private Node PlayerNode()
+    {
+        GameObject player = GameObject.Find("Player");
+        return _grid.GetNodeFromWorldPos(player.transform.position);
+    }
+    private Node closesNode(Node start)
+    {
+        float initialDistance = 0;
+        Node closesTarget = null;
+        foreach(Node neighbour in _grid.GetNodeNeighbours(PlayerNode()))
+        {
+            float distance = Vector2.Distance(start.worldPosition, neighbour.worldPosition);
+            if(distance < 0)
+            {
+                distance *= -1;
+            }
+            if((initialDistance == 0 || initialDistance > distance) && neighbour.isWalkable)
+            {
+                initialDistance = distance;
+                closesTarget = neighbour;
+            }
+        }
+        return closesTarget;
+    }
 }

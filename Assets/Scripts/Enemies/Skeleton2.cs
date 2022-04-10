@@ -25,27 +25,37 @@ public class Skeleton2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        begin();
+
+    }
+    private void begin()
+    {
+        blockPlayer = false;
+        hitPlayer = false;
         hitValue = 50;
         pos = new List<int[]>();
-        for(int i = 0; i < xPos.Length; i++)
+        for (int i = 0; i < xPos.Length; i++)
         {
             int[] coords = new int[] { xPos[i], yPos[i] };
             pos.Add(coords);
         }
         healthValue = 200;
         posCounter = 0;
-        Node startNode = grid.grid[pos[posCounter][0],pos[posCounter][1]];
-        transform.position = startNode.worldPosition - new Vector3(0,0,1);
+        Node startNode = grid.grid[pos[posCounter][0], pos[posCounter][1]];
+        transform.position = startNode.worldPosition - new Vector3(0, 0, 1);
         coroutineStart = false;
         healthBar = this.transform.GetChild(0).GetChild(0).GetComponent<HealthBar>();
         healthBar.SetHealthBarValue(1);
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        path2Player = pathFinder.FindPath(transform.position, player.transform.position);
+        if (player.GetComponent<Player>().leaveLevel)
+        {
+            begin();
+        }
+        path2Player = pathFinder.FindPathEnemies(transform.position, player.transform.position);
         if (next2Player())
         {
             if (!hitPlayer && !player.GetComponent<Player>().blockEnemy)

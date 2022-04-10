@@ -26,7 +26,15 @@ public class EvilGhost1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
+        begin();
+    }
+
+    private void begin()
+    {
+        moveAway = false;
+        stay = false;
+        attackPlayer = false;
         healthValue = 200;
         Node startNode = grid.grid[startPos[0], startPos[1]];
         transform.position = startNode.worldPosition - new Vector3(0, 0, 1);
@@ -40,7 +48,7 @@ public class EvilGhost1 : MonoBehaviour
     void Update()
     {
         
-        path2Player = pathFinder.FindPath(transform.position, player.transform.position);
+        path2Player = pathFinder.FindPathEnemies(transform.position, player.transform.position);
         if (next2Player() && !moveAway)
         {
             attackPlayer = false;
@@ -94,7 +102,7 @@ public class EvilGhost1 : MonoBehaviour
             }
 
         }
-        List<Node> back2Pos = pathFinder.FindPath(transform.position, targetNode.worldPosition);
+        List<Node> back2Pos = pathFinder.FindPathEnemies(transform.position, targetNode.worldPosition);
         if (back2Pos.Count > 1 && !stay)
         {
             hitSpeed = visitedNodes.Count;
