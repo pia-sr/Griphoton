@@ -109,7 +109,6 @@ public class Level17 : MonoBehaviour
         }
         if (GameObject.Find("Player").GetComponent<Player>().leaveLevel)
         {
-            GameObject.Find("Player").GetComponent<Player>().leaveLevel = false;
             begin();
         }
     }

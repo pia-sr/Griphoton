@@ -95,8 +95,11 @@ public class Level20 : MonoBehaviour
     {
         if (GameObject.Find("Player").GetComponent<Player>().leaveLevel)
         {
-            GameObject.Find("Player").GetComponent<Player>().leaveLevel = false;
             begin();
+        }
+        if (data.activeLevel == int.Parse(this.gameObject.tag) && noEnemiesLeft())
+        {
+            Debug.Log("Won!");
         }
 
     }
@@ -110,5 +113,16 @@ public class Level20 : MonoBehaviour
         {
             Destroy(prefabManager.transform.GetChild(0).gameObject);
         }
+    }
+    private bool noEnemiesLeft()
+    {
+        for (int i = 0; i < transform.GetChild(0).childCount; i++)
+        {
+            if (transform.GetChild(0).GetChild(i).gameObject.activeSelf)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

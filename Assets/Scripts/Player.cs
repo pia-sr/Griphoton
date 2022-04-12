@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     public int hitValue;
     public bool enemyHit;
     public bool blockEnemy = false;
-    private bool ready = true;
+    private bool blockBool;
     private bool foundPos = false;
     private bool coroutineStart;
     private float fullHealth;
@@ -26,6 +26,15 @@ public class Player : MonoBehaviour
     public Game data;
     public bool leaveLevel;
     private bool chooseExit;
+    private bool attackBool;
+
+    private void setAllBoolsFalse()
+    {
+        blockEnemy = false;
+        blockBool = false;
+        coroutineStart = false;
+        attackBool = false;
+    }
 
     public HealthBar healthBar;
     private void Awake()
@@ -39,7 +48,7 @@ public class Player : MonoBehaviour
     {
         enemyHit = false;
         //hitValue = 25 + (10 * strengthMultiplier());
-        hitValue = 500;
+        hitValue = 25;
         targetNode = null;
         existingTarget = null;
         strength = 100;
@@ -172,11 +181,12 @@ public class Player : MonoBehaviour
             leaveLevel = true;
             targetNode = null;
             StopAllCoroutines();
-            coroutineStart = false;
+            setAllBoolsFalse();
             levels.transform.GetChild(levelNr).gameObject.SetActive(false);
             levels.transform.GetChild(levelNr - 1).gameObject.SetActive(true);
             chooseExit = true;
             foundPos = false;
+            StartCoroutine(wait());
         }
     }
 
@@ -196,10 +206,11 @@ public class Player : MonoBehaviour
             leaveLevel = true;
             targetNode = null;
             StopAllCoroutines();
-            coroutineStart = false;
+            setAllBoolsFalse();
             levels.transform.GetChild(levelNr).gameObject.SetActive(false);
             levels.transform.GetChild(levelNr + 1).gameObject.SetActive(true);
             foundPos = false;
+            StartCoroutine(wait());
         }
     }
 
@@ -258,9 +269,10 @@ public class Player : MonoBehaviour
             lost = false;
             GameObject levels = GameObject.FindWithTag("Levels");
             targetNode = null;
-            coroutineStart = false;
             StopAllCoroutines();
             leaveLevel = true;
+            setAllBoolsFalse();
+
             if(data.activeLevel != 1) 
             { 
                 levels.transform.GetChild(data.activeLevel-1).gameObject.SetActive(false);
@@ -269,13 +281,14 @@ public class Player : MonoBehaviour
             healthBar.SetHealthBarValue(1);
             foundPos = false;
             strength = fullHealth;
+            StartCoroutine(wait());
         }
     }
 
     public void attack()
     {
 
-        if (enemyNearby() && ready)
+        if (enemyNearby() && !attackBool)
         {
             targetNode = null;
             coroutineStart = false;
@@ -284,7 +297,7 @@ public class Player : MonoBehaviour
     }
     public void block()
     {
-        if (ready && enemyNearby())
+        if (!blockBool && enemyNearby())
         {
             targetNode = null;
             coroutineStart = false;
@@ -306,20 +319,20 @@ public class Player : MonoBehaviour
     }
     IEnumerator wait2Hit()
     {
-        ready = false;
+        attackBool = true;
         enemyHit = true;
         yield return new WaitForSeconds(1);
-        ready = true;
+        attackBool = false;
     }
 
     IEnumerator wait2Block()
     {
-        ready = false;
+        blockBool = true;
         blockEnemy = true;
         yield return new WaitForSeconds(0.5f);
         blockEnemy = false;
         yield return new WaitForSeconds(2);
-        ready = true;
+        blockBool = false;
     }
     private int strengthMultiplier()
     {
@@ -333,5 +346,10 @@ public class Player : MonoBehaviour
         }
         int strength = grid.ghostNames.Count - counter;
         return strength;
+    }
+    IEnumerator wait()
+    {
+        yield return new WaitForSeconds(0.1f);
+        leaveLevel = false;
     }
 }

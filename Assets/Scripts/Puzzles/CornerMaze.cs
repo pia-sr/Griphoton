@@ -37,8 +37,9 @@ public class CornerMaze : MonoBehaviour
         };
         foreach(Node node in grid.grid)
         {
-            Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
+
             tile.transform.localScale = new Vector3(size, size, 0);
+            Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
             tile.GetComponent<SpriteRenderer>().color = Color.white;
 
         }

@@ -123,8 +123,8 @@ public class GridField : MonoBehaviour
     public Node GetNodeFromWorldPos(Vector3 worldPos)
     {
 
-        float xShift = worldPos.x + (gridWorldSize.x / 2);
-        float yShift = worldPos.y + (gridWorldSize.y / 2);
+        float xShift = worldPos.x - transform.localPosition.x + (gridWorldSize.x / 2);
+        float yShift = worldPos.y - transform.localPosition.y +(gridWorldSize.y / 2);
        
         int x = Mathf.FloorToInt(xShift/ _nodeDiameter);
         int y = Mathf.FloorToInt(yShift/ _nodeDiameter);

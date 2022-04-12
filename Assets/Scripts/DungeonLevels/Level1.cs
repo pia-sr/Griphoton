@@ -100,7 +100,6 @@ public class Level1 : MonoBehaviour
         }
         if (GameObject.Find("Player").GetComponent<Player>().leaveLevel)
         {
-            GameObject.Find("Player").GetComponent<Player>().leaveLevel = false;
             begin();
         }
     }
