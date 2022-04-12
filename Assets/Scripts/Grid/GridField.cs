@@ -264,7 +264,7 @@ public class GridField : MonoBehaviour
     public Rect bounds()
     {
         Vector3 gridBottomLeftWordPos = transform.position - Vector3.right * (gridWorldSize.x / 2) - Vector3.up * (gridWorldSize.y / 2);
-        Rect rectGrid = new Rect(gridBottomLeftWordPos, new Vector2(getGridSizeX(), getGridSizeY()));
+        Rect rectGrid = new Rect(gridBottomLeftWordPos, gridWorldSize);
         return rectGrid;
     }
 

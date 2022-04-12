@@ -77,7 +77,9 @@
     <Compile Include="Assets\Scripts\Save\GameData.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level18.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level15.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\RedPointPuzzle2.cs" />
     <Compile Include="Assets\Scripts\Enemies\Skeleton1.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\RedPointPuzzle1.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level14.cs" />
     <Compile Include="Assets\Scripts\Save\SaveSystem.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level5.cs" />
@@ -109,10 +111,9 @@
     <Compile Include="Assets\Scripts\Puzzles\PiecesOf8_2.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level13.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\MirrorPuzzle.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level9.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\RedPointPuzzle1.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\RedPointPuzzle2.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\MirrorPuzzle1.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle3.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\ProjectSettings\ProjectVersion.txt" />

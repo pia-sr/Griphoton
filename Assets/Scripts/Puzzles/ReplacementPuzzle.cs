@@ -119,21 +119,29 @@ public class ReplacementPuzzle : MonoBehaviour
                             }
                         }
                         row = newRow;
-                        for (int i = 0; i < row.Count; i++)
+                        if (row.Count < 8)
                         {
 
-                            symbol.transform.localScale = new Vector3(size, size, 0);
-                            GameObject item = Instantiate(symbol, grid.grid[1 + i, rowNumber].worldPosition, Quaternion.identity, symbolManager.transform);
-                            if (row[i] == 0)
+                            for (int i = 0; i < row.Count; i++)
                             {
-                                item.GetComponent<SpriteRenderer>().color = Color.black;
+
+                                symbol.transform.localScale = new Vector3(size, size, 0);
+                                GameObject item = Instantiate(symbol, grid.grid[1 + i, rowNumber].worldPosition, Quaternion.identity, symbolManager.transform);
+                                if (row[i].ToString() == "0")
+                                {
+                                    item.GetComponent<SpriteRenderer>().color = Color.black;
+                                }
+                                else
+                                {
+                                    item.GetComponent<SpriteRenderer>().color = Color.red;
+                                }
                             }
-                            else
-                            {
-                                item.GetComponent<SpriteRenderer>().color = Color.red;
-                            }
+                            selected.Clear();
                         }
-                        selected.Clear();
+                        else
+                        {
+                            exchangeButton.GetComponent<SpriteRenderer>().color = Color.magenta;
+                        }
                     }
                     else
                     {
@@ -276,11 +284,11 @@ public class ReplacementPuzzle : MonoBehaviour
     private List<int> replace(List<int> input)
     {
         List<int> output = new List<int>();
-        int counter = 0;
         for(int i = 0; i< inputSymbols.Count; i++)
         {
             if(input.Count == inputSymbols[i].Count)
             {
+                int counter = 0;
                 for(int j = 0; j < inputSymbols[i].Count; j++)
                 {
                     if(input[j] == inputSymbols[i][j])
