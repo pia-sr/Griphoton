@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\Grid\Node.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level11.cs" />
     <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\MainTutorial.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level3.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level7.cs" />
     <Compile Include="Assets\Scripts\Puzzles\RoomPuzzle2.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Assets\Scripts\Puzzles\HamiltonianMaze.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level20.cs" />
     <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle2.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle3.cs" />
     <Compile Include="Assets\Scripts\Grid\Pathfinder.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries2.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CornerMaze2.cs" />
@@ -113,7 +115,9 @@
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries.cs" />
     <Compile Include="Assets\Scripts\Puzzles\MirrorPuzzle.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level9.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle3.cs" />
+    <Compile Include="Assets\Scripts\TouchAnimation.cs" />
+    <Compile Include="Assets\Scripts\Circle.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\MovementSim.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\ProjectSettings\ProjectVersion.txt" />

@@ -12,6 +12,7 @@ public class Upperworld : MonoBehaviour
     public GameObject tree;
     public GameObject treeManager;
     public Game data;
+    public string playerName;
     
 
     void Awake()
@@ -22,26 +23,30 @@ public class Upperworld : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Node center = grid.GetNodeFromWorldPos(new Vector3(0, 0, 0));
-        center.setItemOnTop("Dungeon");
+        houses.SetActive(true);
+        //Node center = grid.GetNodeFromWorldPos(new Vector3(0, 0, 0));
+        Node center = grid.grid[(int)grid.getGridSizeX() / 2, ((int)grid.getGridSizeY() / 2) +2];
+        grid.setHouse(center, "Dungeon");
         houses.transform.GetChild(houses.transform.childCount - 1).transform.localPosition = center.worldPosition + new Vector3(0, 0, -1);
-        houses.transform.GetChild(houses.transform.childCount - 1).GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 5, grid.nodeRadius * 5, 1);
+        houses.transform.GetChild(houses.transform.childCount - 1).GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 6, grid.nodeRadius * 6, 1);
+        
         Pathfinder pathFinder = this.GetComponent<Pathfinder>();
 
         if (data.tutorial)
         {
             for (int i = 0; i < houses.transform.childCount - 1; i++)
             {
-                int x = Random.Range(1, grid.getGridSizeX());
-                int y = Random.Range(1, grid.getGridSizeY());
+                int x = Random.Range(1, grid.getGridSizeX()-1);
+                int y = Random.Range(1, grid.getGridSizeY()-1);
+
 
                 while (grid.grid[x, y].onTop != null)
                 {
-                    x = Random.Range(1, grid.getGridSizeX());
-                    y = Random.Range(1, grid.getGridSizeY());
+                    x = Random.Range(1, grid.getGridSizeX()-1);
+                    y = Random.Range(1, grid.getGridSizeY())-1;
                 }
 
-                grid.setHouse(grid.grid[x, y], houses.transform.GetChild(i).tag);
+                grid.setHouse(grid.grid[x, y], houses.transform.GetChild(i).name);
                 buildHouse(grid.grid[x, y]);
 
             }
@@ -60,7 +65,7 @@ public class Upperworld : MonoBehaviour
                     path[k].setItemOnTop("Path");
                 }
             }
-            for (int i = 0; i < 3000; i++)
+            for (int i = 0; i < 4000; i++)
             {
                 int x = Random.Range(0, grid.getGridSizeX());
                 int y = Random.Range(1, grid.getGridSizeY());
@@ -76,6 +81,9 @@ public class Upperworld : MonoBehaviour
                 grid.grid[x, y].setItemOnTop("Tree");
 
             }
+            data.namePlayer = name;
+            data.tutorial = false;
+            SaveSystem.saveGame(data);
             
         }
         else
@@ -109,9 +117,9 @@ public class Upperworld : MonoBehaviour
 
     private void buildHouse(Node node)
     {
-        GameObject house = GameObject.FindWithTag(node.onTop);
+        GameObject house = GameObject.Find(node.onTop);
+        house.transform.GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 6, grid.nodeRadius * 6, 1);
         house.transform.localPosition = node.worldPosition + new Vector3(0, 0, -1);
-        house.transform.GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 5, grid.nodeRadius * 5, 1);
     }
 
     // Update is called once per frame
@@ -133,5 +141,13 @@ public class Upperworld : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public void activateHouses(bool active)
+    {
+        for(int i = 0; i < houses.transform.childCount; i++)
+        {
+            houses.transform.GetChild(i).transform.GetChild(0).gameObject.SetActive(active);
+        }
     }
 }

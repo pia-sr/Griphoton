@@ -7,6 +7,8 @@ public class Node : IHeapItem<Node>
     //The position of the node
     public Vector3 worldPosition;
 
+    public string owner;
+
     //Bool to determine if a wall is on the node
     public bool isWalkable = true;
 
@@ -56,10 +58,6 @@ public class Node : IHeapItem<Node>
         if(unwalkable.Contains(itemOnTop))
         {
             isWalkable = false;
-        }
-        else
-        {
-            isWalkable = true;
         }
     }
 

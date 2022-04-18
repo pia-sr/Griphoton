@@ -7,6 +7,10 @@ public class Player : MonoBehaviour
 {
     public GridField grid;
     private Node targetNode;
+    public GameObject pathManager;
+    public GameObject TreeManager;
+    public GameObject puzzles;
+    public GameObject Houses;
     public Pathfinder pathFinder;
     private Node dungeon;
     private List<Node> path;
@@ -118,6 +122,19 @@ public class Player : MonoBehaviour
             else if (grid.GetNodeFromWorldPos(transform.position).onTop == "ExitOpen")
             {
                 nextLevel();
+            }
+            else if (grid.ghostNames.Contains(targetNode.onTop) || targetNode.onTop == "House")
+            {
+                string ghostName = grid.grid[path[0].gridX, path[0].gridY + 2].onTop;
+                GameObject ghostHouse = findWithTag(ghostName);
+                pathManager.gameObject.SetActive(false);
+                TreeManager.SetActive(false);
+                grid.gameObject.SetActive(false);
+                ghostHouse.SetActive(true);
+                Houses.SetActive(false);
+                targetNode = null;
+                setAllBoolsFalse();
+                this.gameObject.SetActive(false);
             }
         }
         if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
@@ -351,5 +368,18 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);
         leaveLevel = false;
+    }
+
+    private GameObject findWithTag(string tag)
+    {
+        GameObject foundPuzzles = null;
+        for(int i = 0; i < puzzles.transform.childCount; i++)
+        {
+            if(puzzles.transform.GetChild(i).CompareTag(tag))
+            {
+                foundPuzzles = puzzles.transform.GetChild(i).gameObject;
+            }
+        }
+        return foundPuzzles;
     }
 }

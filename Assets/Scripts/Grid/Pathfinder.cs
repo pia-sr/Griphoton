@@ -142,16 +142,30 @@ public class Pathfinder : MonoBehaviour
         List<Node> neighboursStart = _grid.GetNodeNeighboursDiagonal(startNode);
         int counterTarget = 0;
         int counterStart = 0;
-        while (!targetNode.isWalkable || _grid.getEnemiesPos().Contains(targetNode))
+        if(targetNode.onTop == "House")
         {
-            targetNode = neighboursTarget[counterTarget];
-            counterTarget++;
+            Node houseCenter = _grid.tagToNode(targetNode.owner);
+            targetNode = _grid.grid[houseCenter.gridX, houseCenter.gridY - 2];
         }
-        while(!startNode.isWalkable || _grid.getEnemiesPos().Contains(startNode))
+        else if (_grid.ghostNames.Contains(targetNode.onTop))
         {
-            startNode = neighboursStart[counterStart];
-            counterStart++;
+            targetNode = _grid.grid[targetNode.gridX, targetNode.gridY - 2];
         }
+        else
+        {
+            while (!targetNode.isWalkable || _grid.getEnemiesPos().Contains(targetNode))
+            {
+                targetNode = neighboursTarget[counterTarget];
+                counterTarget++;
+            }
+            while (!startNode.isWalkable || _grid.getEnemiesPos().Contains(startNode))
+            {
+                startNode = neighboursStart[counterStart];
+                counterStart++;
+
+            }
+        }
+        
 
         openList.insert(startNode);
         while (openList.count > 0)

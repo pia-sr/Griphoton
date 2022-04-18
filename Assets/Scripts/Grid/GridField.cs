@@ -42,7 +42,13 @@ public class GridField : MonoBehaviour
         "Remy",
         "Charlie",
         "Avery",
-        "Riley"
+        "Riley",
+        "Rowan",
+        "Jessie",
+        "Terrie",
+        "Brennan",
+        "Erin",
+        "Kaden"
     };
 
 
@@ -325,13 +331,14 @@ public class GridField : MonoBehaviour
             {
                 if(i == 0 && j == 0)
                 {
-                    node.setItemOnTop(name);
+                    node.onTop = name;
                     node.isWalkable = false;
                 }
                 else
                 {
                     grid[node.gridX + i, node.gridY + j].setItemOnTop("House");
-
+                    grid[node.gridX + i, node.gridY + j].isWalkable = false;
+                    grid[node.gridX + i, node.gridY + j].owner = name;
                 }
             }
         }
@@ -345,6 +352,18 @@ public class GridField : MonoBehaviour
                 grid[node.gridX + i, node.gridY + j].setItemOnTop("Solved");
             }
         }
+    }
+    public Node tagToNode(string tag)
+    {
+        Node chosenNode = null;
+        foreach(Node node in grid)
+        {
+            if(node.onTop == tag)
+            {
+                chosenNode = node;
+            }
+        }
+        return chosenNode;
     }
 
 }

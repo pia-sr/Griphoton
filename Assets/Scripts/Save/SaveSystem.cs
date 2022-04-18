@@ -6,9 +6,14 @@ public static class SaveSystem
 {
     public static void saveGame(Game game)
     {
+        FileStream stream = null;
         BinaryFormatter formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/gameData.game";
-        FileStream stream = new FileStream(path, FileMode.Create);
+        if (!System.IO.File.Exists("gameDat.game"))
+        {
+
+            stream = new FileStream(path, FileMode.Create);
+        }
 
         GameData data = new GameData(game);
 
