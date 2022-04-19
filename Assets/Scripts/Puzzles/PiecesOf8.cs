@@ -42,8 +42,8 @@ public class PiecesOf8 : MonoBehaviour
         {
             grid.grid[1,0],
             grid.grid[4,0],
-            grid.grid[5,2],
-            grid.grid[5,3]
+            grid.grid[0,2],
+            grid.grid[0,3]
         };
         colours = new List<Color>()
         {

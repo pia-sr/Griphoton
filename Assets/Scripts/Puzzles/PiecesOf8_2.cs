@@ -43,7 +43,7 @@ public class PiecesOf8_2 : MonoBehaviour
             grid.grid[2,0],
             grid.grid[3,0],
             grid.grid[4,0],
-            grid.grid[5,4]
+            grid.grid[0,4]
         };
         colours = new List<Color>()
         {
@@ -62,7 +62,7 @@ public class PiecesOf8_2 : MonoBehaviour
             tile.GetComponent<SpriteRenderer>().color = Color.white;
             Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform); 
             numbers.GetComponent<RectTransform>().sizeDelta = new Vector3(130, 130, 0);
-            numbers.fontSize = 90;
+            numbers.fontSize = 70;
             Instantiate(numbers, node.worldPosition, Quaternion.identity, tileNumbers.transform);
 
         }

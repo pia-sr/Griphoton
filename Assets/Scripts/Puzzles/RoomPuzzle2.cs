@@ -59,7 +59,7 @@ public class RoomPuzzle2 : MonoBehaviour
             Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
             if (textTiles.Contains(node))
             {
-                numbers.fontSize = 100;
+                numbers.fontSize = 70;
                 numbers.GetComponent<RectTransform>().sizeDelta = new Vector3(160, 160, 0);
                 numbers.text = "2";
                 Instantiate(numbers, node.worldPosition, Quaternion.identity, canvas.transform);
