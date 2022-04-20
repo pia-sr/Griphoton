@@ -38,12 +38,9 @@ public class ReplacementPuzzle3 : MonoBehaviour
         inactive = false;
         size = grid.nodeRadius * 1.25f;
         selected = new List<GameObject>();
-        for (int i = 0; i < grid.getGridSizeY(); i++)
+        for (int i = 0; i < symbolManager.transform.childCount; i++)
         {
-            rowText.GetComponent<RectTransform>().sizeDelta = new Vector3(130, 130, 0);
-            rowText.fontSize = 100;
-            Text text = Instantiate(rowText, grid.grid[0, i].worldPosition, Quaternion.identity, rowCanvas.transform);
-            text.text = (7 - i).ToString();
+            Destroy(symbolManager.transform.GetChild(i).gameObject);
         }
         rowNumber = 6;
         row = new List<int>() { 1 };
@@ -70,6 +67,13 @@ public class ReplacementPuzzle3 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        for (int i = 0; i < grid.getGridSizeY(); i++)
+        {
+            rowText.GetComponent<RectTransform>().sizeDelta = new Vector3(130, 130, 0);
+            rowText.fontSize = 100;
+            Text text = Instantiate(rowText, grid.grid[0, i].worldPosition, Quaternion.identity, rowCanvas.transform);
+            text.text = (7 - i).ToString();
+        }
         setUp();
     }
 
@@ -110,6 +114,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
                         }
                         Destroy(selectedTiles.transform.GetChild(i).gameObject);
                     }
+                    selected.Clear();
                     if (replace(rowSymbols).Count != 0)
                     {
                         rowNumber--;
@@ -167,7 +172,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
                 {
                     inactive = true;
                     message.transform.parent.gameObject.SetActive(true);
-                    message.text = "Please select at least one symbol.";
+                    message.text = "Your selected pattern is not valid. \nPlease select a different pattern.";
                 }
 
             }

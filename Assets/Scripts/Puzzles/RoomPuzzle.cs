@@ -37,6 +37,11 @@ public class RoomPuzzle : MonoBehaviour
 
     private void setUp()
     {
+
+        for (int i = 0; i < tilemanager.transform.childCount; i++)
+        {
+            Destroy(tilemanager.transform.GetChild(i).gameObject);
+        }
         inactive = false;
         select = false;
         unselect = false;
@@ -61,7 +66,7 @@ public class RoomPuzzle : MonoBehaviour
             tile.transform.localScale = new Vector3(size * 2, size * 2, 0);
             tile.GetComponent<SpriteRenderer>().color = Color.white;
             Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
-            if (textTiles.Contains(node))
+            if (textTiles.Contains(node) && canvas.transform.childCount < textTiles.Count)
             {
                 numbers.fontSize = 70;
                 numbers.GetComponent<RectTransform>().sizeDelta = new Vector3(160, 160, 0);

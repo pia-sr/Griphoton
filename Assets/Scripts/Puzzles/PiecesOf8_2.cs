@@ -37,7 +37,16 @@ public class PiecesOf8_2 : MonoBehaviour
     {
         inactive = false;
         colourTile.GetComponent<SpriteRenderer>().color = Color.red;
+        colourText.text = "1";
         size = grid.nodeRadius;
+        for(int i = 0; i < tileNumbers.transform.childCount; i++)
+        {
+            Destroy(tileNumbers.transform.GetChild(i).gameObject);
+        }
+        for (int i = 0; i < tilemanager.transform.childCount; i++)
+        {
+            Destroy(tilemanager.transform.GetChild(i).gameObject);
+        }
         Color orange = new Color(1, 0.5539422f, 0.1006289f, 1);
         Color blue = new Color(0.2019105f, 0.5038049f, 0.7735849f, 1);
         Color purple = new Color(0.7108399f, 0.5169099f, 0.9339623f, 1);

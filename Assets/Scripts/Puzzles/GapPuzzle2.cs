@@ -22,6 +22,11 @@ public class GapPuzzle2 : MonoBehaviour
 
     private void setUp()
     {
+
+        for (int i = 0; i < tilemanager.transform.childCount; i++)
+        {
+            Destroy(tilemanager.transform.GetChild(i).gameObject);
+        }
         tilesBlack = new List<int>();
         float size = (grid.nodeRadius * 2) - 0.005f;
 

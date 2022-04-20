@@ -23,6 +23,7 @@ public class MatchstickPuzzle1 : MonoBehaviour
     public GameObject player;
     private bool inactive;
     private List<Vector3> positions;
+    private List<float> rotations;
 
 
     private void setUp()
@@ -35,6 +36,9 @@ public class MatchstickPuzzle1 : MonoBehaviour
         {
             matchstickManager.transform.GetChild(i).transform.localPosition = positions[i];
             matchsticks.Add(matchstickManager.transform.GetChild(i).gameObject);
+            var rotation = matchstickManager.transform.GetChild(i).transform.localRotation.eulerAngles;
+            rotation.z = rotations[i];
+            matchstickManager.transform.GetChild(i).transform.localRotation = Quaternion.Euler(rotation);
         }
 
     }
@@ -42,12 +46,14 @@ public class MatchstickPuzzle1 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        setUp();
         positions = new List<Vector3>();
-        for(int i = 0; i< matchstickManager.transform.childCount; i++)
+        rotations = new List<float>();
+        for (int i = 0; i< matchstickManager.transform.childCount; i++)
         {
-            positions[i] = matchstickManager.transform.GetChild(i).transform.localPosition;
+            positions.Add(matchstickManager.transform.GetChild(i).transform.localPosition);
+            rotations.Add(matchstickManager.transform.GetChild(i).transform.localRotation.eulerAngles.z);
         }
+        setUp();
     }
 
     // Update is called once per frame

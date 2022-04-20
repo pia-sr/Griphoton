@@ -31,6 +31,11 @@ public class RegionDivision : MonoBehaviour
 
     private void setUp()
     {
+
+        for (int i = 0; i < tilemanager.transform.childCount; i++)
+        {
+            Destroy(tilemanager.transform.GetChild(i).gameObject);
+        }
         inactive = false;
         select = false;
         unselect = false;

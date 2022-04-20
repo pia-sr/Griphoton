@@ -27,6 +27,10 @@ public class MirrorPuzzle : MonoBehaviour
     private void setUp()
     {
         inactive = false;
+        for(int i = 0; i < symbolManager.transform.childCount; i++)
+        {
+            Destroy(symbolManager.transform.GetChild(i).gameObject);
+        }
         person.GetComponent<SpriteRenderer>().color = Color.black;
         person.transform.localScale = new Vector3(grid.nodeRadius, grid.nodeRadius, 0);
 

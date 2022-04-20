@@ -31,6 +31,20 @@ public class CornerMaze : MonoBehaviour
 
     private void setUp()
     {
+        if (path.transform.childCount > 2)
+        {
+
+            for (int i = 2; i < path.transform.childCount; i++)
+            {
+                Destroy(path.transform.GetChild(i).gameObject);
+            }
+        }
+        selectedTiles.Clear();
+        selectedTiles.Add(startTile);
+    }
+
+    void Start()
+    {
         float size = (grid.nodeRadius * 2) - 0.015f;
         startTile = grid.grid[0, 0];
         selectedTiles = new List<Node>()
@@ -71,10 +85,6 @@ public class CornerMaze : MonoBehaviour
         canvas.transform.GetChild(5).GetComponent<Text>().text = "2";
         canvas.transform.GetChild(6).GetComponent<Text>().text = "1";
         canvas.transform.GetChild(7).GetComponent<Text>().text = "2";
-    }
-
-    void Start()
-    {
         setUp();
     }
 

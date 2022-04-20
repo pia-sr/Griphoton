@@ -27,6 +27,21 @@ public class HamiltonianMaze2 : MonoBehaviour
 
     private void setUp()
     {
+        foreach (Node node in grid.grid)
+        {
+            node.tileValue = 0;
+        }
+        for (int i = 0; i < linesManager.transform.childCount; i++)
+        {
+            linesManager.transform.GetChild(i).GetComponent<LineRenderer>().material.color = Color.white;
+        }
+
+        
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
         List<Node> noConnectionEnd = new List<Node>()
         {
             grid.grid[1,1],
@@ -93,11 +108,6 @@ public class HamiltonianMaze2 : MonoBehaviour
 
 
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
         setUp();
     }
     private void DrawLine(Vector3 start, Vector3 end)

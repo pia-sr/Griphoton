@@ -39,12 +39,9 @@ public class RedPointPuzzle1 : MonoBehaviour
             grid.grid[2,3],
             grid.grid[4,4]
         };
-        foreach(Node node in dots)
+        for(int i = 0; i < circleManager.transform.childCount; i++)
         {
-
-            circle.transform.localScale = new Vector3(grid.nodeRadius * 1.5f, grid.nodeRadius * 1.5f, 0);
-            circle.GetComponent<SpriteRenderer>().color = Color.black;
-            Instantiate(circle, node.worldPosition, Quaternion.identity, circleManager.transform);
+            circleManager.transform.GetChild(i).GetComponent<SpriteRenderer>().color = Color.black;
         }
 
     }
@@ -53,6 +50,13 @@ public class RedPointPuzzle1 : MonoBehaviour
     void Start()
     {
         setUp();
+        foreach (Node node in dots)
+        {
+
+            circle.transform.localScale = new Vector3(grid.nodeRadius * 1.5f, grid.nodeRadius * 1.5f, 0);
+            circle.GetComponent<SpriteRenderer>().color = Color.black;
+            Instantiate(circle, node.worldPosition, Quaternion.identity, circleManager.transform);
+        }
     }
 
     private Rect tile2Rect(Transform tile)

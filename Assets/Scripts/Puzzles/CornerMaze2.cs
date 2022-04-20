@@ -22,13 +22,28 @@ public class CornerMaze2 : MonoBehaviour
 
 
     private LineRenderer pathRend;
-
+    /*
     void Awake()
     {
         grid = GetComponent<GridField>();
-    }
+    }*/
 
     private void setUp()
+    {
+        if (path.transform.childCount > 2)
+        {
+
+            for (int i = 2; i < path.transform.childCount; i++)
+            {
+                Destroy(path.transform.GetChild(i).gameObject);
+            }
+        }
+        selectedTiles.Clear();
+        selectedTiles.Add(startTile);
+    }
+
+    // Start is called before the first frame update
+    void Start()
     {
         float size = (grid.nodeRadius * 2) - 0.015f;
         startTile = grid.grid[0, 0];
@@ -61,11 +76,6 @@ public class CornerMaze2 : MonoBehaviour
         canvas.transform.GetChild(1).GetComponent<Text>().text = "4";
         canvas.transform.GetChild(2).GetComponent<Text>().text = "0";
         canvas.transform.GetChild(3).GetComponent<Text>().text = "4";
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
         setUp();
     }
 
