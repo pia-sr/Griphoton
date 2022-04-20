@@ -11,6 +11,8 @@ public class HamiltonianMaze : MonoBehaviour
     public GameObject tilemanager;
     public GameObject linesManager;
     public GameObject line;
+    public GameObject griphoton;
+    public GameObject player;
     private List<Vector3> lineVec;
     private LineRenderer lineRend;
     private bool selected;
@@ -22,8 +24,8 @@ public class HamiltonianMaze : MonoBehaviour
     {
         grid = GetComponent<GridField>();
     }
-    // Start is called before the first frame update
-    void Start()
+
+    private void setUp()
     {
         List<Node> noConnectionEnd = new List<Node>()
         {
@@ -46,28 +48,28 @@ public class HamiltonianMaze : MonoBehaviour
             grid.grid[2, 0],
             grid.grid[2, 4]
         };
-    
+
         float size = grid.nodeRadius;
         foreach (Node node in grid.grid)
         {
-            foreach(Node neighbour in grid.GetNodeNeighbours(node))
+            foreach (Node neighbour in grid.GetNodeNeighbours(node))
             {
                 if (!noThere.Contains(node))
                 {
-                    Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
                     tile.transform.localScale = new Vector3(size, size, 0);
                     tile.GetComponent<SpriteRenderer>().color = Color.white;
+                    Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
 
-                    if(neighbour.gridX - node.gridX >= 0 && neighbour.gridY - node.gridY >= 0)
+                    if (neighbour.gridX - node.gridX >= 0 && neighbour.gridY - node.gridY >= 0)
                     {
                         if (!(noConnectionEnd.Contains(neighbour) && noConnectionStart.Contains(node)))
                         {
                             if (noThere.Contains(neighbour))
                             {
-                                int x = neighbour.gridX +(neighbour.gridX - node.gridX);
+                                int x = neighbour.gridX + (neighbour.gridX - node.gridX);
                                 int y = neighbour.gridY + (neighbour.gridY - node.gridY);
 
-                                if(x < grid.getGridSizeX() && x >= 0 && y < grid.getGridSizeY() && y >= 0)
+                                if (x < grid.getGridSizeX() && x >= 0 && y < grid.getGridSizeY() && y >= 0)
                                 {
 
                                     DrawLine(node.worldPosition, grid.grid[x, y].worldPosition);
@@ -84,13 +86,18 @@ public class HamiltonianMaze : MonoBehaviour
             }
 
         }
-        for(int i = 0; i < tilemanager.transform.childCount; i++)
+        for (int i = 0; i < tilemanager.transform.childCount; i++)
         {
             GameObject currentTile = tilemanager.transform.GetChild(i).gameObject;
-            
+
 
         }
+    }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        setUp();
     }
     private void DrawLine(Vector3 start, Vector3 end)
     {
@@ -196,7 +203,10 @@ public class HamiltonianMaze : MonoBehaviour
             }
             if (checkWin())
             {
-                Debug.Log("Won!");
+                griphoton.SetActive(true);
+                player.SetActive(true);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
+                this.transform.parent.gameObject.SetActive(false);
             }
         }
     }
@@ -213,5 +223,16 @@ public class HamiltonianMaze : MonoBehaviour
             }
         }
         return true;
+    }
+    public void restart()
+    {
+        setUp();
+    }
+    public void leave()
+    {
+        griphoton.SetActive(true);
+        player.SetActive(true);
+        setUp();
+        this.transform.parent.gameObject.SetActive(false);
     }
 }

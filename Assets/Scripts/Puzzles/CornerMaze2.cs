@@ -11,6 +11,8 @@ public class CornerMaze2 : MonoBehaviour
     public GameObject tilemanager;
     public GameObject path;
     public GameObject line;
+    public GameObject griphoton;
+    public GameObject player;
     public Text numbers;
     private List<Node> selectedTiles;
     private Node startTile;
@@ -25,10 +27,9 @@ public class CornerMaze2 : MonoBehaviour
     {
         grid = GetComponent<GridField>();
     }
-    // Start is called before the first frame update
-    void Start()
-    {
 
+    private void setUp()
+    {
         float size = (grid.nodeRadius * 2) - 0.015f;
         startTile = grid.grid[0, 0];
         selectedTiles = new List<Node>()
@@ -37,9 +38,9 @@ public class CornerMaze2 : MonoBehaviour
         };
         foreach (Node node in grid.grid)
         {
-            Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
-            tile.transform.localScale = new Vector3(size, size, 0);
             tile.GetComponent<SpriteRenderer>().color = Color.white;
+            tile.transform.localScale = new Vector3(size, size, 0);
+            Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
 
         }
 
@@ -52,7 +53,7 @@ public class CornerMaze2 : MonoBehaviour
         };
         for (int i = 0; i < corners.Count; i++)
         {
-            numbers.fontSize = 100;
+            numbers.fontSize = 70;
             numbers.GetComponent<RectTransform>().sizeDelta = new Vector3(160, 160, 0);
             Instantiate(numbers, corners[i].worldPosition, Quaternion.identity, canvas.transform);
         }
@@ -60,7 +61,12 @@ public class CornerMaze2 : MonoBehaviour
         canvas.transform.GetChild(1).GetComponent<Text>().text = "4";
         canvas.transform.GetChild(2).GetComponent<Text>().text = "0";
         canvas.transform.GetChild(3).GetComponent<Text>().text = "4";
+    }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        setUp();
     }
 
 
@@ -111,7 +117,10 @@ public class CornerMaze2 : MonoBehaviour
             }
             if (checkWin())
             {
-                Debug.Log("Won!");
+                griphoton.SetActive(true);
+                player.SetActive(true);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
+                this.transform.parent.gameObject.SetActive(false);
             }
 
         }
@@ -189,5 +198,16 @@ public class CornerMaze2 : MonoBehaviour
 
         }
         return true;
+    }
+    public void restart()
+    {
+        setUp();
+    }
+    public void leave()
+    {
+        griphoton.SetActive(true);
+        player.SetActive(true);
+        setUp();
+        this.transform.parent.gameObject.SetActive(false);
     }
 }

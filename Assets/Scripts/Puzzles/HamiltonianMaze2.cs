@@ -11,6 +11,8 @@ public class HamiltonianMaze2 : MonoBehaviour
     public GameObject tilemanager;
     public GameObject linesManager;
     public GameObject line;
+    public GameObject griphoton;
+    public GameObject player;
     private List<Vector3> lineVec;
     private LineRenderer lineRend;
     private bool selected;
@@ -22,8 +24,8 @@ public class HamiltonianMaze2 : MonoBehaviour
     {
         grid = GetComponent<GridField>();
     }
-    // Start is called before the first frame update
-    void Start()
+
+    private void setUp()
     {
         List<Node> noConnectionEnd = new List<Node>()
         {
@@ -55,9 +57,9 @@ public class HamiltonianMaze2 : MonoBehaviour
             {
                 if (!noThere.Contains(node))
                 {
-                    Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
                     tile.transform.localScale = new Vector3(size, size, 0);
                     tile.GetComponent<SpriteRenderer>().color = Color.white;
+                    Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
 
                     if (neighbour.gridX - node.gridX >= 0 && neighbour.gridY - node.gridY >= 0)
                     {
@@ -91,7 +93,12 @@ public class HamiltonianMaze2 : MonoBehaviour
 
 
         }
+    }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        setUp();
     }
     private void DrawLine(Vector3 start, Vector3 end)
     {
@@ -197,7 +204,10 @@ public class HamiltonianMaze2 : MonoBehaviour
             }
             if (checkWin())
             {
-                Debug.Log("Won!");
+                griphoton.SetActive(true);
+                player.SetActive(true);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
+                this.transform.parent.gameObject.SetActive(false);
             }
         }
     }
@@ -214,5 +224,17 @@ public class HamiltonianMaze2 : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public void restart()
+    {
+        setUp();
+    }
+    public void leave()
+    {
+        griphoton.SetActive(true);
+        player.SetActive(true);
+        setUp();
+        this.transform.parent.gameObject.SetActive(false);
     }
 }

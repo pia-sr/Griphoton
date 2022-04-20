@@ -15,6 +15,9 @@ public class RoomPuzzle2 : MonoBehaviour
     private List<Node> textTiles;
     public Canvas canvas;
     public Text numbers;
+    public GameObject griphoton;
+    public GameObject player;
+    private bool inactive;
 
     private List<Node> red;
     private List<Node> blue;
@@ -32,9 +35,9 @@ public class RoomPuzzle2 : MonoBehaviour
         grid = GetComponent<GridField>();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void setUp()
     {
+        inactive = false;
         select = false;
         unselect = false;
         colourTile.GetComponent<SpriteRenderer>().color = Color.red;
@@ -67,6 +70,12 @@ public class RoomPuzzle2 : MonoBehaviour
 
         }
     }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        setUp();
+    }
     private Rect tile2Rect(Transform tile)
     {
 
@@ -82,7 +91,7 @@ public class RoomPuzzle2 : MonoBehaviour
             select = false;
             unselect = false;
         }
-        else if (Input.GetMouseButton(0) && !checkWin())
+        else if (Input.GetMouseButton(0) && !inactive)
         {
 
             Color colour = colourTile.GetComponent<SpriteRenderer>().color;
@@ -190,7 +199,10 @@ public class RoomPuzzle2 : MonoBehaviour
 
             if (checkWin())
             {
-                Debug.Log("Won!");
+                griphoton.SetActive(true);
+                player.SetActive(true);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
+                this.transform.parent.gameObject.SetActive(false);
             }
 
         }
@@ -304,5 +316,17 @@ public class RoomPuzzle2 : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public void restart()
+    {
+        setUp();
+    }
+    public void leave()
+    {
+        griphoton.SetActive(true);
+        player.SetActive(true);
+        setUp();
+        this.transform.parent.gameObject.SetActive(false);
     }
 }

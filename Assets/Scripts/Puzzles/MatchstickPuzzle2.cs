@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MatchstickPuzzle2 : MonoBehaviour
 {
@@ -18,25 +19,43 @@ public class MatchstickPuzzle2 : MonoBehaviour
     private float distRotate;
     private float distMove;
     private bool moveStick;
+    public Text message;
+    public GameObject griphoton;
+    public GameObject player;
+    private bool inactive;
+    private List<Vector3> positions;
 
-
-
-    // Start is called before the first frame update
-    void Start()
+    private void setUp()
     {
+        inactive = false;
         movedSticks = new List<GameObject>();
         selectedStick = null;
         matchsticks = new List<GameObject>();
         for(int i = 0; i < matchstickManager.transform.childCount; i++)
         {
+
+            matchstickManager.transform.GetChild(i).transform.localPosition = positions[i];
             matchsticks.Add(matchstickManager.transform.GetChild(i).gameObject);
+        }
+
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        setUp();
+
+        positions = new List<Vector3>();
+        for (int i = 0; i < matchstickManager.transform.childCount; i++)
+        {
+            positions[i] = matchstickManager.transform.GetChild(i).transform.localPosition;
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0) && !won() && !lost)
+        if (Input.GetMouseButton(0) && !inactive)
         {
 
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -71,7 +90,9 @@ public class MatchstickPuzzle2 : MonoBehaviour
                         {
                             if(movedSticks.Count == 3 && !movedSticks.Contains(matchstick))
                             {
-                                lost = true;
+                                inactive = true;
+                                message.transform.parent.gameObject.SetActive(true);
+                                message.text = "You already moved 3 matchsticks! \nYou can reset the matchsticks with the reset button, if you want to move a different one.";
                             }
                             selected = true;
                             selectedBounds = new Bounds(matchstick.transform.localPosition, matchstick.transform.localScale);
@@ -137,12 +158,11 @@ public class MatchstickPuzzle2 : MonoBehaviour
         }
         if (won())
         {
-          
-            Debug.Log("Won!");
-        }
-        else if (lost)
-        {
-            Debug.Log("Lost!");
+
+            griphoton.SetActive(true);
+            player.SetActive(true);
+            griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
+            this.transform.parent.gameObject.SetActive(false);
         }
     }
     
@@ -194,5 +214,23 @@ public class MatchstickPuzzle2 : MonoBehaviour
 
         }
         return false;
+    }
+
+    public void restart()
+    {
+        setUp();
+    }
+    public void leave()
+    {
+        griphoton.SetActive(true);
+        player.SetActive(true);
+        setUp();
+        this.transform.parent.gameObject.SetActive(false);
+    }
+
+    public void close()
+    {
+        message.transform.parent.gameObject.SetActive(false);
+        inactive = false;
     }
 }

@@ -14,6 +14,9 @@ public class MirrorPuzzle : MonoBehaviour
     public GameObject person;
     public GameObject mirror;
     public Canvas canvas;
+    public GameObject griphoton;
+    public GameObject player;
+    private bool inactive;
 
 
     void Awake()
@@ -21,10 +24,9 @@ public class MirrorPuzzle : MonoBehaviour
         grid = GetComponent<GridField>();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void setUp()
     {
-
+        inactive = false;
         person.GetComponent<SpriteRenderer>().color = Color.black;
         person.transform.localScale = new Vector3(grid.nodeRadius, grid.nodeRadius, 0);
 
@@ -34,9 +36,16 @@ public class MirrorPuzzle : MonoBehaviour
         foreach (Node node in grid.grid)
         {
             node.onTop = "Empty";
-            Instantiate(tile, node.worldPosition, Quaternion.identity, tileManager.transform);
             tile.GetComponent<SpriteRenderer>().color = Color.white;
+            Instantiate(tile, node.worldPosition, Quaternion.identity, tileManager.transform);
         }
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        setUp();
+        
     }
     private Rect tile2Rect(Vector3 center)
     {
@@ -48,7 +57,7 @@ public class MirrorPuzzle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !checkWin())
+        if (Input.GetMouseButtonDown(0) && !inactive)
         {
             foreach(Node node in grid.grid)
             {
@@ -128,7 +137,10 @@ public class MirrorPuzzle : MonoBehaviour
             }
             if (checkWin())
             {
-                Debug.Log("Won!");
+                griphoton.SetActive(true);
+                player.SetActive(true);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
+                this.transform.parent.gameObject.SetActive(false);
             }
 
         }
@@ -264,4 +276,16 @@ public class MirrorPuzzle : MonoBehaviour
         return true;
        
     }
+    public void restart()
+    {
+        setUp();
+    }
+    public void leave()
+    {
+        griphoton.SetActive(true);
+        player.SetActive(true);
+        setUp();
+        this.transform.parent.gameObject.SetActive(false);
+    }
+
 }

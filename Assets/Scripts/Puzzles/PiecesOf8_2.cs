@@ -17,6 +17,9 @@ public class PiecesOf8_2 : MonoBehaviour
     public GameObject tileNumbers;
     public Text numbers;
     public Text colourText;
+    public GameObject griphoton;
+    public GameObject player;
+    private bool inactive;
 
     private List<Color> colours;
 
@@ -30,9 +33,9 @@ public class PiecesOf8_2 : MonoBehaviour
         grid = GetComponent<GridField>();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void setUp()
     {
+        inactive = false;
         colourTile.GetComponent<SpriteRenderer>().color = Color.red;
         size = grid.nodeRadius;
         Color orange = new Color(1, 0.5539422f, 0.1006289f, 1);
@@ -60,12 +63,20 @@ public class PiecesOf8_2 : MonoBehaviour
         {
             tile.transform.localScale = new Vector3(size * 2, size * 2, 0);
             tile.GetComponent<SpriteRenderer>().color = Color.white;
-            Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform); 
             numbers.GetComponent<RectTransform>().sizeDelta = new Vector3(130, 130, 0);
             numbers.fontSize = 70;
+            numbers.text = "";
+            Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform); 
             Instantiate(numbers, node.worldPosition, Quaternion.identity, tileNumbers.transform);
 
         }
+
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        setUp();
     }
     private Rect tile2Rect(Transform tile)
     {
@@ -77,7 +88,7 @@ public class PiecesOf8_2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !checkWin())
+        if (Input.GetMouseButtonDown(0) && !inactive)
         {
 
             Color colour = colourTile.GetComponent<SpriteRenderer>().color;
@@ -146,7 +157,10 @@ public class PiecesOf8_2 : MonoBehaviour
             }
             if (checkWin())
             {
-                Debug.Log("Won!");
+                griphoton.SetActive(true);
+                player.SetActive(true);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
+                this.transform.parent.gameObject.SetActive(false);
             }
 
         }
@@ -250,5 +264,17 @@ public class PiecesOf8_2 : MonoBehaviour
         }
 
         return true;
+    }
+
+    public void restart()
+    {
+        setUp();
+    }
+    public void leave()
+    {
+        griphoton.SetActive(true);
+        player.SetActive(true);
+        setUp();
+        this.transform.parent.gameObject.SetActive(false);
     }
 }

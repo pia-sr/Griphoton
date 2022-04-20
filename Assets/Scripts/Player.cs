@@ -127,11 +127,8 @@ public class Player : MonoBehaviour
             {
                 string ghostName = grid.grid[path[0].gridX, path[0].gridY + 2].onTop;
                 GameObject ghostHouse = findWithTag(ghostName);
-                pathManager.gameObject.SetActive(false);
-                TreeManager.SetActive(false);
                 grid.gameObject.SetActive(false);
                 ghostHouse.SetActive(true);
-                Houses.SetActive(false);
                 targetNode = null;
                 setAllBoolsFalse();
                 this.gameObject.SetActive(false);

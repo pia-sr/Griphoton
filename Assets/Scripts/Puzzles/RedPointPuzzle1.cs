@@ -10,6 +10,9 @@ public class RedPointPuzzle1 : MonoBehaviour
     public GameObject circleManager;
     private List<Node> selectedDots;
     private List<Node> dots;
+    public GameObject griphoton;
+    public GameObject player;
+    private bool inactive;
 
 
     void Awake()
@@ -17,9 +20,9 @@ public class RedPointPuzzle1 : MonoBehaviour
         grid = GetComponent<GridField>();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void setUp()
     {
+        inactive = false;
         selectedDots = new List<Node>();
         dots = new List<Node>()
         {
@@ -40,9 +43,16 @@ public class RedPointPuzzle1 : MonoBehaviour
         {
 
             circle.transform.localScale = new Vector3(grid.nodeRadius * 1.5f, grid.nodeRadius * 1.5f, 0);
-            Instantiate(circle, node.worldPosition, Quaternion.identity, circleManager.transform);
             circle.GetComponent<SpriteRenderer>().color = Color.black;
+            Instantiate(circle, node.worldPosition, Quaternion.identity, circleManager.transform);
         }
+
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        setUp();
     }
 
     private Rect tile2Rect(Transform tile)
@@ -55,7 +65,7 @@ public class RedPointPuzzle1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !checkWin())
+        if (Input.GetMouseButtonDown(0) && !inactive)
         {
             for(int i = 0; i < circleManager.transform.childCount; i++)
             {
@@ -100,7 +110,10 @@ public class RedPointPuzzle1 : MonoBehaviour
             }
             if (checkWin())
             {
-                Debug.Log("Won!");
+                griphoton.SetActive(true);
+                player.SetActive(true);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
+                this.transform.parent.gameObject.SetActive(false);
             }
 
         }
@@ -131,5 +144,17 @@ public class RedPointPuzzle1 : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void restart()
+    {
+        setUp();
+    }
+    public void leave()
+    {
+        griphoton.SetActive(true);
+        player.SetActive(true);
+        setUp();
+        this.transform.parent.gameObject.SetActive(false);
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(GridField))]
 public class Upperworld : MonoBehaviour
@@ -13,6 +14,10 @@ public class Upperworld : MonoBehaviour
     public GameObject treeManager;
     public Game data;
     public string playerName;
+    public Text messageSimple;
+
+    private List<string> wonSentences;
+
     
 
     void Awake()
@@ -36,14 +41,14 @@ public class Upperworld : MonoBehaviour
         {
             for (int i = 0; i < houses.transform.childCount - 1; i++)
             {
-                int x = Random.Range(1, grid.getGridSizeX()-1);
-                int y = Random.Range(1, grid.getGridSizeY()-1);
+                int x = Random.Range(5, grid.getGridSizeX()-5);
+                int y = Random.Range(5, grid.getGridSizeY()-5);
 
 
                 while (grid.grid[x, y].onTop != null)
                 {
-                    x = Random.Range(1, grid.getGridSizeX()-1);
-                    y = Random.Range(1, grid.getGridSizeY())-1;
+                    x = Random.Range(5, grid.getGridSizeX()-5);
+                    y = Random.Range(5, grid.getGridSizeY()-5);
                 }
 
                 grid.setHouse(grid.grid[x, y], houses.transform.GetChild(i).name);
@@ -81,7 +86,7 @@ public class Upperworld : MonoBehaviour
                 grid.grid[x, y].setItemOnTop("Tree");
 
             }
-            data.namePlayer = name;
+            data.namePlayer = playerName;
             data.tutorial = false;
             SaveSystem.saveGame(data);
             
@@ -111,6 +116,15 @@ public class Upperworld : MonoBehaviour
 
 
         }
+        wonSentences = new List<string>()
+        {
+            "Congratulations! \nYou solved the puzzle!",
+            "Thank you so much for your help, " + playerName + "!",
+            "Goodbye, " + playerName + ".\nGood luck with the dungeon!",
+            "Brilliant! \nI knew you could help me.",
+            "Now I can finally pass on. \nThank you, " + playerName + "!"
+
+        };
 
 
     }
@@ -149,5 +163,25 @@ public class Upperworld : MonoBehaviour
         {
             houses.transform.GetChild(i).transform.GetChild(0).gameObject.SetActive(active);
         }
+    }
+
+    public void setHouseSolved(string houseName)
+    {
+        foreach(Node node in grid.grid)
+        {
+            if(node.onTop == houseName)
+            {
+                int randIndex = Random.Range(0, wonSentences.Count);
+                grid.solvedHouse(node);
+                GameObject house = GameObject.Find(houseName);
+                Destroy(house);
+                messageSimple.transform.parent.gameObject.SetActive(true);
+                messageSimple.text = wonSentences[randIndex];
+            }
+        }
+    }
+    public void close()
+    {
+        messageSimple.transform.parent.gameObject.SetActive(false);
     }
 }

@@ -11,6 +11,9 @@ public class CannibalsMissionaries : MonoBehaviour
     public GameObject boat;
     public GameObject button;
     public Text counterText;
+    public Text message;
+    public GameObject griphoton;
+    public GameObject player;
 
     private List<GameObject> onBoat;
     private List<GameObject> left;
@@ -19,12 +22,15 @@ public class CannibalsMissionaries : MonoBehaviour
     private List<Vector3> chickenPos;
     private bool onTheMove;
     private bool boatLeft;
-    private Vector3 leftBoatPos;
     private GameObject[] boatSeats;
     private int moveCounter;
+    private bool inactive;
+
     // Start is called before the first frame update
-    void Start()
+
+    private void setUp()
     {
+        message.transform.parent.gameObject.SetActive(false);
         left = new List<GameObject>();
         right = new List<GameObject>();
         onBoat = new List<GameObject>();
@@ -42,7 +48,7 @@ public class CannibalsMissionaries : MonoBehaviour
                 left.Add(wolves.transform.GetChild(i - 3).gameObject);
             }
         }
-        boatSeats = new GameObject[] { null,null };
+        boatSeats = new GameObject[] { null, null };
         wolvesPos = new List<Vector3>()
         {
             new Vector3(-6,2,0),
@@ -55,9 +61,15 @@ public class CannibalsMissionaries : MonoBehaviour
             new Vector3(-5,-2.4f,0),
             new Vector3(-7,-2.4f,0)
         };
-        leftBoatPos = boat.transform.localPosition;
         boatLeft = true;
+        boat.transform.localPosition = new Vector3(-2.2f,0, 0);
         counterText.text = moveCounter.ToString();
+    }
+
+    void Start()
+    {
+        setUp();
+        
     }
     private Rect tile2Rect(GameObject tile)
     {
@@ -69,7 +81,7 @@ public class CannibalsMissionaries : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !onTheMove && !won() && !lost())
+        if (Input.GetMouseButtonDown(0) && !onTheMove && !inactive)
         {
             GameObject animal;
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -197,11 +209,17 @@ public class CannibalsMissionaries : MonoBehaviour
         }positions();
         if (lost())
         {
-            Debug.Log("lost!");
+            message.transform.parent.gameObject.SetActive(true);
+            message.transform.parent.transform.GetChild(0).transform.GetComponentInChildren<Text>().text = "Yes";
+            message.transform.parent.transform.GetChild(1).transform.GetComponentInChildren<Text>().text = "No";
+            message.text = "Game over! \nDo you want to try again?";
         }
         else if (won())
         {
-            Debug.Log("won!");
+            griphoton.SetActive(true);
+            player.SetActive(true);
+            griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
+            this.transform.parent.gameObject.SetActive(false);
         }
     }
     private void positions()
@@ -306,5 +324,17 @@ public class CannibalsMissionaries : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void restart()
+    {
+        setUp();
+    }
+    public void leave()
+    {
+        griphoton.SetActive(true);
+        player.SetActive(true);
+        setUp();
+        this.transform.parent.gameObject.SetActive(false);
     }
 }

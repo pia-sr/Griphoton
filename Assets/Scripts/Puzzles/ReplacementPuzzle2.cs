@@ -13,6 +13,10 @@ public class ReplacementPuzzle2 : MonoBehaviour
     public GameObject symbolManager;
     public GameObject exchangeButton;
     public GameObject selectedTiles;
+    public GameObject griphoton;
+    public GameObject player;
+    private bool inactive;
+    public Text message;
 
     private int rowNumber;
     private List<GameObject> selected;
@@ -29,20 +33,20 @@ public class ReplacementPuzzle2 : MonoBehaviour
         grid = GetComponent<GridField>();
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void setUp()
     {
-        size = grid.nodeRadius *1.25f;
+        inactive = false;
+        size = grid.nodeRadius * 1.25f;
         selected = new List<GameObject>();
-        for(int i = 0; i < grid.getGridSizeY(); i++)
+        for (int i = 0; i < grid.getGridSizeY(); i++)
         {
             rowText.GetComponent<RectTransform>().sizeDelta = new Vector3(130, 130, 0);
             rowText.fontSize = 100;
-            Text text = Instantiate(rowText, grid.grid[0,i].worldPosition, Quaternion.identity, rowCanvas.transform);
+            Text text = Instantiate(rowText, grid.grid[0, i].worldPosition, Quaternion.identity, rowCanvas.transform);
             text.text = (7 - i).ToString();
         }
         rowNumber = 6;
-        row = new List<int>() { 1,0 };
+        row = new List<int>() { 1, 0 };
         symbol.transform.localScale = new Vector3(size, size, 0);
         GameObject symbol1 = Instantiate(symbol, grid.grid[1, 6].worldPosition, Quaternion.identity, symbolManager.transform);
         symbol1.GetComponent<SpriteRenderer>().color = Color.red;
@@ -65,6 +69,12 @@ public class ReplacementPuzzle2 : MonoBehaviour
         buttonColour = exchangeButton.GetComponent<SpriteRenderer>().color;
     }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        setUp();
+    }
+
     private Rect tile2Rect(GameObject tile)
     {
 
@@ -75,7 +85,7 @@ public class ReplacementPuzzle2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !checkWin())
+        if (Input.GetMouseButtonDown(0) && !inactive)
         {
 
             exchangeButton.GetComponent<SpriteRenderer>().color = buttonColour;
@@ -142,20 +152,26 @@ public class ReplacementPuzzle2 : MonoBehaviour
                         }
                         else
                         {
-                            exchangeButton.GetComponent<SpriteRenderer>().color = Color.magenta;
+                            inactive = true;
+                            message.transform.parent.gameObject.SetActive(true);
+                            message.text = "You reached the limit of symbols for this row. \nPlease select a different pattern or reset the puzzle.";
                         }
                     }
                     else
                     {
-                        exchangeButton.GetComponent<SpriteRenderer>().color = Color.magenta;
+                        inactive = true;
+                        message.transform.parent.gameObject.SetActive(true);
+                        message.text = "Your selected pattern is not valid. \nPlease select a different pattern.";
                     }
 
                 }
                 else
                 {
-                    exchangeButton.GetComponent<SpriteRenderer>().color = Color.magenta;
+                    inactive = true;
+                    message.transform.parent.gameObject.SetActive(true);
+                    message.text = "Please select at least one symbol.";
                 }
-                
+
             }
 
             for (int i = 1; i < grid.getGridSizeX(); i++)
@@ -213,7 +229,10 @@ public class ReplacementPuzzle2 : MonoBehaviour
             }
             if (checkWin())
             {
-                Debug.Log("Won!");
+                griphoton.SetActive(true);
+                player.SetActive(true);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
+                this.transform.parent.gameObject.SetActive(false);
             }
 
         }
@@ -306,6 +325,22 @@ public class ReplacementPuzzle2 : MonoBehaviour
             }
         }
         return output;
+    }
+    public void restart()
+    {
+        setUp();
+    }
+    public void leave()
+    {
+        griphoton.SetActive(true);
+        player.SetActive(true);
+        setUp();
+        this.transform.parent.gameObject.SetActive(false);
+    }
+    public void close()
+    {
+        inactive = false;
+        message.transform.parent.gameObject.SetActive(false);
     }
 
 }

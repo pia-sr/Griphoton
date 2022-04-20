@@ -8,6 +8,9 @@ public class GapPuzzle2 : MonoBehaviour
     public GridField grid;
     public GameObject tile;
     public GameObject tilemanager;
+
+    public GameObject griphoton;
+    public GameObject player;
     private List<int> tilesBlack;
     void Awake()
     {
@@ -16,20 +19,25 @@ public class GapPuzzle2 : MonoBehaviour
 
 
     }
-    // Start is called before the first frame update
-    void Start()
+
+    private void setUp()
     {
         tilesBlack = new List<int>();
         float size = (grid.nodeRadius * 2) - 0.005f;
 
         foreach (Node node in grid.grid)
         {
-            Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
             tile.transform.localScale = new Vector3(size, size, 0);
             tile.GetComponent<SpriteRenderer>().color = Color.white;
+            Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
 
         }
+    }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        setUp();
 
     }
     private Rect tile2Rect(Transform tile)
@@ -73,7 +81,10 @@ public class GapPuzzle2 : MonoBehaviour
             }
             if (checkWin())
             {
-                Debug.Log("won");
+                griphoton.SetActive(true);
+                player.SetActive(true);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
+                this.transform.parent.gameObject.SetActive(false);
             }
 
         }
@@ -129,5 +140,17 @@ public class GapPuzzle2 : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public void restart()
+    {
+        setUp();
+    }
+    public void leave()
+    {
+        griphoton.SetActive(true);
+        player.SetActive(true);
+        setUp();
+        this.transform.parent.gameObject.SetActive(false);
     }
 }

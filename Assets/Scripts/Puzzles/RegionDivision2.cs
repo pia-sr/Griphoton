@@ -20,20 +20,18 @@ public class RegionDivision2 : MonoBehaviour
     private List<GameObject> green;
     private bool select;
     private bool unselect;
+    public GameObject griphoton;
+    public GameObject player;
+    private bool inactive;
 
 
     private float size;
 
     //compare bounds instead of list size
 
-    void Awake()
+    private void setUp()
     {
-        grid = GetComponent<GridField>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
+        inactive = false;
         select = false;
         unselect = false;
         colourTile.GetComponent<SpriteRenderer>().color = Color.red;
@@ -74,6 +72,17 @@ public class RegionDivision2 : MonoBehaviour
 
         }
     }
+
+    void Awake()
+    {
+        grid = GetComponent<GridField>();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        setUp();
+    }
     private Rect tile2Rect(Transform tile)
     {
 
@@ -90,7 +99,7 @@ public class RegionDivision2 : MonoBehaviour
             select = false;
             unselect = false;
         }
-        else if (Input.GetMouseButton(0) && !checkWin())
+        else if (Input.GetMouseButton(0) && !inactive)
         {
 
             Color colour = colourTile.GetComponent<SpriteRenderer>().color;
@@ -215,7 +224,10 @@ public class RegionDivision2 : MonoBehaviour
             }
             if (checkWin())
             {
-                Debug.Log("Won!");
+                griphoton.SetActive(true);
+                player.SetActive(true);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
+                this.transform.parent.gameObject.SetActive(false);
             }
 
         }
@@ -305,5 +317,16 @@ public class RegionDivision2 : MonoBehaviour
             }
         }
         return true;
+    }
+    public void restart()
+    {
+        setUp();
+    }
+    public void leave()
+    {
+        griphoton.SetActive(true);
+        player.SetActive(true);
+        setUp();
+        this.transform.parent.gameObject.SetActive(false);
     }
 }
