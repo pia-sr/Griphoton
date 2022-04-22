@@ -139,7 +139,6 @@ public class Upperworld : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
     private bool neighboursTree(Node node)
     {

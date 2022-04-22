@@ -13,6 +13,8 @@ public class RegionDivision2 : MonoBehaviour
     public GameObject colourTile;
     private List<Node> notThere;
     private List<GameObject> neighbours;
+    public RegionDivisionTutorial tutorial;
+    public GameObject message;
 
     private List<GameObject> red;
     private List<GameObject> blue;
@@ -22,7 +24,6 @@ public class RegionDivision2 : MonoBehaviour
     private bool unselect;
     public GameObject griphoton;
     public GameObject player;
-    private bool inactive;
 
 
     private float size;
@@ -36,7 +37,6 @@ public class RegionDivision2 : MonoBehaviour
         {
             Destroy(tilemanager.transform.GetChild(i).gameObject);
         }
-        inactive = false;
         select = false;
         unselect = false;
         colourTile.GetComponent<SpriteRenderer>().color = Color.red;
@@ -104,7 +104,7 @@ public class RegionDivision2 : MonoBehaviour
             select = false;
             unselect = false;
         }
-        else if (Input.GetMouseButton(0) && !inactive)
+        else if (Input.GetMouseButton(0) && !tutorial.inactive)
         {
 
             Color colour = colourTile.GetComponent<SpriteRenderer>().color;
@@ -325,13 +325,31 @@ public class RegionDivision2 : MonoBehaviour
     }
     public void restart()
     {
-        setUp();
+        if (!tutorial.inactive)
+        {
+            setUp();
+        }
     }
     public void leave()
+    {
+        if (!tutorial.inactive)
+        {
+            tutorial.inactive = true;
+            message.SetActive(true);
+        }
+        
+    }
+
+    public void yes()
     {
         griphoton.SetActive(true);
         player.SetActive(true);
         setUp();
-        this.transform.parent.gameObject.SetActive(false);
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+    }
+    public void no()
+    {
+        tutorial.inactive = false;
+        message.SetActive(false);
     }
 }

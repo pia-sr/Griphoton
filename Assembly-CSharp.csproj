@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\DungeonLevels\Level17.cs" />
     <Compile Include="Assets\Scripts\Grid\GridField.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level2.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\MovementSim.cs" />
     <Compile Include="Assets\Scripts\Save\GameData.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level18.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level15.cs" />
@@ -95,12 +96,15 @@
     <Compile Include="Assets\Scripts\DungeonLevels\Level10.cs" />
     <Compile Include="Assets\Scripts\Puzzles\GapPuzzle.cs" />
     <Compile Include="Assets\Scripts\HealthBar.cs" />
+    <Compile Include="Assets\Scripts\Circle.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level16.cs" />
+    <Compile Include="Assets\Scripts\TouchAnimation.cs" />
     <Compile Include="Assets\Scripts\Puzzles\HamiltonianMaze2.cs" />
     <Compile Include="Assets\Scripts\Puzzles\MatchstickPuzzle2.cs" />
     <Compile Include="Assets\Scripts\Grid\IHeapItem.cs" />
     <Compile Include="Assets\Scripts\Puzzles\MatchstickPuzzle1.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level19.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\RegionDivisionTutorial.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level8.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level12.cs" />
     <Compile Include="Assets\Scripts\Puzzles\HamiltonianMaze.cs" />
@@ -115,9 +119,6 @@
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries.cs" />
     <Compile Include="Assets\Scripts\Puzzles\MirrorPuzzle.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level9.cs" />
-    <Compile Include="Assets\Scripts\TouchAnimation.cs" />
-    <Compile Include="Assets\Scripts\Circle.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\MovementSim.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\ProjectSettings\ProjectVersion.txt" />

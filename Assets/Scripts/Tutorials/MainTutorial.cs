@@ -62,7 +62,7 @@ public class MainTutorial : MonoBehaviour
                     break;
                 case 2:
                     skipButton.SetActive(true);
-                    string sentence = "My name is Spencer.| I don't know how you ended up here, but welcome to Griphoton, " + playerName + "!";
+                    string sentence = "My name is Spencer.| I do not know how you ended up here, but welcome to Griphoton, " + playerName + "!";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
@@ -74,15 +74,15 @@ public class MainTutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 5:
-                    sentence = "Hmm, it looks like you are not armed.| You will not come far in the dungeon without an armour or a sword.";
+                    sentence = "Hmm, it looks like you are not armed.| You will not come far in the dungeon without a sword.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
-                    sentence = "Lucky for you, I have some spares.| They are even magical!";
+                    sentence = "Lucky for you, I have a spare.| It is even magical!";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 7:
-                    sentence = "What is so magical about them, you ask?| \nYou see, this world is a place where souls go who still have unsolved puzzles from their previous life.| These souls can strengthen this amour and sword when you help them solve their puzzle.";
+                    sentence = "What is so magical about them, you ask?| \nYou see, this world is a place where souls go who still have unsolved puzzles from their previous life.| These souls can strengthen this sword when you help them solve their puzzle.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 8:

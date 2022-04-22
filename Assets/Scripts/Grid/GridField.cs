@@ -350,6 +350,7 @@ public class GridField : MonoBehaviour
             for (int j = -1; j < 2; j++)
             {
                 grid[node.gridX + i, node.gridY + j].setItemOnTop("Solved");
+                grid[node.gridX + i, node.gridY + j].owner = null;
             }
         }
     }

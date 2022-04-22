@@ -147,7 +147,7 @@ public class Pathfinder : MonoBehaviour
             Node houseCenter = _grid.tagToNode(targetNode.owner);
             targetNode = _grid.grid[houseCenter.gridX, houseCenter.gridY - 2];
         }
-        else if (_grid.ghostNames.Contains(targetNode.onTop))
+        else if (_grid.ghostNames.Contains(targetNode.onTop) || targetNode.onTop == "Dungeon")
         {
             targetNode = _grid.grid[targetNode.gridX, targetNode.gridY - 2];
         }

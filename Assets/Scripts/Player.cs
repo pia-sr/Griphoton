@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -118,13 +119,16 @@ public class Player : MonoBehaviour
             else if (grid.GetNodeFromWorldPos(transform.position).onTop == "Entrance" && targetNode.onTop == "Entrance")
             {
                 previousLevel();
+                data.SaveGame();
             }
             else if (grid.GetNodeFromWorldPos(transform.position).onTop == "ExitOpen")
             {
                 nextLevel();
+                data.SaveGame();
             }
             else if (grid.ghostNames.Contains(targetNode.onTop) || targetNode.onTop == "House")
             {
+                data.SaveGame();
                 string ghostName = grid.grid[path[0].gridX, path[0].gridY + 2].onTop;
                 GameObject ghostHouse = findWithTag(ghostName);
                 grid.gameObject.SetActive(false);
@@ -132,6 +136,10 @@ public class Player : MonoBehaviour
                 targetNode = null;
                 setAllBoolsFalse();
                 this.gameObject.SetActive(false);
+            }else if(targetNode.onTop == "Dungeon" || targetNode.owner == "Dungeon")
+            {
+                data.SaveGame();
+                SceneManager.LoadScene("Dungeon");
             }
         }
         if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
