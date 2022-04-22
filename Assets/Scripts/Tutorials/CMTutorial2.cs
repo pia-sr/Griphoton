@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RegionDivisionTutorial : MonoBehaviour
+public class CMTutorial2 : MonoBehaviour
 {
     public Text mainDialog;
     public Game data;
@@ -26,9 +26,9 @@ public class RegionDivisionTutorial : MonoBehaviour
         running = false;
         counter = 0;
         skipButton.SetActive(true);
-        string firstSentence = "Thank you, " + data.namePlayer +", for helping me with my puzzle!";
+        string firstSentence = "Thank you for your help, " + data.namePlayer + "!";
         StartCoroutine(WordbyWord(firstSentence));
-        
+
 
     }
 
@@ -63,28 +63,43 @@ public class RegionDivisionTutorial : MonoBehaviour
             {
                 case 1:
                     this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "I have this shape which I have to cut into four identical pieces.| These pieces can be rotated or mirrored versions of each other, but need to be identical in every other aspect.";
+                    string sentence = "I have three wolves, three snakes and three mice and I need to get all of them across the river.| I can only carry three animals with me on the boat.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "I have four different colours to separate the four pieces.| You can select the colour with the button on the left side of the shape.";
+                    sentence = "The problem is that if there are more wolves than snakes on either side, the wolves will eat the snakes.| And of course, if there are more snakes than mice on either side, the snakes will eat the mice.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "If you tap or swipe over the shape, the selected squares will be coloured in the same colour as the button.| But you cannot use the same colour in two separate areas of the shape!";
+                    sentence = "For some reason the wolves will not eat the mice.| But that makes traveling with them a bit easier.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
+                    sentence = "Another problem is that the boat is not the best and can only go across the river 13 times.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 5:
+                    sentence = "Can you help me get all the animals across the river?";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 6:
+                    sentence = "Just tap on the animal which you want to have on the boat.| If you want to remove an animal from the boat, just tap on that animal and it will be put back on the riverbank.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 7:
+                    sentence = "If there are at least two animals in the boat, you can press the button at the bottom middle of your screen to make the boat move.| At the top of your screen, you see how many times the boat has crossed the river. ";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 8:
                     options.SetActive(true);
                     sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved! ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
-                case 5:
+                case 9:
                     sentence = "If you have any questions, just tap on the icon with the question mark.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
-                case 6:
-                    this.transform.parent.transform.GetChild(1).gameObject.SetActive(true);
+                case 10:
                     inactive = false;
                     this.gameObject.SetActive(false);
                     break;
@@ -120,7 +135,6 @@ public class RegionDivisionTutorial : MonoBehaviour
     public void skipTutorial()
     {
         this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
-        this.transform.parent.transform.GetChild(1).gameObject.SetActive(true);
         options.SetActive(true);
         inactive = false;
         this.gameObject.SetActive(false);
@@ -131,20 +145,65 @@ public class RegionDivisionTutorial : MonoBehaviour
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
         Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
-        question.text = "How can I colour in a square?";
+        question.text = "What am I supposed to do again?";
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
-        answer.text = "Just tap or swipe over the square you want to colour in and the same colour will be used as shown on the button.";
+        answer.text = "You need to get all the animals on the left riverside to the right riverside. But remember: the wolves will eat the snakes if there are more wolves than snakes. And the snakes will eat the mice if there are more snakes than mice. Also, the boat can cross the river only 13 times.";
     }
     public void Question2()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
         Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
-        question.text = "How can I remove the colour of a square?";
+        question.text = "Who wants to eat who again?";
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
-        answer.text = "You can remove the colour by tapping or swiping over a coloured square and the colour will be removed.";
+        answer.text = "The wolves will eat the snakes, but only if there are more wolves than snakes on the river bank. And the snakes will eat the mice, if there are more snakes than mice on the riverbank. Luckly, the wolves will not eat the mice, no matter how many wolves or mice are on the same riverbank.";
     }
     public void Question3()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        question.text = "How can I put an animal onto the boat?";
+        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        answer.text = "Just tap on the animal you want on the boat and it will be put on there unless the boat is full.";
+    }
+    public void Question4()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        question.text = "Can I remove an animal from the boat?";
+        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        answer.text = "Yes, just tap in the animal that you want to remove and it will be put back on the riverside.";
+    }
+    public void Question5()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        question.text = "How can I move the boat?";
+        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        answer.text = "Just press the button at the bottom middle of your screen and the boat will move to the other side as long there are at least two animals on the boat.";
+    }
+    public void Question6()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        question.text = "How many times can the boat cross the river?";
+        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        answer.text = "The boat can cross the river a maximum of 13 times.";
+    }
+    public void Question7()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        question.text = "How many animals can I put on the boat?";
+        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        answer.text = "You can put a maximum of three animals on the boat. But remember that the boat will not move unless there are at least two animals on the boat.";
+    }
+    public void Question8()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
@@ -153,7 +212,7 @@ public class RegionDivisionTutorial : MonoBehaviour
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The lowest button is the exit button with which you can leave the puzzle.";
     }
-    public void Question4()
+    public void Question9()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);

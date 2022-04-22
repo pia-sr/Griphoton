@@ -119,6 +119,12 @@
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries.cs" />
     <Compile Include="Assets\Scripts\Puzzles\MirrorPuzzle.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level9.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\RoomTutorial.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\CMTutorial.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\CMTutorial2.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\PieceOf8Tutorial.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\HamiltonianTutorial.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\RedPointTutorial.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\ProjectSettings\ProjectVersion.txt" />

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RegionDivisionTutorial : MonoBehaviour
+public class RoomTutorial : MonoBehaviour
 {
     public Text mainDialog;
     public Game data;
@@ -26,9 +26,9 @@ public class RegionDivisionTutorial : MonoBehaviour
         running = false;
         counter = 0;
         skipButton.SetActive(true);
-        string firstSentence = "Thank you, " + data.namePlayer +", for helping me with my puzzle!";
+        string firstSentence = "Hello " + data.namePlayer +", \nThank you for dropping by.";
         StartCoroutine(WordbyWord(firstSentence));
-        
+
 
     }
 
@@ -63,15 +63,15 @@ public class RegionDivisionTutorial : MonoBehaviour
             {
                 case 1:
                     this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "I have this shape which I have to cut into four identical pieces.| These pieces can be rotated or mirrored versions of each other, but need to be identical in every other aspect.";
+                    string sentence = "I have this shape which I need to colour in 3 different colours.| \nThere should be exact 12 squares in the same colour and all the same coloured squares need to be next to each other. ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "I have four different colours to separate the four pieces.| You can select the colour with the button on the left side of the shape.";
+                    sentence = "Some squares have numbers on them.| \nThese numbers indicate how many same coloured squared can be seen horizontally and vertically from that square.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "If you tap or swipe over the shape, the selected squares will be coloured in the same colour as the button.| But you cannot use the same colour in two separate areas of the shape!";
+                    sentence = "You can select the colour with the button on the left side of the shape.| If you tap or swipe over the shape, the selected squares will be coloured in the same colour as the button.| But you cannot use the same colour in two separate areas of the shape!";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:

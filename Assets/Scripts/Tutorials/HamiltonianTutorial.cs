@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RegionDivisionTutorial : MonoBehaviour
+public class HamiltonianTutorial : MonoBehaviour
 {
     public Text mainDialog;
     public Game data;
@@ -26,9 +26,9 @@ public class RegionDivisionTutorial : MonoBehaviour
         running = false;
         counter = 0;
         skipButton.SetActive(true);
-        string firstSentence = "Thank you, " + data.namePlayer +", for helping me with my puzzle!";
+        string firstSentence = "Thank you for your help, " + data.namePlayer + ".";
         StartCoroutine(WordbyWord(firstSentence));
-        
+
 
     }
 
@@ -63,15 +63,15 @@ public class RegionDivisionTutorial : MonoBehaviour
             {
                 case 1:
                     this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "I have this shape which I have to cut into four identical pieces.| These pieces can be rotated or mirrored versions of each other, but need to be identical in every other aspect.";
+                    string sentence = "My problem consists of a pipe construct.| Between every pipe is a sphere to hold it together.| Sadly I do not know through which pipe the water flows.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "I have four different colours to separate the four pieces.| You can select the colour with the button on the left side of the shape.";
+                    sentence = "I am only certain about two things:| \nOne thing is that the water passes every sphere exactly once.| \nAnd the other thing is that water flows in one big circuit.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "If you tap or swipe over the shape, the selected squares will be coloured in the same colour as the button.| But you cannot use the same colour in two separate areas of the shape!";
+                    sentence = "Can you colour in all the pipes through which the water flows?| \nJust tap on the pipe through which you believe the water flows and it will be coloured in. ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
@@ -131,18 +131,18 @@ public class RegionDivisionTutorial : MonoBehaviour
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
         Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
-        question.text = "How can I colour in a square?";
+        question.text = "How can I colour in a pipe?";
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
-        answer.text = "Just tap or swipe over the square you want to colour in and the same colour will be used as shown on the button.";
+        answer.text = "Just tap on the pipe you want to colour in and the colour will appear.";
     }
     public void Question2()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
         Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
-        question.text = "How can I remove the colour of a square?";
+        question.text = "How can I remove the colour of a pipe?";
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
-        answer.text = "You can remove the colour by tapping or swiping over a coloured square and the colour will be removed.";
+        answer.text = "Just tap on the coloured-in pipe and the colour will be removed. If you want to remove the colour of all the pipes, you can just press the restart button.";
     }
     public void Question3()
     {

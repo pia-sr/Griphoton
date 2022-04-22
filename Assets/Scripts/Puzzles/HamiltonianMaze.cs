@@ -18,7 +18,9 @@ public class HamiltonianMaze : MonoBehaviour
     private bool selected;
     private bool horizontal;
     private List<Node> noThere;
-   
+    public HamiltonianTutorial tutorial;
+    public GameObject message;
+
 
     void Awake()
     {
@@ -229,13 +231,33 @@ public class HamiltonianMaze : MonoBehaviour
     }
     public void restart()
     {
-        setUp();
+        if (!tutorial.inactive)
+        {
+            setUp();
+        }
     }
     public void leave()
+    {
+        if (!tutorial.inactive)
+        {
+            tutorial.inactive = true;
+            message.SetActive(true);
+        }
+
+    }
+
+    public void yes()
     {
         griphoton.SetActive(true);
         player.SetActive(true);
         setUp();
-        this.transform.parent.gameObject.SetActive(false);
+        tutorial.gameObject.SetActive(true);
+        tutorial.setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+    }
+    public void no()
+    {
+        tutorial.inactive = false;
+        message.SetActive(false);
     }
 }

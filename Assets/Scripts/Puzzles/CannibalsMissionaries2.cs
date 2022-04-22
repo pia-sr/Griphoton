@@ -26,7 +26,8 @@ public class CannibalsMissionaries2 : MonoBehaviour
     private bool boatLeft;
     private GameObject[] boatSeats;
     private int moveCounter;
-    private bool inactive;
+    public CMTutorial2 tutorial;
+    public GameObject messageExit;
 
     // Start is called before the first frame update
     private void setUp()
@@ -75,7 +76,6 @@ public class CannibalsMissionaries2 : MonoBehaviour
         boatLeft = true;
         boat.transform.localPosition = new Vector2(-2.1f, 0);
         counterText.text = moveCounter.ToString();
-        inactive = false;
     }
     
     void Start()
@@ -92,7 +92,7 @@ public class CannibalsMissionaries2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !onTheMove && !inactive)
+        if (Input.GetMouseButtonDown(0) && !onTheMove && !tutorial.inactive)
         {
             GameObject animal;
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -382,13 +382,34 @@ public class CannibalsMissionaries2 : MonoBehaviour
     }
     public void restart()
     {
-        setUp();
+        if (!tutorial.inactive)
+        {
+            setUp();
+
+        }
     }
     public void leave()
+    {
+        if (!tutorial.inactive)
+        {
+            tutorial.inactive = true;
+            messageExit.SetActive(true);
+        }
+
+    }
+
+    public void yes()
     {
         griphoton.SetActive(true);
         player.SetActive(true);
         setUp();
-        this.transform.parent.gameObject.SetActive(false);
+        tutorial.gameObject.SetActive(true);
+        tutorial.setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+    }
+    public void no()
+    {
+        tutorial.inactive = false;
+        messageExit.SetActive(false);
     }
 }

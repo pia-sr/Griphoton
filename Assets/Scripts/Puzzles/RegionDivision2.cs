@@ -345,6 +345,9 @@ public class RegionDivision2 : MonoBehaviour
         griphoton.SetActive(true);
         player.SetActive(true);
         setUp();
+
+        tutorial.gameObject.SetActive(true);
+        tutorial.setUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);
     }
     public void no()

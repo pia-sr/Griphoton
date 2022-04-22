@@ -19,7 +19,8 @@ public class PiecesOf8_2 : MonoBehaviour
     public Text colourText;
     public GameObject griphoton;
     public GameObject player;
-    private bool inactive;
+    public PieceOf8Tutorial tutorial;
+    public GameObject message;
 
     private List<Color> colours;
 
@@ -35,7 +36,6 @@ public class PiecesOf8_2 : MonoBehaviour
 
     private void setUp()
     {
-        inactive = false;
         colourTile.GetComponent<SpriteRenderer>().color = Color.red;
         colourText.text = "1";
         size = grid.nodeRadius;
@@ -97,7 +97,7 @@ public class PiecesOf8_2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !inactive)
+        if (Input.GetMouseButtonDown(0) && !tutorial.inactive)
         {
 
             Color colour = colourTile.GetComponent<SpriteRenderer>().color;
@@ -277,13 +277,33 @@ public class PiecesOf8_2 : MonoBehaviour
 
     public void restart()
     {
-        setUp();
+        if (!tutorial.inactive)
+        {
+            setUp();
+        }
     }
     public void leave()
+    {
+        if (!tutorial.inactive)
+        {
+            tutorial.inactive = true;
+            message.SetActive(true);
+        }
+
+    }
+
+    public void yes()
     {
         griphoton.SetActive(true);
         player.SetActive(true);
         setUp();
-        this.transform.parent.gameObject.SetActive(false);
+        tutorial.gameObject.SetActive(true);
+        tutorial.setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+    }
+    public void no()
+    {
+        tutorial.inactive = false;
+        message.SetActive(false);
     }
 }

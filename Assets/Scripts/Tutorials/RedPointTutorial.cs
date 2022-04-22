@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RegionDivisionTutorial : MonoBehaviour
+public class RedPointTutorial : MonoBehaviour
 {
     public Text mainDialog;
     public Game data;
@@ -26,9 +26,9 @@ public class RegionDivisionTutorial : MonoBehaviour
         running = false;
         counter = 0;
         skipButton.SetActive(true);
-        string firstSentence = "Thank you, " + data.namePlayer +", for helping me with my puzzle!";
+        string firstSentence = "Hello " + data.namePlayer + ",| \nThanks for dropping by.";
         StartCoroutine(WordbyWord(firstSentence));
-        
+
 
     }
 
@@ -63,15 +63,15 @@ public class RegionDivisionTutorial : MonoBehaviour
             {
                 case 1:
                     this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "I have this shape which I have to cut into four identical pieces.| These pieces can be rotated or mirrored versions of each other, but need to be identical in every other aspect.";
+                    string sentence = "I have a collection of point and I want to colour in 5 of them.| The pairwise distances between every coloured-in points should all be different. ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "I have four different colours to separate the four pieces.| You can select the colour with the button on the left side of the shape.";
+                    sentence = "Can you colour in those points for me?";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "If you tap or swipe over the shape, the selected squares will be coloured in the same colour as the button.| But you cannot use the same colour in two separate areas of the shape!";
+                    sentence = "Tap on the point you want to select and it will be coloured in. ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
@@ -131,18 +131,18 @@ public class RegionDivisionTutorial : MonoBehaviour
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
         Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
-        question.text = "How can I colour in a square?";
+        question.text = "How can I colour in a point?";
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
-        answer.text = "Just tap or swipe over the square you want to colour in and the same colour will be used as shown on the button.";
+        answer.text = "Just tap on the point you want to colour in and the colour will appear.";
     }
     public void Question2()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
         Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
-        question.text = "How can I remove the colour of a square?";
+        question.text = "How can I remove the colour of a point?";
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
-        answer.text = "You can remove the colour by tapping or swiping over a coloured square and the colour will be removed.";
+        answer.text = "Just tap on the coloured-in point and the colour will be removed. If you want to remove the colour of all the points, you can just press the restart button.";
     }
     public void Question3()
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RegionDivisionTutorial : MonoBehaviour
+public class PieceOf8Tutorial : MonoBehaviour
 {
     public Text mainDialog;
     public Game data;
@@ -26,9 +26,9 @@ public class RegionDivisionTutorial : MonoBehaviour
         running = false;
         counter = 0;
         skipButton.SetActive(true);
-        string firstSentence = "Thank you, " + data.namePlayer +", for helping me with my puzzle!";
+        string firstSentence = "Thank you for your help, " + data.namePlayer + "!";
         StartCoroutine(WordbyWord(firstSentence));
-        
+
 
     }
 
@@ -63,27 +63,35 @@ public class RegionDivisionTutorial : MonoBehaviour
             {
                 case 1:
                     this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "I have this shape which I have to cut into four identical pieces.| These pieces can be rotated or mirrored versions of each other, but need to be identical in every other aspect.";
+                    string sentence = "Do you see the grid there?";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "I have four different colours to separate the four pieces.| You can select the colour with the button on the left side of the shape.";
+                    sentence = "I need to fill it with numbers from 1 to 8.| There need to be one 1, two 2s, three 3s and so on...| All the twos need to be next to each other, so do the threes and the fours,... ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "If you tap or swipe over the shape, the selected squares will be coloured in the same colour as the button.| But you cannot use the same colour in two separate areas of the shape!";
+                    sentence = "But I cannot put these numbers down randomly.| \nThe numbers which are in a row or column with a number on the side need to be added up to that exact number.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
+                    sentence = "Next to the field is the button with which you can change the number. The number on top of the button indicates which number you currently use. If you press the button it will change to the next number.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 5:
+                    sentence = "To put a number onto the field, just tap on the square where the number should be.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 6:
                     options.SetActive(true);
                     sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved! ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
-                case 5:
+                case 7:
                     sentence = "If you have any questions, just tap on the icon with the question mark.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
-                case 6:
+                case 8:
                     this.transform.parent.transform.GetChild(1).gameObject.SetActive(true);
                     inactive = false;
                     this.gameObject.SetActive(false);
@@ -131,20 +139,29 @@ public class RegionDivisionTutorial : MonoBehaviour
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
         Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
-        question.text = "How can I colour in a square?";
+        question.text = "How do I put a number onto a square?";
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
-        answer.text = "Just tap or swipe over the square you want to colour in and the same colour will be used as shown on the button.";
+        answer.text = "Just tap on the square and the number shown on the left button will appear on the square.";
     }
     public void Question2()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
         Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
-        question.text = "How can I remove the colour of a square?";
+        question.text = "Can I remove a number?";
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
-        answer.text = "You can remove the colour by tapping or swiping over a coloured square and the colour will be removed.";
+        answer.text = "Yes, just tap on the square again and the number will disappear.";
     }
     public void Question3()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        question.text = "How can I change the number?";
+        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        answer.text = "Tap on the button next to the field to change the number. The number on the button is the number that is currently in use.";
+    }
+    public void Question4()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
@@ -153,7 +170,7 @@ public class RegionDivisionTutorial : MonoBehaviour
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The lowest button is the exit button with which you can leave the puzzle.";
     }
-    public void Question4()
+    public void Question5()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
