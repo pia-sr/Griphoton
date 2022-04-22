@@ -56,11 +56,14 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Tutorials\PieceOf8Tutorial.cs" />
     <Compile Include="Assets\Scripts\Upperworld.cs" />
     <Compile Include="Assets\Scripts\Puzzles\PiecesOf8.cs" />
     <Compile Include="Assets\Scripts\Enemies\Skeleton2.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\RedPointTutorial.cs" />
     <Compile Include="Assets\Scripts\Save\Game.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level1.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\HamiltonianTutorial.cs" />
     <Compile Include="Assets\Scripts\FollowPlayer.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CornerMaze.cs" />
@@ -80,10 +83,12 @@
     <Compile Include="Assets\Scripts\DungeonLevels\Level18.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level15.cs" />
     <Compile Include="Assets\Scripts\Puzzles\RedPointPuzzle2.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\CMTutorial.cs" />
     <Compile Include="Assets\Scripts\Enemies\Skeleton1.cs" />
     <Compile Include="Assets\Scripts\Puzzles\RedPointPuzzle1.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level14.cs" />
     <Compile Include="Assets\Scripts\Save\SaveSystem.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\CMTutorial2.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level5.cs" />
     <Compile Include="Assets\Scripts\Enemies\EvilGhost1.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level4.cs" />
@@ -98,6 +103,7 @@
     <Compile Include="Assets\Scripts\HealthBar.cs" />
     <Compile Include="Assets\Scripts\Circle.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level16.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\RoomTutorial.cs" />
     <Compile Include="Assets\Scripts\TouchAnimation.cs" />
     <Compile Include="Assets\Scripts\Puzzles\HamiltonianMaze2.cs" />
     <Compile Include="Assets\Scripts\Puzzles\MatchstickPuzzle2.cs" />
@@ -119,12 +125,12 @@
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries.cs" />
     <Compile Include="Assets\Scripts\Puzzles\MirrorPuzzle.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level9.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\RoomTutorial.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\CMTutorial.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\CMTutorial2.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\PieceOf8Tutorial.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\HamiltonianTutorial.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\RedPointTutorial.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\MatchstickTutorial1.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\MatchstickTutorial2.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\GapPuzzleTutorial.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\CornerTutorial.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\ReplacementTutorial.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\MirrorTutorial.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\ProjectSettings\ProjectVersion.txt" />

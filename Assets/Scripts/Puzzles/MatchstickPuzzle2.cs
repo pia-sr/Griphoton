@@ -14,7 +14,6 @@ public class MatchstickPuzzle2 : MonoBehaviour
     private bool selected;
     private bool activeMove;
     private List<GameObject> movedSticks;
-    private bool lost;
     private float distStick;
     private float distRotate;
     private float distMove;
@@ -22,7 +21,8 @@ public class MatchstickPuzzle2 : MonoBehaviour
     public Text message;
     public GameObject griphoton;
     public GameObject player;
-    private bool inactive;
+    public MatchstickTutorial2 tutorial;
+    public GameObject messageExit;
     private List<Vector3> positions;
     private List<float> rotations;
 
@@ -30,7 +30,6 @@ public class MatchstickPuzzle2 : MonoBehaviour
     {
         moveStick = false;
         selected = false;
-        inactive = false;
         movedSticks = new List<GameObject>();
         selectedStick = null;
         matchsticks = new List<GameObject>();
@@ -63,7 +62,7 @@ public class MatchstickPuzzle2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0) && !inactive)
+        if (Input.GetMouseButton(0) && !tutorial.inactive)
         {
 
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -97,7 +96,7 @@ public class MatchstickPuzzle2 : MonoBehaviour
                         {
                             if(movedSticks.Count == 3 && !movedSticks.Contains(matchstick))
                             {
-                                inactive = true;
+                                tutorial.inactive = true;
                                 message.transform.parent.gameObject.SetActive(true);
                                 message.text = "You already moved 3 matchsticks! \nYou can reset the matchsticks with the reset button, if you want to move a different one.";
                             }
@@ -225,19 +224,39 @@ public class MatchstickPuzzle2 : MonoBehaviour
 
     public void restart()
     {
-        setUp();
+        if (!tutorial.inactive)
+        {
+            setUp();
+        }
     }
     public void leave()
+    {
+        if (!tutorial.inactive)
+        {
+            tutorial.inactive = true;
+            messageExit.SetActive(true);
+        }
+
+    }
+
+    public void yes()
     {
         griphoton.SetActive(true);
         player.SetActive(true);
         setUp();
-        this.transform.parent.gameObject.SetActive(false);
+        tutorial.gameObject.SetActive(true);
+        tutorial.setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+    }
+    public void no()
+    {
+        tutorial.inactive = false;
+        messageExit.SetActive(false);
     }
 
     public void close()
     {
         message.transform.parent.gameObject.SetActive(false);
-        inactive = false;
+        tutorial.inactive = false;
     }
 }

@@ -16,7 +16,8 @@ public class MirrorPuzzle : MonoBehaviour
     public Canvas canvas;
     public GameObject griphoton;
     public GameObject player;
-    private bool inactive;
+    public MirrorTutorial tutorial;
+    public GameObject message;
 
 
     void Awake()
@@ -26,7 +27,6 @@ public class MirrorPuzzle : MonoBehaviour
 
     private void setUp()
     {
-        inactive = false;
         for(int i = 0; i < symbolManager.transform.childCount; i++)
         {
             Destroy(symbolManager.transform.GetChild(i).gameObject);
@@ -61,7 +61,7 @@ public class MirrorPuzzle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !inactive)
+        if (Input.GetMouseButtonDown(0) && !tutorial.inactive)
         {
             foreach(Node node in grid.grid)
             {
@@ -282,14 +282,35 @@ public class MirrorPuzzle : MonoBehaviour
     }
     public void restart()
     {
-        setUp();
+        if (!tutorial.inactive)
+        {
+            setUp();
+        }
     }
     public void leave()
+    {
+        if (!tutorial.inactive)
+        {
+            tutorial.inactive = true;
+            message.SetActive(true);
+        }
+
+    }
+
+    public void yes()
     {
         griphoton.SetActive(true);
         player.SetActive(true);
         setUp();
-        this.transform.parent.gameObject.SetActive(false);
+
+        tutorial.gameObject.SetActive(true);
+        tutorial.setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+    }
+    public void no()
+    {
+        tutorial.inactive = false;
+        message.SetActive(false);
     }
 
 }

@@ -15,7 +15,8 @@ public class ReplacementPuzzle3 : MonoBehaviour
     public GameObject selectedTiles;
     public GameObject griphoton;
     public GameObject player;
-    private bool inactive;
+    public ReplacementTutorial tutorial;
+    public GameObject messageExit;
     public Text message;
 
     private int rowNumber;
@@ -35,7 +36,6 @@ public class ReplacementPuzzle3 : MonoBehaviour
 
     private void setUp()
     {
-        inactive = false;
         size = grid.nodeRadius * 1.25f;
         selected = new List<GameObject>();
         for (int i = 0; i < symbolManager.transform.childCount; i++)
@@ -87,7 +87,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !inactive)
+        if (Input.GetMouseButtonDown(0) && !tutorial.inactive)
         {
 
             exchangeButton.GetComponent<SpriteRenderer>().color = buttonColour;
@@ -155,14 +155,14 @@ public class ReplacementPuzzle3 : MonoBehaviour
                         }
                         else
                         {
-                            inactive = true;
+                            tutorial.inactive = true;
                             message.transform.parent.gameObject.SetActive(true);
                             message.text = "You reached the limit of symbols for this row. \nPlease select a different pattern or reset the puzzle.";
                         }
                     }
                     else
                     {
-                        inactive = true;
+                        tutorial.inactive = true;
                         message.transform.parent.gameObject.SetActive(true);
                         message.text = "Your selected pattern is not valid. \nPlease select a different pattern.";
                     }
@@ -170,7 +170,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
                 }
                 else
                 {
-                    inactive = true;
+                    tutorial.inactive = true;
                     message.transform.parent.gameObject.SetActive(true);
                     message.text = "Your selected pattern is not valid. \nPlease select a different pattern.";
                 }
@@ -332,18 +332,38 @@ public class ReplacementPuzzle3 : MonoBehaviour
 
     public void restart()
     {
-        setUp();
+        if (!tutorial.inactive)
+        {
+            setUp();
+        }
     }
     public void leave()
+    {
+        if (!tutorial.inactive)
+        {
+            tutorial.inactive = true;
+            messageExit.SetActive(true);
+        }
+
+    }
+
+    public void yes()
     {
         griphoton.SetActive(true);
         player.SetActive(true);
         setUp();
-        this.transform.parent.gameObject.SetActive(false);
+        tutorial.gameObject.SetActive(true);
+        tutorial.setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+    }
+    public void no()
+    {
+        tutorial.inactive = false;
+        messageExit.SetActive(false);
     }
     public void close()
     {
-        inactive = false;
+        tutorial.inactive = false;
         message.transform.parent.gameObject.SetActive(false);
     }
 

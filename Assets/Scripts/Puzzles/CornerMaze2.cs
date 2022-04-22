@@ -19,6 +19,8 @@ public class CornerMaze2 : MonoBehaviour
     private List<Vector3> linePath;
     private List<Node> corners;
     public Canvas canvas;
+    public CornerTutorial tutorial;
+    public GameObject message;
 
 
     private LineRenderer pathRend;
@@ -90,7 +92,7 @@ public class CornerMaze2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !checkWin())
+        if (Input.GetMouseButtonDown(0) && !tutorial.inactive)
         {
             for (int i = 0; i < tilemanager.transform.childCount; i++)
             {
@@ -211,13 +213,33 @@ public class CornerMaze2 : MonoBehaviour
     }
     public void restart()
     {
-        setUp();
+        if (!tutorial.inactive)
+        {
+            setUp();
+        }
     }
     public void leave()
+    {
+        if (!tutorial.inactive)
+        {
+            tutorial.inactive = true;
+            message.SetActive(true);
+        }
+
+    }
+
+    public void yes()
     {
         griphoton.SetActive(true);
         player.SetActive(true);
         setUp();
-        this.transform.parent.gameObject.SetActive(false);
+        tutorial.gameObject.SetActive(true);
+        tutorial.setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+    }
+    public void no()
+    {
+        tutorial.inactive = false;
+        message.SetActive(false);
     }
 }

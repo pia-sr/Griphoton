@@ -12,6 +12,10 @@ public class GapPuzzle2 : MonoBehaviour
     public GameObject griphoton;
     public GameObject player;
     private List<int> tilesBlack;
+
+    public GapPuzzleTutorial tutorial;
+    public GameObject message;
+
     void Awake()
     {
 
@@ -55,7 +59,7 @@ public class GapPuzzle2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !checkWin())
+        if (Input.GetMouseButtonDown(0) && !tutorial.inactive)
         {
             for (int i = 0; i < tilemanager.transform.childCount; i++)
             {
@@ -149,13 +153,33 @@ public class GapPuzzle2 : MonoBehaviour
 
     public void restart()
     {
-        setUp();
+        if (!tutorial.inactive)
+        {
+            setUp();
+        }
     }
     public void leave()
+    {
+        if (!tutorial.inactive)
+        {
+            tutorial.inactive = true;
+            message.SetActive(true);
+        }
+
+    }
+
+    public void yes()
     {
         griphoton.SetActive(true);
         player.SetActive(true);
         setUp();
-        this.transform.parent.gameObject.SetActive(false);
+        tutorial.gameObject.SetActive(true);
+        tutorial.setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+    }
+    public void no()
+    {
+        tutorial.inactive = false;
+        message.SetActive(false);
     }
 }
