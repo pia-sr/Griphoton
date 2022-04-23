@@ -9,6 +9,7 @@ public class GameData
     public int activeLevel;
     public string namePlayer;
     public string[] nodeTags;
+    public bool sound;
 
     public GameData(Game game)
     {
@@ -16,6 +17,7 @@ public class GameData
         activeLevel = game.activeLevel;
         namePlayer = game.namePlayer;
         nodeTags = game.getGrid();
+        sound = game.sound;
     }
 
     

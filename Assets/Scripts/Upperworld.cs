@@ -20,10 +20,6 @@ public class Upperworld : MonoBehaviour
 
     
 
-    void Awake()
-    {
-        grid = GetComponent<GridField>();
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -37,7 +33,7 @@ public class Upperworld : MonoBehaviour
         
         Pathfinder pathFinder = this.GetComponent<Pathfinder>();
 
-        if (data.tutorial)
+        if (data.namePlayer == null)
         {
             for (int i = 0; i < houses.transform.childCount - 1; i++)
             {
@@ -75,7 +71,7 @@ public class Upperworld : MonoBehaviour
                 int x = Random.Range(0, grid.getGridSizeX());
                 int y = Random.Range(1, grid.getGridSizeY());
 
-                while (grid.grid[x, y].onTop != null || !neighboursTree(grid.grid[x, y]))
+                while (grid.grid[x, y].onTop != null)
                 {
                     x = Random.Range(0, grid.getGridSizeX());
                     y = Random.Range(1, grid.getGridSizeY());
@@ -96,10 +92,14 @@ public class Upperworld : MonoBehaviour
             int counter = 0;
             foreach (Node node in grid.grid)
             {
+                
                 node.setItemOnTop(data.nodeTags[counter]);
-                if (grid.ghostNames.Contains(node.onTop))
+
+                Debug.Log(grid.ghostNames().Count);
+                if (grid.ghostNames().Contains(node.onTop))
                 {
                     buildHouse(node);
+                    
                 }
                 else if (node.onTop == "Path")
                 {

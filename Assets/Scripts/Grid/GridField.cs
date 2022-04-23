@@ -25,31 +25,6 @@ public class GridField : MonoBehaviour
 
     public List<Node> listNodes;
 
-    public List<string> ghostNames = new List<string>
-    {
-        "Taylor",
-        "Sutton",
-        "Robin",
-        "Morgan",
-        "Logan",
-        "Hayden",
-        "Dylan",
-        "Carter",
-        "Alexis",
-        "Sam",
-        "Quinn",
-        "Harley",
-        "Remy",
-        "Charlie",
-        "Avery",
-        "Riley",
-        "Rowan",
-        "Jessie",
-        "Terrie",
-        "Brennan",
-        "Erin",
-        "Kaden"
-    };
 
 
     /*
@@ -69,6 +44,8 @@ public class GridField : MonoBehaviour
         _gridSizeX = Mathf.RoundToInt(gridWorldSize.x / _nodeDiameter);
         _gridSizeY = Mathf.RoundToInt(gridWorldSize.y / _nodeDiameter);
         CreateGrid();
+        
+
 
     }
     
@@ -365,6 +342,34 @@ public class GridField : MonoBehaviour
             }
         }
         return chosenNode;
+    }
+    public List<string> ghostNames()
+    {
+        List<string> names = new List<string>{
+            "Taylor",
+            "Sutton",
+            "Robin",
+            "Morgan",
+            "Logan",
+            "Hayden",
+            "Dylan",
+            "Carter",
+            "Alexis",
+            "Sam",
+            "Quinn",
+            "Harley",
+            "Remy",
+            "Charlie",
+            "Avery",
+            "Riley",
+            "Rowan",
+            "Jessie",
+            "Terrie",
+            "Brennan",
+            "Erin",
+            "Kaden"
+        };
+        return names;
     }
 
 }

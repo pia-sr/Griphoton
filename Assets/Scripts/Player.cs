@@ -126,7 +126,7 @@ public class Player : MonoBehaviour
                 nextLevel();
                 data.SaveGame();
             }
-            else if (grid.ghostNames.Contains(targetNode.onTop) || targetNode.onTop == "House")
+            else if (grid.ghostNames().Contains(targetNode.onTop) || targetNode.onTop == "House")
             {
                 data.SaveGame();
                 string ghostName = grid.grid[path[0].gridX, path[0].gridY + 2].onTop;
@@ -201,14 +201,14 @@ public class Player : MonoBehaviour
         if (levelNr != -1)
         {
             leaveLevel = true;
-            targetNode = null;
-            StopAllCoroutines();
             setAllBoolsFalse();
+            pause();
             levels.transform.GetChild(levelNr).gameObject.SetActive(false);
             levels.transform.GetChild(levelNr - 1).gameObject.SetActive(true);
             chooseExit = true;
             foundPos = false;
             StartCoroutine(wait());
+            unpause();
         }
     }
 
@@ -226,13 +226,13 @@ public class Player : MonoBehaviour
         if(levelNr != -1)
         {
             leaveLevel = true;
-            targetNode = null;
-            StopAllCoroutines();
             setAllBoolsFalse();
+            pause();
             levels.transform.GetChild(levelNr).gameObject.SetActive(false);
             levels.transform.GetChild(levelNr + 1).gameObject.SetActive(true);
             foundPos = false;
             StartCoroutine(wait());
+            unpause();
         }
     }
 
@@ -361,12 +361,12 @@ public class Player : MonoBehaviour
         int counter = 0;
         foreach(string name in data.nodeTags)
         {
-            if (grid.ghostNames.Contains(name))
+            if (grid.ghostNames().Contains(name))
             {
                 counter++;
             }
         }
-        int strength = grid.ghostNames.Count - counter;
+        int strength = grid.ghostNames().Count - counter;
         return strength;
     }
     IEnumerator wait()
@@ -386,5 +386,22 @@ public class Player : MonoBehaviour
             }
         }
         return foundPuzzles;
+    }
+    public void pause()
+    {
+        StopAllCoroutines();
+        targetNode = null;
+        coroutineStart = true;
+    }
+    public void unpause()
+    {
+        StartCoroutine(wait2Move());
+    }
+
+    IEnumerator wait2Move()
+    {
+        yield return new WaitForSeconds(0.5f);
+        coroutineStart = false;
+
     }
 }
