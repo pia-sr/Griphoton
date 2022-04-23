@@ -44,11 +44,8 @@ public class GridField : MonoBehaviour
         _gridSizeX = Mathf.RoundToInt(gridWorldSize.x / _nodeDiameter);
         _gridSizeY = Mathf.RoundToInt(gridWorldSize.y / _nodeDiameter);
         CreateGrid();
-        
-
-
     }
-    
+    /*
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector2(gridWorldSize.x, gridWorldSize.y));
@@ -66,9 +63,9 @@ public class GridField : MonoBehaviour
                 Gizmos.color = Color.cyan;
             }
             Gizmos.DrawCube(node.worldPosition, new Vector3(1,1,1) * (_nodeDiameter - 0.05f));
-        }*/
+        }
         
-    }
+    }*/
 
     public Node dungeonNode()
     {
@@ -367,7 +364,8 @@ public class GridField : MonoBehaviour
             "Terrie",
             "Brennan",
             "Erin",
-            "Kaden"
+            "Kaden",
+            "Payton"
         };
         return names;
     }

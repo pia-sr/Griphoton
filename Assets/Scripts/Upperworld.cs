@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(GridField))]
+
 public class Upperworld : MonoBehaviour
 {
     public GridField grid;
@@ -25,7 +25,6 @@ public class Upperworld : MonoBehaviour
     void Start()
     {
         houses.SetActive(true);
-        //Node center = grid.GetNodeFromWorldPos(new Vector3(0, 0, 0));
         Node center = grid.grid[(int)grid.getGridSizeX() / 2, ((int)grid.getGridSizeY() / 2) +2];
         grid.setHouse(center, "Dungeon");
         houses.transform.GetChild(houses.transform.childCount - 1).transform.localPosition = center.worldPosition + new Vector3(0, 0, -1);
@@ -92,10 +91,6 @@ public class Upperworld : MonoBehaviour
             int counter = 0;
             foreach (Node node in grid.grid)
             {
-                
-                node.setItemOnTop(data.nodeTags[counter]);
-
-                Debug.Log(grid.ghostNames().Count);
                 if (grid.ghostNames().Contains(node.onTop))
                 {
                     buildHouse(node);

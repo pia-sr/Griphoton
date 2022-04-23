@@ -23,6 +23,7 @@ public class MainTutorial : MonoBehaviour
     public GameObject settings;
     public GameObject options;
     public Text message;
+    public GridField grid;
 
     private void Awake()
     {
@@ -32,13 +33,14 @@ public class MainTutorial : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //data.namePlayer = null;
+        data.namePlayer = null;
         if (data.namePlayer == null)
         {
             running = false;
             counter = 0;
             string firstSentence = "Hello,| \nWho might you be?";
             StartCoroutine(WordbyWord(firstSentence));
+            data.activeLevel = 1;
 
         }
         else
@@ -46,6 +48,12 @@ public class MainTutorial : MonoBehaviour
             running = false;
             string firstSentence = "Welcome back, "+ data.namePlayer + "!";
             StartCoroutine(WordbyWord(firstSentence));
+            int counterNode = 0;
+            foreach (Node node in grid.grid)
+            {
+                node.setItemOnTop(data.nodeTags[counterNode]);
+                counterNode++;
+            };
 
         }
         data.tutorial = true;
@@ -70,16 +78,16 @@ public class MainTutorial : MonoBehaviour
             }
             touchAni.SetActive(false);
             start = true;
-            if (data.namePlayer != null)
+            if (data.namePlayer != null && counter < 2)
             {
-                options.SetActive(true);
                 griphoton.SetActive(true);
-                this.transform.parent.transform.parent.gameObject.SetActive(false);
+                options.SetActive(true);
                 player.SetActive(true);
                 player.GetComponent<Player>().pause();
                 player.GetComponent<Player>().unpause();
                 running = true;
                 start = false;
+                this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
         }
         else if (start)
@@ -134,7 +142,7 @@ public class MainTutorial : MonoBehaviour
                     break;
                 case 11:
                     options.SetActive(true);
-                    sentence = "If you have any questions, just tap on the icon with the question mark.| \nYou can also access the setting or leave the game by tapping this icon.| \nGood luck, " + playerName + "!";
+                    sentence = "If you have any questions, just tap on the icon with the question mark.| \nYou can also access the setting or leave the game by tapping the setting icon.| \nGood luck, " + playerName + "!";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 12:

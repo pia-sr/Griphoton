@@ -44,8 +44,7 @@ public class Player : MonoBehaviour
     public HealthBar healthBar;
     private void Awake()
     {
-
-        data.setLevel(1);
+        data.setLevel(data.activeLevel);
     }
 
     // Start is called before the first frame update
