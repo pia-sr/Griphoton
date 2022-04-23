@@ -8,10 +8,9 @@ public class Player : MonoBehaviour
 {
     public GridField grid;
     private Node targetNode;
-    public GameObject pathManager;
-    public GameObject TreeManager;
+    public GameObject options;
     public GameObject puzzles;
-    public GameObject Houses;
+    public GameObject griphoton;
     public Pathfinder pathFinder;
     private Node dungeon;
     private List<Node> path;
@@ -28,7 +27,7 @@ public class Player : MonoBehaviour
     private bool coroutineStart;
     private float fullHealth;
     public bool levelLoaded;
-    public Game data;
+    private Game data;
     public bool leaveLevel;
     private bool chooseExit;
     private bool attackBool;
@@ -44,6 +43,7 @@ public class Player : MonoBehaviour
     public HealthBar healthBar;
     private void Awake()
     {
+        data = GameObject.Find("GameData").GetComponent<Game>();
         data.setLevel(data.activeLevel);
     }
 
@@ -51,12 +51,10 @@ public class Player : MonoBehaviour
     void Start()
     {
         enemyHit = false;
-        //hitValue = 25 + (10 * strengthMultiplier());
-        hitValue = 25;
+        hitValue = 25 + (5 * strengthMultiplier());
         targetNode = null;
         existingTarget = null;
-        strength = 100;
-        //strength = 100 + (25 + strengthMultiplier());
+        strength = 100 + (25 + strengthMultiplier());
         fullHealth = strength;
         coroutineStart = false;
         if (!upperWorld)
@@ -125,12 +123,12 @@ public class Player : MonoBehaviour
                 nextLevel();
                 data.SaveGame();
             }
-            else if (grid.ghostNames().Contains(targetNode.onTop) || targetNode.onTop == "House")
+            else if (grid.ghostNames().Contains(targetNode.onTop) || grid.ghostNames().Contains(targetNode.owner))
             {
                 data.SaveGame();
                 string ghostName = grid.grid[path[0].gridX, path[0].gridY + 2].onTop;
                 GameObject ghostHouse = findWithTag(ghostName);
-                grid.gameObject.SetActive(false);
+                griphoton.SetActive(false);
                 ghostHouse.SetActive(true);
                 targetNode = null;
                 setAllBoolsFalse();

@@ -9,10 +9,12 @@ public class Level1 : MonoBehaviour
     public GameObject prefabManager;
     public GameObject floorTile;
     public GameObject door;
-    public Game data;
+    private Game data;
+    private bool build;
 
     private void Awake()
     {
+        data = GameObject.Find("GameData").GetComponent<Game>();
         SaveSystem.loadGame();
     }
     // Start is called before the first frame update
@@ -76,13 +78,16 @@ public class Level1 : MonoBehaviour
     }
     void Start()
     {
-        begin();
+        //if (!data.tutorial)
+        //{
+            begin();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(data.activeLevel == int.Parse(this.gameObject.tag) && noEnemiesLeft())
+        if(data.activeLevel == int.Parse(this.gameObject.tag) && noEnemiesLeft() && !data.tutorial)
         {
             foreach(Node node in grid.grid)
             {

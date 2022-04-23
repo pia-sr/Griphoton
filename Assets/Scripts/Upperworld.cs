@@ -82,7 +82,6 @@ public class Upperworld : MonoBehaviour
 
             }
             data.namePlayer = playerName;
-            data.tutorial = false;
             SaveSystem.saveGame(data);
             
         }

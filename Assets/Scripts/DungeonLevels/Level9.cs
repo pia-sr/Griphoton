@@ -9,8 +9,14 @@ public class Level9 : MonoBehaviour
     public GameObject prefabManager;
     public GameObject floorTile;
     public GameObject door;
-    public Game data;
+    private Game data;
     private float size;
+
+    private void Awake()
+    {
+        data = GameObject.Find("GameData").GetComponent<Game>();
+        SaveSystem.loadGame();
+    }
 
     private void begin()
     {

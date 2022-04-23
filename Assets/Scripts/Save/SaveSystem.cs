@@ -24,10 +24,10 @@ public static class SaveSystem
     public static GameData loadGame()
     {
         string path = Application.persistentDataPath + "/gameData.game";
-        if (File.Exists(path))
+        FileStream stream = new FileStream(path, FileMode.Open);
+        if (File.Exists(path) && stream.Length > 0)
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stream = new FileStream(path, FileMode.Open);
 
             GameData data = (GameData)formatter.Deserialize(stream);
             stream.Close();

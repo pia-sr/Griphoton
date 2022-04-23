@@ -27,13 +27,17 @@ public class MainTutorial : MonoBehaviour
 
     private void Awake()
     {
-        data.loadGame();
+        if(data.namePlayer != null)
+        {
+            data.loadGame();
+
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        data.namePlayer = null;
+        //data.namePlayer = null;
         if (data.namePlayer == null)
         {
             running = false;
@@ -41,6 +45,7 @@ public class MainTutorial : MonoBehaviour
             string firstSentence = "Hello,| \nWho might you be?";
             StartCoroutine(WordbyWord(firstSentence));
             data.activeLevel = 1;
+            data.tutorial = true;
 
         }
         else
@@ -56,7 +61,6 @@ public class MainTutorial : MonoBehaviour
             };
 
         }
-        data.tutorial = true;
         //else enable script and gameobjects;
     }
 
@@ -150,7 +154,8 @@ public class MainTutorial : MonoBehaviour
                     player.GetComponent<Player>().pause();
                     player.GetComponent<Player>().unpause();
                     this.transform.parent.transform.parent.gameObject.SetActive(false);
-                    this.enabled = false;
+                    running = true;
+                    start = false;
                     break;
             }
         }
@@ -253,7 +258,7 @@ public class MainTutorial : MonoBehaviour
         Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
         question.text = "How can I leave the game?";
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
-        answer.text = "You will find an exit button in the settings to leave the game..";
+        answer.text = "You will find an exit button in the settings to leave the game.";
     }
     public void Question6()
     {
