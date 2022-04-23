@@ -68,12 +68,13 @@ public class RedPointPuzzle2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !tutorial.inactive)
+        if (Input.touchCount > 0 && !tutorial.inactive)
         {
             for(int i = 0; i < circleManager.transform.childCount; i++)
             {
 
-                Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Touch touch = Input.GetTouch(0);
+                Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
                 Rect rect = tile2Rect(circleManager.transform.GetChild(i));
                 if (rect.Contains(touchPosition))
                 {

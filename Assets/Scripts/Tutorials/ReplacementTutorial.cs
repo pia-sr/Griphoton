@@ -40,7 +40,7 @@ public class ReplacementTutorial : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0) && !running && EventSystem.current != GameObject.Find("Skip"))
+        if (Input.touchCount > 0 && !running && EventSystem.current != GameObject.Find("Skip"))
         {
 
             touchAni.GetComponent<TouchAnimation>().running = false;

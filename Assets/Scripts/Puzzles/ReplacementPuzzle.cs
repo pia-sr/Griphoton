@@ -88,11 +88,12 @@ public class ReplacementPuzzle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !tutorial.inactive)
+        if (Input.touchCount > 0 && !tutorial.inactive)
         {
 
             exchangeButton.GetComponent<SpriteRenderer>().color = buttonColour;
-            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Touch touch = Input.GetTouch(0);
+            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             Rect button = tile2Rect(exchangeButton);
             if (button.Contains(touchPosition))
             {

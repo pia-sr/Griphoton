@@ -143,12 +143,13 @@ public class HamiltonianMaze2 : MonoBehaviour
     void Update()
     {
         selected = false;
-        if (Input.GetMouseButtonDown(0) && !tutorial.inactive)
+        if (Input.touchCount > 0 && !tutorial.inactive)
         {
             for (int i = 0; i < linesManager.transform.childCount; i++)
             {
                 lineRend = linesManager.transform.GetChild(i).gameObject.GetComponent<LineRenderer>();
-                Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Touch touch = Input.GetTouch(0);
+                Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
                 float dify = lineRend.GetPosition(lineRend.positionCount - 1).y - lineRend.GetPosition(0).y;
                 float difx = lineRend.GetPosition(lineRend.positionCount - 1).x - lineRend.GetPosition(0).x;
                 float y;

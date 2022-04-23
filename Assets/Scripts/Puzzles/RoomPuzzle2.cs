@@ -91,17 +91,14 @@ public class RoomPuzzle2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonUp(0))
-        {
-            select = false;
-            unselect = false;
-        }
-        else if (Input.GetMouseButton(0) && !tutorial.inactive)
+        
+        if (Input.touchCount > 0 && !tutorial.inactive)
         {
 
             Color colour = colourTile.GetComponent<SpriteRenderer>().color;
             Rect rectColour = tile2Rect(colourTile.transform);
-            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Touch touch = Input.GetTouch(0);
+            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             for (int i = 0; i < tilemanager.transform.childCount; i++)
             {
                 Rect rect = tile2Rect(tilemanager.transform.GetChild(i));
@@ -115,7 +112,7 @@ public class RoomPuzzle2 : MonoBehaviour
                     Node child = grid.GetNodeFromWorldPos(rect.center);
                     if (rend.color == Color.white && !unselect)
                     {
-                        if (Input.GetMouseButtonDown(0))
+                        if (touch.phase == TouchPhase.Began)
                         {
                             select = true;
                         }
@@ -161,7 +158,7 @@ public class RoomPuzzle2 : MonoBehaviour
                     }
                     else if (!select)
                     {
-                        if (Input.GetMouseButtonDown(0))
+                        if (touch.phase == TouchPhase.Began)
                         {
                             unselect = true;
                         }
@@ -182,7 +179,7 @@ public class RoomPuzzle2 : MonoBehaviour
                 }
 
             }
-            if (Input.GetMouseButtonDown(0))
+            if (touch.phase == TouchPhase.Began)
             {
                 if (rectColour.Contains(touchPosition))
                 {
@@ -201,7 +198,11 @@ public class RoomPuzzle2 : MonoBehaviour
                     }
                 }
             }
-
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                select = false;
+                unselect = false;
+            }
             if (checkWin())
             {
                 griphoton.SetActive(true);

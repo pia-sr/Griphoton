@@ -139,9 +139,10 @@ public class Player : MonoBehaviour
                 SceneManager.LoadScene("Dungeon");
             }
         }
-        if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.touchCount > 0 && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
         {
-            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Touch touch = Input.GetTouch(0);
+            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             if (grid.bounds().Contains(touchPosition))
             {
                 targetNode = grid.GetNodeFromWorldPos(touchPosition);

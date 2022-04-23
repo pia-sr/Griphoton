@@ -62,10 +62,11 @@ public class MatchstickPuzzle2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0) && !tutorial.inactive)
+        if (Input.touchCount > 0 && !tutorial.inactive)
         {
 
-            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Touch touch = Input.GetTouch(0);
+            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
 
             if (moveStick)
             {
@@ -84,7 +85,7 @@ public class MatchstickPuzzle2 : MonoBehaviour
                 selectedStick.transform.localPosition = touchPosition - new Vector2(distStick,0);
                 rotateButton.transform.localPosition = touchPosition - new Vector2(distRotate, 0);
             }
-            else if (Input.GetMouseButtonDown(0))
+            else if (touch.phase == TouchPhase.Began)
             {
                 if (!selected)
                 {
@@ -153,14 +154,14 @@ public class MatchstickPuzzle2 : MonoBehaviour
                     }
                 }
             }
-            
+
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                activeMove = false;
+                moveStick = false;
+            }
 
 
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            activeMove = false;
-            moveStick = false;
         }
         if (won())
         {

@@ -82,10 +82,11 @@ public class CannibalsMissionaries : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !onTheMove && !tutorial.inactive)
+        if (Input.touchCount > 0 && !onTheMove && !tutorial.inactive)
         {
             GameObject animal;
-            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Touch touch = Input.GetTouch(0);
+            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             for (int i = 0; i < wolves.transform.childCount *2; i++)
             {
                 

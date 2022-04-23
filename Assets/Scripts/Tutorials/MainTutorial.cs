@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -27,10 +28,10 @@ public class MainTutorial : MonoBehaviour
 
     private void Awake()
     {
-        if(data.namePlayer != null)
+        string path = Application.persistentDataPath + "/gameData.game";
+        if (File.Exists(path))
         {
             data.loadGame();
-
         }
     }
 
@@ -38,7 +39,7 @@ public class MainTutorial : MonoBehaviour
     void Start()
     {
         //data.namePlayer = null;
-        if (data.namePlayer == null)
+        if (data.namePlayer == null || data.namePlayer.Length == 0)
         {
             running = false;
             counter = 0;
@@ -67,7 +68,7 @@ public class MainTutorial : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButton(0) && !running && EventSystem.current != GameObject.Find("Skip"))
+        if(Input.touchCount > 0 && !running && EventSystem.current != GameObject.Find("Skip"))
         {
 
             touchAni.GetComponent<TouchAnimation>().running = false;
@@ -82,7 +83,7 @@ public class MainTutorial : MonoBehaviour
             }
             touchAni.SetActive(false);
             start = true;
-            if (data.namePlayer != null && counter < 2)
+            if (data.namePlayer.Length > 0 && counter < 2)
             {
                 griphoton.SetActive(true);
                 options.SetActive(true);
@@ -100,6 +101,7 @@ public class MainTutorial : MonoBehaviour
             switch (counter)
             {
                 case 1:
+                    TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
                     namePanel.SetActive(true);
                     this.gameObject.SetActive(false);
                     mainDialog.text = "";

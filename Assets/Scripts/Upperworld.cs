@@ -32,7 +32,7 @@ public class Upperworld : MonoBehaviour
         
         Pathfinder pathFinder = this.GetComponent<Pathfinder>();
 
-        if (data.namePlayer == null)
+        if (data.namePlayer.Length == 0)
         {
             for (int i = 0; i < houses.transform.childCount - 1; i++)
             {
