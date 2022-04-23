@@ -31,6 +31,7 @@ public class DungeonTutorial : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player.GetComponent<Player>().upperWorld = false;
         if (data.tutorial)
         {
             data.tutorial = false;

@@ -160,6 +160,7 @@ public class Upperworld : MonoBehaviour
 
     public void setHouseSolved(string houseName)
     {
+        data.increaseMultiplier();
         foreach(Node node in grid.grid)
         {
             if(node.onTop == houseName)

@@ -41,6 +41,7 @@ public class MainTutorial : MonoBehaviour
         //data.namePlayer = null;
         if (data.namePlayer == null || data.namePlayer.Length == 0)
         {
+            data.strenghtMultiplier = 0;
             running = false;
             counter = 0;
             string firstSentence = "Hello,| \nWho might you be?";
@@ -101,7 +102,7 @@ public class MainTutorial : MonoBehaviour
             switch (counter)
             {
                 case 1:
-                    TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+                    //TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
                     namePanel.SetActive(true);
                     this.gameObject.SetActive(false);
                     mainDialog.text = "";

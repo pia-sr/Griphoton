@@ -10,10 +10,16 @@ public class Game : MonoBehaviour
     public bool sound;
 
     public string[] nodeTags;
+    public int strenghtMultiplier;
 
     public void setLevel(int level)
     {
         this.activeLevel = level;
+    }
+
+    public void increaseMultiplier()
+    {
+        this.strenghtMultiplier++;
     }
 
     public void setName(string name)
@@ -63,6 +69,7 @@ public class Game : MonoBehaviour
         namePlayer = data.namePlayer;
         nodeTags = data.nodeTags;
         sound = data.sound;
+        strenghtMultiplier = data.strenghtMultiplier;
 
     }
     private void Start()

@@ -51,12 +51,12 @@ public class Player : MonoBehaviour
     void Start()
     {
         enemyHit = false;
-        hitValue = 25 + (5 * strengthMultiplier());
+        hitValue = 25 + (5 * data.strenghtMultiplier);
         targetNode = null;
         existingTarget = null;
-        strength = 100 + (25 + strengthMultiplier());
+        strength = 100 + (25 + data.strenghtMultiplier);
         fullHealth = strength;
-        coroutineStart = false;
+        foundPos = false;
         if (!upperWorld)
         {
             healthBar.SetHealthBarValue(1);
@@ -66,7 +66,15 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            data.SaveGame();
+            Application.Quit();
+        }
+        if(this.gameObject.activeSelf && !options.activeSelf)
+        {
+            options.SetActive(true);
+        }
         restart();
         if (!foundPos)
         {
@@ -125,6 +133,7 @@ public class Player : MonoBehaviour
             }
             else if (grid.ghostNames().Contains(targetNode.onTop) || grid.ghostNames().Contains(targetNode.owner))
             {
+                options.SetActive(false);
                 data.SaveGame();
                 string ghostName = grid.grid[path[0].gridX, path[0].gridY + 2].onTop;
                 GameObject ghostHouse = findWithTag(ghostName);
@@ -353,19 +362,6 @@ public class Player : MonoBehaviour
         blockEnemy = false;
         yield return new WaitForSeconds(2);
         blockBool = false;
-    }
-    private int strengthMultiplier()
-    {
-        int counter = 0;
-        foreach(string name in data.nodeTags)
-        {
-            if (grid.ghostNames().Contains(name))
-            {
-                counter++;
-            }
-        }
-        int strength = grid.ghostNames().Count - counter;
-        return strength;
     }
     IEnumerator wait()
     {
