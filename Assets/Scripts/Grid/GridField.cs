@@ -323,9 +323,17 @@ public class GridField : MonoBehaviour
         {
             for (int j = -1; j < 2; j++)
             {
-                grid[node.gridX + i, node.gridY + j].setItemOnTop("Solved");
-                grid[node.gridX + i, node.gridY + j].owner = null;
-                grid[node.gridX + i, node.gridY + j].isWalkable = true;
+                if (i == 0 && j == 0)
+                {
+                    node.onTop = "SolvedCenter";
+                    node.isWalkable = true;
+                }
+                else
+                {
+                    grid[node.gridX + i, node.gridY + j].setItemOnTop("Solved");
+                    grid[node.gridX + i, node.gridY + j].owner = null;
+                    grid[node.gridX + i, node.gridY + j].isWalkable = true;
+                }
             }
         }
     }

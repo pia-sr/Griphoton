@@ -20,6 +20,21 @@ TextureImporter:
   - first:
       213: 21300010
     second: Town_5
+  - first:
+      213: -971289391552300662
+    second: Town_6
+  - first:
+      213: -61019804611345528
+    second: Town_7
+  - first:
+      213: -852558035132325119
+    second: Town_8
+  - first:
+      213: -9117723553969679865
+    second: Town_9
+  - first:
+      213: -2447139571626646473
+    second: Town_10
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -150,11 +165,11 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 432
-        width: 160
-        height: 208
+        width: 51
+        height: 64
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 0, y: 64, z: 51, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -170,9 +185,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 3
-        y: 190
-        width: 42
-        height: 74
+        y: 221
+        width: 14
+        height: 43
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -192,11 +207,11 @@ TextureImporter:
         serializedVersion: 2
         x: 5
         y: 352
-        width: 137
+        width: 69
         height: 80
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 80, z: 62, w: 0}
+      border: {x: 0, y: 79, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -256,9 +271,9 @@ TextureImporter:
         x: 5
         y: 267
         width: 70
-        height: 84
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        height: 83
+      alignment: 9
+      pivot: {x: 1.2058936, y: 0.50000036}
       border: {x: 0, y: 3, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -266,6 +281,111 @@ TextureImporter:
       bones: []
       spriteID: c64e5c12aef44b080800000000000000
       internalID: 21300010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Town_6
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 241
+        width: 67
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a897b6ac1794582f0800000000000000
+      internalID: -971289391552300662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Town_7
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 143
+        width: 25
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 1}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88380ed9fc6372ff0800000000000000
+      internalID: -61019804611345528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Town_8
+      rect:
+        serializedVersion: 2
+        x: 71
+        y: 146
+        width: 19
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 1, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 103688debfa1b24f0800000000000000
+      internalID: -852558035132325119
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Town_9
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 221
+        width: 15
+        height: 43
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 702dc654cb6577180800000000000000
+      internalID: -9117723553969679865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Town_10
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 221
+        width: 14
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 734646d66830a0ed0800000000000000
+      internalID: -2447139571626646473
       vertices: []
       indices: 
       edges: []

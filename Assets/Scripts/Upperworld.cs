@@ -15,6 +15,8 @@ public class Upperworld : MonoBehaviour
     public Game data;
     public string playerName;
     public Text messageSimple;
+    public List<GameObject> grass;
+    public GameObject moudField;
 
     private List<string> wonSentences;
 
@@ -24,14 +26,58 @@ public class Upperworld : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        foreach (Node node in grid.grid)
+        {
+            if (node.onTop == null)
+            {
+                int rand = Random.Range(0, 100);
+                GameObject grassObject;
+                if(rand < 2)
+                {
+                    grassObject = grass[0];
+                }
+                else if(rand < 4)
+                {
+                    grassObject = grass[1];
+                }
+                else if(rand < 6)
+                {
+                    grassObject = grass[2];
+                }
+                else if(rand < 8)
+                {
+                    grassObject = grass[3];
+                }
+                else if(rand < 10)
+                {
+                    grassObject = grass[4];
+                }
+                else if(rand < 12)
+                {
+                    grassObject = grass[5];
+                }
+                else if(rand < 30)
+                {
+                    grassObject = grass[6];
+                }
+                else
+                {
+                    grassObject = grass[7];
+                }
+                GameObject grassTile = Instantiate(grassObject, node.worldPosition, Quaternion.identity, treeManager.transform);
+                grassTile.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 1);
+                grassTile.transform.localPosition += new Vector3(0, 0, 5);
+
+            }
+        }
         houses.SetActive(true);
         Node center = grid.grid[(int)grid.getGridSizeX() / 2, ((int)grid.getGridSizeY() / 2) +2];
         grid.setHouse(center, "Dungeon");
         houses.transform.GetChild(houses.transform.childCount - 1).transform.localPosition = center.worldPosition + new Vector3(0, 0, -1);
-        houses.transform.GetChild(houses.transform.childCount - 1).GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 6, grid.nodeRadius * 6, 1);
+        houses.transform.GetChild(houses.transform.childCount - 1).GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 6, grid.nodeRadius * 6, 2);
         
         Pathfinder pathFinder = this.GetComponent<Pathfinder>();
-
+        
         if (data.namePlayer.Length == 0)
         {
             for (int i = 0; i < houses.transform.childCount - 1; i++)
@@ -65,7 +111,7 @@ public class Upperworld : MonoBehaviour
                     path[k].setItemOnTop("Path");
                 }
             }
-            for (int i = 0; i < 4000; i++)
+            for (int i = 0; i < 3000; i++)
             {
                 int x = Random.Range(0, grid.getGridSizeX());
                 int y = Random.Range(1, grid.getGridSizeY());
@@ -77,7 +123,8 @@ public class Upperworld : MonoBehaviour
 
                 }
                 GameObject treeT = Instantiate(tree, grid.grid[x, y].worldPosition, Quaternion.identity, treeManager.transform);
-                treeT.transform.localScale = new Vector3(grid.nodeRadius * 2, grid.nodeRadius * 2, 1);
+                treeT.transform.localScale = new Vector3(grid.nodeRadius * 6, grid.nodeRadius * 6, 4);
+                treeT.transform.localPosition += new Vector3(0, grid.nodeRadius, -2 + ( y * x * 0.00001f));
                 grid.grid[x, y].setItemOnTop("Tree");
 
             }
@@ -103,7 +150,12 @@ public class Upperworld : MonoBehaviour
                 else if (node.onTop == "Tree")
                 {
                     GameObject treeT = Instantiate(tree, node.worldPosition, Quaternion.identity, treeManager.transform);
-                    treeT.transform.localScale = new Vector3(grid.nodeRadius * 2, grid.nodeRadius * 2, 1);
+                    treeT.transform.localScale = new Vector3(grid.nodeRadius * 4, grid.nodeRadius * 4, 1);
+                }
+                else if(node.onTop == "SovedCenter")
+                {
+                    GameObject solvedHouse = Instantiate(moudField, node.worldPosition, Quaternion.identity, houses.transform);
+                    solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 6, grid.nodeRadius * 6, 1);
                 }
                 counter++;
             }
@@ -117,6 +169,7 @@ public class Upperworld : MonoBehaviour
 
 
         }
+        
         wonSentences = new List<string>()
         {
             "Congratulations! \nYou solved the puzzle!",
@@ -176,6 +229,8 @@ public class Upperworld : MonoBehaviour
                 grid.solvedHouse(node);
                 GameObject house = GameObject.Find(houseName);
                 house.SetActive(false);
+                GameObject solvedHouse = Instantiate(moudField, node.worldPosition, Quaternion.identity, houses.transform);
+                solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 6, grid.nodeRadius * 6, 1);
                 messageSimple.transform.parent.gameObject.SetActive(true);
                 messageSimple.text = wonSentences[randIndex];
             }
@@ -185,4 +240,5 @@ public class Upperworld : MonoBehaviour
     {
         messageSimple.transform.parent.gameObject.SetActive(false);
     }
+
 }
