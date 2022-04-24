@@ -109,7 +109,7 @@ public class CornerMaze : MonoBehaviour
                 Touch touch = Input.GetTouch(0);
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
                 Rect rect = tile2Rect(tilemanager.transform.GetChild(i));
-                if (rect.Contains(touchPosition))
+                if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                 {
                     Node currentNode = grid.GetNodeFromWorldPos(rect.center);
                     Node neighbour = null;
@@ -141,8 +141,8 @@ public class CornerMaze : MonoBehaviour
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
-                this.transform.parent.gameObject.SetActive(false);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
 
         }
@@ -239,9 +239,10 @@ public class CornerMaze : MonoBehaviour
 
     public void yes()
     {
+        setUp();
         griphoton.SetActive(true);
         player.SetActive(true);
-        setUp();
+        message.SetActive(false);
         tutorial.gameObject.SetActive(true);
         tutorial.setUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);

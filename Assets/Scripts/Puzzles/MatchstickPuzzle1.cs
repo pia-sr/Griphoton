@@ -160,8 +160,8 @@ public class MatchstickPuzzle1 : MonoBehaviour
 
             griphoton.SetActive(true);
             player.SetActive(true);
-            griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
-            this.transform.parent.gameObject.SetActive(false);
+            griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+            this.transform.parent.transform.parent.gameObject.SetActive(false);
         }
     }
 
@@ -201,9 +201,10 @@ public class MatchstickPuzzle1 : MonoBehaviour
 
     public void yes()
     {
+        setUp();
         griphoton.SetActive(true);
         player.SetActive(true);
-        setUp();
+        messageExit.SetActive(false);
         tutorial.gameObject.SetActive(true);
         tutorial.setUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);

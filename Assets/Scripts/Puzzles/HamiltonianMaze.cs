@@ -160,7 +160,7 @@ public class HamiltonianMaze : MonoBehaviour
                 }
 
                 Bounds realBounds = new Bounds(lineRend.GetPosition(0) + new Vector3(difx / 2, dify / 2, 0), new Vector3(x, y, 2));
-                if (realBounds.Contains(touchPosition) && selected == false)
+                if (realBounds.Contains(touchPosition) && selected == false && touch.phase == TouchPhase.Began)
                 {
                     int value;
                     selected = true;
@@ -211,8 +211,8 @@ public class HamiltonianMaze : MonoBehaviour
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
-                this.transform.parent.gameObject.SetActive(false);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
         }
     }
@@ -249,9 +249,10 @@ public class HamiltonianMaze : MonoBehaviour
 
     public void yes()
     {
+        setUp();
         griphoton.SetActive(true);
         player.SetActive(true);
-        setUp();
+        message.SetActive(false);
         tutorial.gameObject.SetActive(true);
         tutorial.setUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);

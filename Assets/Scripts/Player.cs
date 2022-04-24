@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -26,7 +27,6 @@ public class Player : MonoBehaviour
     private bool foundPos = false;
     private bool coroutineStart;
     private float fullHealth;
-    public bool levelLoaded;
     private Game data;
     public bool leaveLevel;
     private bool chooseExit;
@@ -44,7 +44,7 @@ public class Player : MonoBehaviour
     private void Awake()
     {
         data = GameObject.Find("GameData").GetComponent<Game>();
-        data.setLevel(data.activeLevel);
+        
     }
 
     // Start is called before the first frame update
@@ -60,6 +60,7 @@ public class Player : MonoBehaviour
         if (!upperWorld)
         {
             healthBar.SetHealthBarValue(1);
+            chooseExit = false;
         }
     }
 
@@ -71,9 +72,13 @@ public class Player : MonoBehaviour
             data.SaveGame();
             Application.Quit();
         }
-        if(this.gameObject.activeSelf && !options.activeSelf)
+        if(this.gameObject.activeSelf && upperWorld)
         {
-            options.SetActive(true);
+            if (!options.activeSelf)
+            {
+                options.SetActive(true);
+
+            }
         }
         restart();
         if (!foundPos)
@@ -87,7 +92,6 @@ public class Player : MonoBehaviour
             }
             else if (!upperWorld)
             {
-                levelLoaded = false;
                 if (!chooseExit)
                 {
 
@@ -148,7 +152,7 @@ public class Player : MonoBehaviour
                 SceneManager.LoadScene("Dungeon");
             }
         }
-        if (Input.touchCount > 0 && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+        if (Input.touchCount > 0 && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             Touch touch = Input.GetTouch(0);
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
@@ -171,7 +175,7 @@ public class Player : MonoBehaviour
                 entraceNodes.Add(node);
             }
         }
-        if (entraceNodes.Count != 0)
+        if (entraceNodes.Count == 3)
         {
             transform.position = entraceNodes[1].worldPosition - new Vector3(0, 0, 1);
             foundPos = true;

@@ -68,7 +68,7 @@ public class GapPuzzle2 : MonoBehaviour
                 Rect rect = tile2Rect(tilemanager.transform.GetChild(i));
 
 
-                if (rect.Contains(touchPosition))
+                if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                 {
 
                     Node node = grid.GetNodeFromWorldPos(rect.center);
@@ -93,8 +93,8 @@ public class GapPuzzle2 : MonoBehaviour
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
-                this.transform.parent.gameObject.SetActive(false);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
 
         }
@@ -171,9 +171,10 @@ public class GapPuzzle2 : MonoBehaviour
 
     public void yes()
     {
+        setUp();
         griphoton.SetActive(true);
         player.SetActive(true);
-        setUp();
+        message.SetActive(false);
         tutorial.gameObject.SetActive(true);
         tutorial.setUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);

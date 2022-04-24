@@ -107,6 +107,13 @@ public class Upperworld : MonoBehaviour
                 }
                 counter++;
             }
+            for(int i = 0; i < houses.transform.childCount-1; i++)
+            {
+                if(houses.transform.GetChild(i).GetChild(0).gameObject.transform.localScale == Vector3.one)
+                {
+                    houses.transform.GetChild(i).gameObject.SetActive(false);
+                }
+            }
 
 
         }
@@ -168,7 +175,7 @@ public class Upperworld : MonoBehaviour
                 int randIndex = Random.Range(0, wonSentences.Count);
                 grid.solvedHouse(node);
                 GameObject house = GameObject.Find(houseName);
-                Destroy(house);
+                house.SetActive(false);
                 messageSimple.transform.parent.gameObject.SetActive(true);
                 messageSimple.text = wonSentences[randIndex];
             }

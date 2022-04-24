@@ -16,7 +16,6 @@ public class Level19 : MonoBehaviour
     private void Awake()
     {
         data = GameObject.Find("GameData").GetComponent<Game>();
-        SaveSystem.loadGame();
     }
 
     private void begin()

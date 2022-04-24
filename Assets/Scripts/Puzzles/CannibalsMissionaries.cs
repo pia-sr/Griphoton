@@ -99,7 +99,7 @@ public class CannibalsMissionaries : MonoBehaviour
                     animal = wolves.transform.GetChild(i-3).gameObject;
                 }
                 Rect animalRect = tile2Rect(animal);
-                if(animalRect.Contains(touchPosition))
+                if(animalRect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                 {
 
                     if (left.Contains(animal) && onBoat.Count < 2 && boatLeft)
@@ -220,8 +220,8 @@ public class CannibalsMissionaries : MonoBehaviour
         {
             griphoton.SetActive(true);
             player.SetActive(true);
-            griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
-            this.transform.parent.gameObject.SetActive(false);
+            griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+            this.transform.parent.transform.parent.gameObject.SetActive(false);
         }
     }
     private void positions()
@@ -348,9 +348,10 @@ public class CannibalsMissionaries : MonoBehaviour
 
     public void yes()
     {
+        setUp();
         griphoton.SetActive(true);
         player.SetActive(true);
-        setUp();
+        messageExit.SetActive(false);
         tutorial.gameObject.SetActive(true);
         tutorial.setUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);

@@ -16,12 +16,14 @@ public class MirrorTutorial : MonoBehaviour
     private bool start;
     public bool inactive;
     public GameObject questions;
+    public GameObject ghost;
 
     public void setUp()
     {
         this.transform.parent.transform.GetChild(0).gameObject.SetActive(false);
         this.transform.parent.transform.GetChild(1).gameObject.SetActive(false);
         options.SetActive(false);
+        ghost.transform.localPosition = Vector3.zero;
         inactive = true;
         running = false;
         counter = 0;
@@ -62,6 +64,7 @@ public class MirrorTutorial : MonoBehaviour
             switch (counter)
             {
                 case 1:
+                    ghost.transform.localPosition = new Vector3(-5, 0, 0);
                     this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
                     string sentence = "I want to build a room full of mirrors as an attraction.| People who visit my room, wait no| let's call it my hall of mirrors, need to find the way out of the room without running into mirrors.";
                     StartCoroutine(WordbyWord(sentence));

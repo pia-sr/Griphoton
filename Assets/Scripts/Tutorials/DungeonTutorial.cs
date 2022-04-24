@@ -21,6 +21,7 @@ public class DungeonTutorial : MonoBehaviour
     public GameObject options;
     public GameObject message;
     private int clickIndex;
+    public GameObject ghost;
 
     private void Awake()
     {
@@ -31,9 +32,9 @@ public class DungeonTutorial : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        player.GetComponent<Player>().upperWorld = false;
         if (data.tutorial)
         {
+            ghost.SetActive(true);
             data.tutorial = false;
             running = false;
             counter = 0;
@@ -82,6 +83,7 @@ public class DungeonTutorial : MonoBehaviour
             switch (counter)
             {
                 case 1:
+                    ghost.SetActive(false);
                     skipButton.SetActive(true);
                     dungeon.SetActive(true);
                     string sentence = "This here is the first room of the dungeon.| To go to the next room, you first need to defeat all the monsters in the room.";
@@ -92,7 +94,7 @@ public class DungeonTutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "To attack the monsters with your sword, you need to get close to them and then press the button in the right corner of your screen.| You can also try to block their attacks by pressing the button in the left corner..";
+                    sentence = "To attack the monsters with your sword, you need to get close to them and then press the button in the right corner of your screen.| You can also try to block their attacks by pressing the button in the left corner.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
@@ -115,6 +117,7 @@ public class DungeonTutorial : MonoBehaviour
                     this.transform.parent.transform.parent.gameObject.SetActive(false);
                     running = true;
                     start = false;
+                    data.tutorial = false;
                     break;
             }
         }

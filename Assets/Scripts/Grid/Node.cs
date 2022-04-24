@@ -59,6 +59,10 @@ public class Node : IHeapItem<Node>
         {
             isWalkable = false;
         }
+        else
+        {
+            isWalkable = true;
+        }
     }
 
 

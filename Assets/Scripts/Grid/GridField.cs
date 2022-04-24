@@ -325,6 +325,7 @@ public class GridField : MonoBehaviour
             {
                 grid[node.gridX + i, node.gridY + j].setItemOnTop("Solved");
                 grid[node.gridX + i, node.gridY + j].owner = null;
+                grid[node.gridX + i, node.gridY + j].isWalkable = true;
             }
         }
     }

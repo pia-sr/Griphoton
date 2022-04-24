@@ -15,7 +15,6 @@ public class Level1 : MonoBehaviour
     private void Awake()
     {
         data = GameObject.Find("GameData").GetComponent<Game>();
-        SaveSystem.loadGame();
     }
     // Start is called before the first frame update
 
@@ -44,9 +43,9 @@ public class Level1 : MonoBehaviour
         {
             if (node == grid.grid[middleX, grid.getGridSizeY() - 1] && node.onTop == "Exit")
             {
-                Instantiate(door, node.worldPosition, Quaternion.identity, prefabManager.transform);
 
                 door.transform.localScale = new Vector3(size * 3, size, 0);
+                Instantiate(door, node.worldPosition, Quaternion.identity, prefabManager.transform);
             }
             else if (node.gridX == 0 || node.gridX == grid.getGridSizeX() - 1 || node.gridY == 0 || node.gridY == grid.getGridSizeY() - 1)
             {
@@ -87,15 +86,15 @@ public class Level1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(data.activeLevel == int.Parse(this.gameObject.tag) && noEnemiesLeft() && !data.tutorial)
+        if(data.activeLevel == int.Parse(this.gameObject.tag) && noEnemiesLeft())
         {
             foreach(Node node in grid.grid)
             {
                 if(node.onTop == "Exit")
                 {
                     node.setItemOnTop("ExitOpen");
-                    Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);
                     floorTile.transform.localScale = new Vector3(2 * grid.nodeRadius, 2 * grid.nodeRadius, 0);
+                    Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);
 
                 }
                 

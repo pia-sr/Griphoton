@@ -68,7 +68,7 @@ public class MirrorPuzzle : MonoBehaviour
                 Touch touch = Input.GetTouch(0);
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
                 Rect rect = tile2Rect(node.worldPosition);
-                if (rect.Contains(touchPosition))
+                if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                 {
                     if(node.onTop == "Empty")
                     {
@@ -143,8 +143,8 @@ public class MirrorPuzzle : MonoBehaviour
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
-                this.transform.parent.gameObject.SetActive(false);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
 
         }
@@ -299,10 +299,10 @@ public class MirrorPuzzle : MonoBehaviour
 
     public void yes()
     {
+        setUp();
         griphoton.SetActive(true);
         player.SetActive(true);
-        setUp();
-
+        message.SetActive(false);
         tutorial.gameObject.SetActive(true);
         tutorial.setUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);

@@ -105,7 +105,7 @@ public class RoomPuzzle2 : MonoBehaviour
 
 
 
-                if (rect.Contains(touchPosition))
+                if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                 {
 
                     var rend = tilemanager.transform.GetChild(i).GetComponent<SpriteRenderer>();
@@ -181,7 +181,7 @@ public class RoomPuzzle2 : MonoBehaviour
             }
             if (touch.phase == TouchPhase.Began)
             {
-                if (rectColour.Contains(touchPosition))
+                if (rectColour.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                 {
 
                     if (colour == Color.red)
@@ -207,8 +207,8 @@ public class RoomPuzzle2 : MonoBehaviour
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
-                this.transform.parent.gameObject.SetActive(false);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
 
         }
@@ -344,11 +344,12 @@ public class RoomPuzzle2 : MonoBehaviour
 
     public void yes()
     {
+        tutorial.setUp();
+        setUp();
         griphoton.SetActive(true);
         player.SetActive(true);
-        setUp();
+        message.SetActive(false);
         tutorial.gameObject.SetActive(true);
-        tutorial.setUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);
     }
     public void no()

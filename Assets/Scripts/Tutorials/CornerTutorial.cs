@@ -16,12 +16,15 @@ public class CornerTutorial : MonoBehaviour
     private bool start;
     public bool inactive;
     public GameObject questions;
+    public GameObject ghost;
 
     public void setUp()
     {
         this.transform.parent.transform.GetChild(0).gameObject.SetActive(false);
         this.transform.parent.transform.GetChild(1).gameObject.SetActive(false);
         options.SetActive(false);
+        ghost.SetActive(true);
+        ghost.transform.localPosition = Vector3.zero;
         inactive = true;
         running = false;
         counter = 0;
@@ -62,6 +65,7 @@ public class CornerTutorial : MonoBehaviour
             switch (counter)
             {
                 case 1:
+                    ghost.transform.localPosition = new Vector3(-5, 0, 0);
                     this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
                     string sentence = "Do you see the field here?| \nI need to find a path from my start square to my end square.";
                     StartCoroutine(WordbyWord(sentence));

@@ -43,11 +43,6 @@ public class Game : MonoBehaviour
             int counter = 0;
             foreach (Node node in grid.grid)
             {
-
-                if (node.onTop == "Erin")
-                {
-                    Debug.Log("Not the problem here");
-                }
                 tags[counter] = node.onTop;
                 counter++;
             }

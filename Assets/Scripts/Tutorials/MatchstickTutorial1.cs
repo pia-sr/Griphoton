@@ -16,12 +16,14 @@ public class MatchstickTutorial1 : MonoBehaviour
     private bool start;
     public bool inactive;
     public GameObject questions;
+    public GameObject ghost;
 
     public void setUp()
     {
         this.transform.parent.transform.GetChild(0).gameObject.SetActive(false);
         this.transform.parent.transform.GetChild(1).gameObject.SetActive(false);
         options.SetActive(false);
+        ghost.SetActive(true);
         inactive = true;
         running = false;
         counter = 0;
@@ -62,6 +64,7 @@ public class MatchstickTutorial1 : MonoBehaviour
             switch (counter)
             {
                 case 1:
+                    ghost.SetActive(false);
                     this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
                     string sentence = "I have six matchsticks and, apparently, if I move one, I can get 4 triangles.| But I do not know how.| \nCan you help me?";
                     StartCoroutine(WordbyWord(sentence));

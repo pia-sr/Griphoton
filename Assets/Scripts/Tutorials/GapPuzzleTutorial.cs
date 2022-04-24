@@ -16,12 +16,15 @@ public class GapPuzzleTutorial : MonoBehaviour
     private bool start;
     public bool inactive;
     public GameObject questions;
+    public GameObject ghost;
 
     public void setUp()
     {
         this.transform.parent.transform.GetChild(0).gameObject.SetActive(false);
         this.transform.parent.transform.GetChild(1).gameObject.SetActive(false);
         options.SetActive(false);
+        ghost.SetActive(true);
+        ghost.transform.localPosition = Vector3.zero;
         inactive = true;
         running = false;
         counter = 0;
@@ -62,6 +65,7 @@ public class GapPuzzleTutorial : MonoBehaviour
             switch (counter)
             {
                 case 1:
+                    ghost.transform.localPosition = new Vector3(-5, 0, 0);
                     this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
                     string sentence = "I have this 9x9 field of squares and I need to colour in two squares in every row and column.| These coloured-in squares are not allowed to touch each other, not even at corners!";
                     StartCoroutine(WordbyWord(sentence));

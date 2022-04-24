@@ -25,6 +25,7 @@ public class MainTutorial : MonoBehaviour
     public GameObject options;
     public Text message;
     public GridField grid;
+    public GameObject Ghost;
 
     private void Awake()
     {
@@ -38,6 +39,8 @@ public class MainTutorial : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Ghost.SetActive(true);
+        Ghost.transform.localPosition = Vector3.zero;
         //data.namePlayer = null;
         if (data.namePlayer == null || data.namePlayer.Length == 0)
         {
@@ -52,6 +55,7 @@ public class MainTutorial : MonoBehaviour
         }
         else
         {
+            data.tutorial = false;
             running = false;
             string firstSentence = "Welcome back, "+ data.namePlayer + "!";
             StartCoroutine(WordbyWord(firstSentence));
@@ -94,6 +98,7 @@ public class MainTutorial : MonoBehaviour
                 running = true;
                 start = false;
                 this.transform.parent.transform.parent.gameObject.SetActive(false);
+                Ghost.SetActive(false);
             }
         }
         else if (start)
@@ -137,6 +142,7 @@ public class MainTutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 9:
+                    Ghost.SetActive(false);
                     movement.SetActive(true);
                     sentence = "Let me show you how you walk in this world.| \nSimply tap on the place where you want to go and that's it!";
                     StartCoroutine(WordbyWord(sentence));
@@ -215,6 +221,7 @@ public class MainTutorial : MonoBehaviour
         player.GetComponent<Player>().unpause();
         running = true;
         start = false;
+        Ghost.SetActive(false);
 
     }
 
@@ -328,6 +335,7 @@ public class MainTutorial : MonoBehaviour
         else
         {
             data.tutorial = true;
+            data.namePlayer = "";
             data.SaveGame();
             Application.Quit();
 

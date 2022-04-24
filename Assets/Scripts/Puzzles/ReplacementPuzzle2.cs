@@ -96,7 +96,7 @@ public class ReplacementPuzzle2 : MonoBehaviour
             Touch touch = Input.GetTouch(0);
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             Rect button = tile2Rect(exchangeButton);
-            if (button.Contains(touchPosition))
+            if (button.Contains(touchPosition) && touch.phase == TouchPhase.Began)
             {
                 sortList();
                 if (selected.Count != 0 && checkNeighbours())
@@ -195,7 +195,7 @@ public class ReplacementPuzzle2 : MonoBehaviour
                 if(chosenSymbol != null)
                 {
                     Rect rect = tile2Rect(chosenSymbol);
-                    if (rect.Contains(touchPosition))
+                    if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                     {
                         if (!selected.Contains(chosenSymbol))
                         {
@@ -237,8 +237,8 @@ public class ReplacementPuzzle2 : MonoBehaviour
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.tag);
-                this.transform.parent.gameObject.SetActive(false);
+                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
 
         }
@@ -353,9 +353,10 @@ public class ReplacementPuzzle2 : MonoBehaviour
 
     public void yes()
     {
+        setUp();
         griphoton.SetActive(true);
         player.SetActive(true);
-        setUp();
+        messageExit.SetActive(false);
         tutorial.gameObject.SetActive(true);
         tutorial.setUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);

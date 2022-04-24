@@ -16,11 +16,14 @@ public class CMTutorial : MonoBehaviour
     private bool start;
     public bool inactive;
     public GameObject questions;
+    public GameObject Ghost;
 
     public void setUp()
     {
         this.transform.parent.transform.GetChild(0).gameObject.SetActive(false);
         this.transform.parent.transform.GetChild(1).gameObject.SetActive(false);
+        Ghost.SetActive(true);
+        Ghost.transform.localPosition = Vector3.zero;
         options.SetActive(false);
         inactive = true;
         running = false;
@@ -62,6 +65,7 @@ public class CMTutorial : MonoBehaviour
             switch (counter)
             {
                 case 1:
+                    Ghost.SetActive(false);
                     this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
                     string sentence = "I have three snakes and three mice and I need to get all of them across the river.| I can only carry two animals with me on the boat.";
                     StartCoroutine(WordbyWord(sentence));
@@ -134,6 +138,7 @@ public class CMTutorial : MonoBehaviour
         options.SetActive(true);
         inactive = false;
         this.gameObject.SetActive(false);
+        Ghost.SetActive(false);
     }
 
     public void Question1()
