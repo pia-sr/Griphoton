@@ -38,7 +38,7 @@ public class Pathfinder : MonoBehaviour
             closedList.Add(currentNode);
             if (currentNode == targetNode)
             {
-                path = TraceRoute(startNode, targetNode);
+                path = TraceRoutePath(startNode, targetNode);
                 return path;
             }
 
@@ -50,11 +50,11 @@ public class Pathfinder : MonoBehaviour
                 {
                     continue;
                 }
-                int movementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
+                int movementCostToNeighbour = currentNode.gCost + GetDistancePath(currentNode, neighbour);
                 if (movementCostToNeighbour < currentNode.gCost || !openList.contains(neighbour))
                 {
                     neighbour.gCost = movementCostToNeighbour;
-                    neighbour.hCost = GetDistance(neighbour, targetNode);
+                    neighbour.hCost = GetDistancePath(neighbour, targetNode);
                     neighbour.parent = currentNode;
                     if (!openList.contains(neighbour))
                     {
@@ -233,7 +233,7 @@ public class Pathfinder : MonoBehaviour
         int distanceX = Mathf.Abs(to.gridX - from.gridX);
         int distanceY = Mathf.Abs(to.gridY - from.gridY);
 
-        return distanceX > distanceY ? 16 * distanceY + 12 * distanceX : 16 * distanceX + 12 * distanceY;
+        return distanceX > distanceY ? 14 * distanceY + 12 * distanceX : 14 * distanceX + 12 * distanceY;
     }
 
     private Node PlayerNode()
@@ -260,4 +260,90 @@ public class Pathfinder : MonoBehaviour
         }
         return closesTarget;
     }
+
+    public int GetDistancePath(Node from, Node to)
+    {
+        int distanceX = Mathf.Abs(to.gridX - from.gridX);
+        int distanceY = Mathf.Abs(to.gridY - from.gridY);
+        int value = 50;
+        if(to.onTop == null)
+        {
+            value = 50;
+        }
+        else if(distanceY == 0 && (to.onTop.Contains("Left") || to.onTop.Contains("Right")))
+        {
+            value = 1;
+        }
+        else if(distanceX == 0 && (to.onTop.Contains("Up") || to.onTop.Contains("Down")))
+        {
+            value = 1;
+        }
+
+        return distanceX * value + distanceY * value;
+    }
+
+    //Returns a path to the script of the ghost who is named
+    public List<Node> TraceRoutePath(Node from, Node to)
+    {
+        bool done = false;
+        List<Node> path = new List<Node>();
+        Node currentNode = to;
+        string directionChild = "";
+        string directionParent = "";
+        while (done == false)
+        {
+            path.Add(currentNode);
+            if (currentNode == from)
+            {
+                done = true;
+            }
+            else
+            {
+                if(currentNode.gridX == currentNode.parent.gridX && currentNode.gridY < currentNode.parent.gridY)
+                {
+                    directionChild = "Up";
+                    directionParent = "Down";
+                }
+                else if(currentNode.gridX == currentNode.parent.gridX && currentNode.gridY > currentNode.parent.gridY)
+                {
+                    directionChild = "Down";
+                    directionParent = "Up";
+                }
+                else if(currentNode.gridY == currentNode.parent.gridY && currentNode.gridX < currentNode.parent.gridX)
+                {
+                    directionChild = "Right";
+                    directionParent = "Left";
+                }
+                else if(currentNode.gridY == currentNode.parent.gridY && currentNode.gridX > currentNode.parent.gridX)
+                {
+                    directionChild = "Left";
+                    directionParent = "Right";
+                }
+
+                if(currentNode.onTop == null)
+                {
+                    currentNode.onTop = directionChild;
+                }
+                else if (!currentNode.onTop.Contains(directionChild))
+                {
+                    currentNode.onTop += directionChild;
+                }
+                currentNode = currentNode.parent;
+                if (currentNode.onTop == null)
+                {
+                    currentNode.onTop = directionParent;
+                }
+                else if (!currentNode.onTop.Contains(directionParent))
+                {
+                    currentNode.onTop += directionParent;
+                }
+
+            }
+        }
+        path.Reverse();
+        return path;
+
+    }
+
+
 }

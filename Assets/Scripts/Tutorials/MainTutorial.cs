@@ -108,11 +108,13 @@ public class MainTutorial : MonoBehaviour
             {
                 case 1:
                     //TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
+                    Ghost.SetActive(false);
                     namePanel.SetActive(true);
                     this.gameObject.SetActive(false);
                     mainDialog.text = "";
                     break;
                 case 2:
+                    Ghost.SetActive(true);
                     skipButton.SetActive(true);
                     string sentence = "My name is Spencer.| I do not know how you ended up here, but welcome to Griphoton, " + playerName + "!";
                     StartCoroutine(WordbyWord(sentence));
@@ -155,7 +157,7 @@ public class MainTutorial : MonoBehaviour
                     break;
                 case 11:
                     options.SetActive(true);
-                    sentence = "If you have any questions, just tap on the icon with the question mark.| \nYou can also access the setting or leave the game by tapping the setting icon.| \nGood luck, " + playerName + "!";
+                    sentence = "If you have any questions, there is a help button in the settings| \nYou can also access the setting or leave the game by tapping the setting icon.| \nGood luck, " + playerName + "!";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 12:

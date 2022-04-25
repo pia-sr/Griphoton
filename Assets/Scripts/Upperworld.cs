@@ -8,7 +8,6 @@ public class Upperworld : MonoBehaviour
 {
     public GridField grid;
     public GameObject houses;
-    public GameObject pathTile;
     public GameObject pathManager;
     public GameObject tree;
     public GameObject treeManager;
@@ -17,6 +16,11 @@ public class Upperworld : MonoBehaviour
     public Text messageSimple;
     public List<GameObject> grass;
     public GameObject moudField;
+    public GameObject path1Direction;
+    public GameObject pathChangingDirection;
+    public GameObject path3Direction;
+    public GameObject path4Direction;
+    public GameObject pathEnd;
 
     private List<string> wonSentences;
 
@@ -86,7 +90,7 @@ public class Upperworld : MonoBehaviour
                 int y = Random.Range(5, grid.getGridSizeY()-5);
 
 
-                while (grid.grid[x, y].onTop != null)
+                while (grid.grid[x, y].onTop != null && !HouseNearby(grid.grid[x,y]))
                 {
                     x = Random.Range(5, grid.getGridSizeX()-5);
                     y = Random.Range(5, grid.getGridSizeY()-5);
@@ -104,12 +108,7 @@ public class Upperworld : MonoBehaviour
                     index = Random.Range(0, houses.transform.childCount - 1);
                 }
                 List<Node> path = pathFinder.FindPath(houses.transform.GetChild(i).transform.localPosition, houses.transform.GetChild(index).transform.localPosition);
-                for (int k = 0; k < path.Count; k++)
-                {
-                    GameObject pathT = Instantiate(pathTile, path[k].worldPosition, Quaternion.identity, pathManager.transform);
-                    pathT.transform.localScale = new Vector3(grid.nodeRadius * 2, grid.nodeRadius * 2, 1);
-                    path[k].setItemOnTop("Path");
-                }
+                
             }
             for (int i = 0; i < 3000; i++)
             {
@@ -128,6 +127,8 @@ public class Upperworld : MonoBehaviour
                 grid.grid[x, y].setItemOnTop("Tree");
 
             }
+            findEndPath();
+            creatingPath();
             data.namePlayer = playerName;
             SaveSystem.saveGame(data);
             
@@ -141,11 +142,6 @@ public class Upperworld : MonoBehaviour
                 {
                     buildHouse(node);
                     
-                }
-                else if (node.onTop == "Path")
-                {
-                    GameObject pathT = Instantiate(pathTile, node.worldPosition, Quaternion.identity, pathManager.transform);
-                    pathT.transform.localScale = new Vector3(grid.nodeRadius * 2, grid.nodeRadius * 2, 1);
                 }
                 else if (node.onTop == "Tree")
                 {
@@ -169,6 +165,7 @@ public class Upperworld : MonoBehaviour
 
 
         }
+
         
         wonSentences = new List<string>()
         {
@@ -239,6 +236,166 @@ public class Upperworld : MonoBehaviour
     public void close()
     {
         messageSimple.transform.parent.gameObject.SetActive(false);
+    }
+
+    private void creatingPath()
+    {
+        float size = 22;
+        foreach(Node node in grid.grid)
+        {
+            if(node.onTop == null)
+            {
+                continue;
+            }
+            else if (node.onTop.Contains("End"))
+            {
+                GameObject pathTile = Instantiate(pathEnd, node.worldPosition, Quaternion.identity, pathManager.transform);
+                pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+                var rotation = pathTile.transform.localRotation.eulerAngles;
+                if (node.onTop.Contains("Left"))
+                {
+                    rotation.z = 180;
+                    pathTile.transform.localRotation = Quaternion.Euler(rotation);
+                    pathTile.transform.localPosition -= new Vector3(0, 0.2f, 0);
+                }
+                else if (node.onTop.Contains("Up"))
+                {
+                    rotation.z = 90;
+                    pathTile.transform.localRotation = Quaternion.Euler(rotation);
+                }
+                else if (node.onTop.Contains("Down"))
+                {
+                    rotation.z = 270;
+                    pathTile.transform.localRotation = Quaternion.Euler(rotation);
+                    pathTile.transform.localPosition += new Vector3( 0.1f, 0, 0);
+                }
+            }
+
+            else if ((node.onTop.Contains("Up") && node.onTop.Contains("Down")) && !node.onTop.Contains("Left") && !node.onTop.Contains("Right"))
+            {
+                GameObject pathTile = Instantiate(path1Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+                var rotation = pathTile.transform.localRotation.eulerAngles;
+                rotation.z = 90;
+                pathTile.transform.localRotation = Quaternion.Euler(rotation);
+            }
+
+            else if (node.onTop.Contains("Up"))
+            {
+                if (node.onTop.Contains("Down"))
+                {
+                    if (!node.onTop.Contains("Left"))
+                    {
+                        GameObject pathTile = Instantiate(path3Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                        pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+                    }
+                    else if (!node.onTop.Contains("Right"))
+                    {
+                        GameObject pathTile = Instantiate(path3Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                        pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+                        var rotation = pathTile.transform.localRotation.eulerAngles;
+                        rotation.z = 180;
+                        pathTile.transform.localRotation = Quaternion.Euler(rotation);
+                    }
+                    else
+                    {
+                        GameObject pathTile = Instantiate(path4Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                        pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+                    }
+                }
+                else
+                {
+                    if (!node.onTop.Contains("Right"))
+                    {
+                        GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition, Quaternion.identity, pathManager.transform);
+                        pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+                        var rotation = pathTile.transform.localRotation.eulerAngles;
+                        rotation.z = 90;
+                        pathTile.transform.localRotation = Quaternion.Euler(rotation);
+                        pathTile.transform.localPosition += new Vector3(-0.2f +(0.02f * grid.nodeRadius * size), -(0.02f * grid.nodeRadius * size), 0);
+                    }
+                    else if (!node.onTop.Contains("Left"))
+                    {
+                        GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition, Quaternion.identity, pathManager.transform);
+                        pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+                        pathTile.transform.localPosition += new Vector3(-0.2f, 0, 0);
+                        pathTile.name = node.onTop;
+                    }
+                    else
+                    {
+                        GameObject pathTile = Instantiate(path3Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                        pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+                        var rotation = pathTile.transform.localRotation.eulerAngles;
+                        rotation.z = 90;
+                        pathTile.transform.localRotation = Quaternion.Euler(rotation);
+                    }
+                }
+            }
+            else if (node.onTop.Contains("Down"))
+            {
+                if (!node.onTop.Contains("Left"))
+                {
+                    GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition, Quaternion.identity, pathManager.transform);
+                    pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+                    var rotation = pathTile.transform.localRotation.eulerAngles;
+                    rotation.z = 270;
+                    pathTile.transform.localRotation = Quaternion.Euler(rotation);
+                    pathTile.transform.localPosition += new Vector3(-0.2f +(0.02f * grid.nodeRadius * size), (0.02f * grid.nodeRadius * size), 0);
+                }
+                else if (!node.onTop.Contains("Right"))
+                {
+                    GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition, Quaternion.identity, pathManager.transform);
+                    pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+                    var rotation = pathTile.transform.localRotation.eulerAngles;
+                    rotation.z = 180;
+                    pathTile.transform.localRotation = Quaternion.Euler(rotation);
+                    pathTile.transform.localPosition += new Vector3(-0.4f +(0.04f * grid.nodeRadius * size), 0, 0);
+                }
+                else
+                {
+                    GameObject pathTile = Instantiate(path3Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                    pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+                    var rotation = pathTile.transform.localRotation.eulerAngles;
+                    rotation.z = 270;
+                    pathTile.transform.localRotation = Quaternion.Euler(rotation);
+                }
+            }
+            else if (node.onTop.Contains("Left") || node.onTop.Contains("Right"))
+            {
+                GameObject pathTile = Instantiate(path1Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+            }
+        }
+    }
+
+    private void findEndPath()
+    {
+        foreach(Node node in grid.grid)
+        {
+            if(node.onTop == "Right" || node.onTop == "Left" || node.onTop == "Up" || node.onTop == "Down")
+            {
+                node.onTop += "End";
+            }
+        }
+    }
+
+    private bool HouseNearby(Node node)
+    {
+        foreach(Node neighbour1 in grid.GetNodeNeighboursDiagonal(node))
+        {
+            if (neighbour1.onTop == "House" || grid.ghostNames().Contains(neighbour1.onTop) || neighbour1.onTop == "Dungeon")
+            {
+                return true;
+            }
+            foreach (Node neighbour2 in grid.GetNodeNeighboursDiagonal(neighbour1))
+            {
+                if(neighbour2.onTop == "House" || grid.ghostNames().Contains(neighbour2.onTop) || neighbour2.onTop == "Dungeon")
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 }
