@@ -11,7 +11,7 @@ public class MirrorPuzzle : MonoBehaviour
     public GameObject tile;
     public GameObject tileManager;
     public GameObject symbolManager;
-    public GameObject person;
+    public GameObject ghosts;
     public GameObject mirror;
     public Canvas canvas;
     public GameObject griphoton;
@@ -31,16 +31,15 @@ public class MirrorPuzzle : MonoBehaviour
         {
             Destroy(symbolManager.transform.GetChild(i).gameObject);
         }
-        person.GetComponent<SpriteRenderer>().color = Color.black;
-        person.transform.localScale = new Vector3(grid.nodeRadius, grid.nodeRadius, 0);
+        
 
         mirror.transform.localScale = new Vector3(grid.nodeRadius * 2, 0.05f, 0);
-        mirror.GetComponent<SpriteRenderer>().color = Color.black;
+        mirror.GetComponent<SpriteRenderer>().color = Color.blue;
         tile.transform.localScale = new Vector3(grid.nodeRadius * 2, grid.nodeRadius * 2, 0);
         foreach (Node node in grid.grid)
         {
             node.onTop = "Empty";
-            tile.GetComponent<SpriteRenderer>().color = Color.white;
+            tile.GetComponent<SpriteRenderer>().color = new Color(1, 0.8f, 0.65f);
             Instantiate(tile, node.worldPosition, Quaternion.identity, tileManager.transform);
         }
     }
@@ -72,11 +71,12 @@ public class MirrorPuzzle : MonoBehaviour
                 {
                     if(node.onTop == "Empty")
                     {
-                        Instantiate(person, node.worldPosition + new Vector3(0,0,-1), Quaternion.identity, symbolManager.transform);
-                        node.onTop = "Person";
+                        GameObject ghost = Instantiate(ghosts, node.worldPosition + new Vector3(0, 0, -4), Quaternion.identity, symbolManager.transform);
+                        ghost.transform.localScale = new Vector3(grid.nodeRadius * 5, grid.nodeRadius * 5, 0);
+                        node.onTop = "Ghost";
 
                     }
-                    else if(node.onTop == "Person")
+                    else if(node.onTop == "Ghost")
                     {
                         GameObject oldSymbol = null;
                         for (int i = 0; i < symbolManager.transform.childCount; i++)
@@ -201,7 +201,7 @@ public class MirrorPuzzle : MonoBehaviour
             while (search)
             {
                 counterCheck++;
-                if (nextNode.onTop == "Person")
+                if (nextNode.onTop == "Ghost")
                 {
                     counter++;
                 }

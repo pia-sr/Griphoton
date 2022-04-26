@@ -78,7 +78,7 @@ public class Upperworld : MonoBehaviour
         Node center = grid.grid[(int)grid.getGridSizeX() / 2, ((int)grid.getGridSizeY() / 2) +2];
         grid.setHouse(center, "Dungeon");
         houses.transform.GetChild(houses.transform.childCount - 1).transform.localPosition = center.worldPosition + new Vector3(0, 0, -1);
-        houses.transform.GetChild(houses.transform.childCount - 1).GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 6, grid.nodeRadius * 6, 2);
+        houses.transform.GetChild(houses.transform.childCount - 1).GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 2);
         
         Pathfinder pathFinder = this.GetComponent<Pathfinder>();
         
@@ -90,7 +90,7 @@ public class Upperworld : MonoBehaviour
                 int y = Random.Range(5, grid.getGridSizeY()-5);
 
 
-                while (grid.grid[x, y].onTop != null && !HouseNearby(grid.grid[x,y]))
+                while (grid.grid[x, y].onTop != null  || HouseNearby(grid.grid[x,y]))
                 {
                     x = Random.Range(5, grid.getGridSizeX()-5);
                     y = Random.Range(5, grid.getGridSizeY()-5);
@@ -151,7 +151,7 @@ public class Upperworld : MonoBehaviour
                 else if(node.onTop == "SovedCenter")
                 {
                     GameObject solvedHouse = Instantiate(moudField, node.worldPosition, Quaternion.identity, houses.transform);
-                    solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 6, grid.nodeRadius * 6, 1);
+                    solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 1);
                 }
                 counter++;
             }
@@ -183,7 +183,7 @@ public class Upperworld : MonoBehaviour
     private void buildHouse(Node node)
     {
         GameObject house = GameObject.Find(node.onTop);
-        house.transform.GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 6, grid.nodeRadius * 6, 1);
+        house.transform.GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 1);
         house.transform.localPosition = node.worldPosition + new Vector3(0, 0, -1);
     }
 
@@ -227,7 +227,7 @@ public class Upperworld : MonoBehaviour
                 GameObject house = GameObject.Find(houseName);
                 house.SetActive(false);
                 GameObject solvedHouse = Instantiate(moudField, node.worldPosition, Quaternion.identity, houses.transform);
-                solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 6, grid.nodeRadius * 6, 1);
+                solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 1);
                 messageSimple.transform.parent.gameObject.SetActive(true);
                 messageSimple.text = wonSentences[randIndex];
             }
@@ -240,7 +240,7 @@ public class Upperworld : MonoBehaviour
 
     private void creatingPath()
     {
-        float size = 22;
+        float size = 7;
         foreach(Node node in grid.grid)
         {
             if(node.onTop == null)
@@ -252,22 +252,22 @@ public class Upperworld : MonoBehaviour
                 GameObject pathTile = Instantiate(pathEnd, node.worldPosition, Quaternion.identity, pathManager.transform);
                 pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                 var rotation = pathTile.transform.localRotation.eulerAngles;
-                if (node.onTop.Contains("Left"))
+                if (node.onTop.Contains("Right"))
                 {
                     rotation.z = 180;
                     pathTile.transform.localRotation = Quaternion.Euler(rotation);
-                    pathTile.transform.localPosition -= new Vector3(0, 0.2f, 0);
+                    //pathTile.transform.localPosition -= new Vector3(0, 0.2f, 0);
                 }
                 else if (node.onTop.Contains("Up"))
                 {
-                    rotation.z = 90;
+                    rotation.z = 270;
                     pathTile.transform.localRotation = Quaternion.Euler(rotation);
                 }
                 else if (node.onTop.Contains("Down"))
                 {
-                    rotation.z = 270;
+                    rotation.z = 90;
                     pathTile.transform.localRotation = Quaternion.Euler(rotation);
-                    pathTile.transform.localPosition += new Vector3( 0.1f, 0, 0);
+                    //pathTile.transform.localPosition += new Vector3( 0.1f, 0, 0);
                 }
             }
 
@@ -275,9 +275,6 @@ public class Upperworld : MonoBehaviour
             {
                 GameObject pathTile = Instantiate(path1Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
                 pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
-                var rotation = pathTile.transform.localRotation.eulerAngles;
-                rotation.z = 90;
-                pathTile.transform.localRotation = Quaternion.Euler(rotation);
             }
 
             else if (node.onTop.Contains("Up"))
@@ -288,13 +285,17 @@ public class Upperworld : MonoBehaviour
                     {
                         GameObject pathTile = Instantiate(path3Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
                         pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+                        var rotation = pathTile.transform.localRotation.eulerAngles;
+                        rotation.z = 90;
+                        pathTile.transform.localRotation = Quaternion.Euler(rotation);
+                        //pathTile.transform.localPosition += new Vector3(-0.1f, 0, 0);
                     }
                     else if (!node.onTop.Contains("Right"))
                     {
                         GameObject pathTile = Instantiate(path3Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
                         pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                         var rotation = pathTile.transform.localRotation.eulerAngles;
-                        rotation.z = 180;
+                        rotation.z = 270;
                         pathTile.transform.localRotation = Quaternion.Euler(rotation);
                     }
                     else
@@ -309,24 +310,23 @@ public class Upperworld : MonoBehaviour
                     {
                         GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition, Quaternion.identity, pathManager.transform);
                         pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
-                        var rotation = pathTile.transform.localRotation.eulerAngles;
-                        rotation.z = 90;
-                        pathTile.transform.localRotation = Quaternion.Euler(rotation);
-                        pathTile.transform.localPosition += new Vector3(-0.2f +(0.02f * grid.nodeRadius * size), -(0.02f * grid.nodeRadius * size), 0);
                     }
                     else if (!node.onTop.Contains("Left"))
                     {
                         GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition, Quaternion.identity, pathManager.transform);
                         pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
-                        pathTile.transform.localPosition += new Vector3(-0.2f, 0, 0);
-                        pathTile.name = node.onTop;
+                        var rotation = pathTile.transform.localRotation.eulerAngles;
+                        rotation.z = 270;
+                        pathTile.transform.localRotation = Quaternion.Euler(rotation);
+                        //pathTile.transform.localPosition += new Vector3(0, (0.085f * grid.nodeRadius * size), 0);
+                        //pathTile.transform.localPosition += new Vector3(-0.2f, -0.2f, 0);
                     }
                     else
                     {
                         GameObject pathTile = Instantiate(path3Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
                         pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                         var rotation = pathTile.transform.localRotation.eulerAngles;
-                        rotation.z = 90;
+                        rotation.z = 180;
                         pathTile.transform.localRotation = Quaternion.Euler(rotation);
                     }
                 }
@@ -338,32 +338,32 @@ public class Upperworld : MonoBehaviour
                     GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition, Quaternion.identity, pathManager.transform);
                     pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                     var rotation = pathTile.transform.localRotation.eulerAngles;
-                    rotation.z = 270;
+                    rotation.z = 180;
                     pathTile.transform.localRotation = Quaternion.Euler(rotation);
-                    pathTile.transform.localPosition += new Vector3(-0.2f +(0.02f * grid.nodeRadius * size), (0.02f * grid.nodeRadius * size), 0);
+                    //pathTile.transform.localPosition += new Vector3((0.085f * grid.nodeRadius * size), (0.085f * grid.nodeRadius * size), 0);
                 }
                 else if (!node.onTop.Contains("Right"))
                 {
                     GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition, Quaternion.identity, pathManager.transform);
                     pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                     var rotation = pathTile.transform.localRotation.eulerAngles;
-                    rotation.z = 180;
+                    rotation.z = 90;
                     pathTile.transform.localRotation = Quaternion.Euler(rotation);
-                    pathTile.transform.localPosition += new Vector3(-0.4f +(0.04f * grid.nodeRadius * size), 0, 0);
+                    //pathTile.transform.localPosition += new Vector3((0.085f * grid.nodeRadius * size), 0, 0);
                 }
                 else
                 {
                     GameObject pathTile = Instantiate(path3Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
                     pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
-                    var rotation = pathTile.transform.localRotation.eulerAngles;
-                    rotation.z = 270;
-                    pathTile.transform.localRotation = Quaternion.Euler(rotation);
                 }
             }
             else if (node.onTop.Contains("Left") || node.onTop.Contains("Right"))
             {
                 GameObject pathTile = Instantiate(path1Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
                 pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
+                var rotation = pathTile.transform.localRotation.eulerAngles;
+                rotation.z = 90;
+                pathTile.transform.localRotation = Quaternion.Euler(rotation);
             }
         }
     }
@@ -392,6 +392,14 @@ public class Upperworld : MonoBehaviour
                 if(neighbour2.onTop == "House" || grid.ghostNames().Contains(neighbour2.onTop) || neighbour2.onTop == "Dungeon")
                 {
                     return true;
+                    
+                }
+                foreach (Node neighbour3 in grid.GetNodeNeighboursDiagonal(neighbour2))
+                {
+                    if (neighbour3.onTop == "House" || grid.ghostNames().Contains(neighbour3.onTop) || neighbour3.onTop == "Dungeon")
+                    {
+                        return true;
+                    }
                 }
             }
         }

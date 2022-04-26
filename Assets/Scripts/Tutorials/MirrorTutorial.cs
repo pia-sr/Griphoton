@@ -66,7 +66,7 @@ public class MirrorTutorial : MonoBehaviour
                 case 1:
                     ghost.transform.localPosition = new Vector3(-5, 0, 0);
                     this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "I want to build a room full of mirrors as an attraction.| People who visit my room, wait no| let's call it my hall of mirrors, need to find the way out of the room without running into mirrors.";
+                    string sentence = "I want to build a room full of mirrors as an attraction.| Other ghosts and maybe even you who visit my room, wait no| let's call it my hall of mirrors, need to find the way out of the room without running into mirrors.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
@@ -74,15 +74,15 @@ public class MirrorTutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "I divided the room into squares.| On every square should either be a person lost in my hall of mirrors or a diagonal mirror. ";
+                    sentence = "I divided the room into squares.| On every square should either be a ghost lost in my hall of mirrors or a diagonal mirror. ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
-                    sentence = "The numbers next to the room indicate how many people can be seen from that position.| Do not forget to count the reflections of people, too.";
+                    sentence = "The numbers next to the room indicate how many ghosts can be seen from that position.| And before you ask: yes, ghosts have a reflection.| So do not forget the refections.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 5:
-                    sentence = "If you tap on a square, I will put a person on that square.| If you tap on that square again, I will put one of the diagonal mirrors on it.| If you tap another time, the other diagonal mirror will appear.| If you tap one last time all the symbols will disappear on that square.";
+                    sentence = "If you tap on a square, I will put a ghost on that square.| If you tap on that square again, I will put one of the diagonal mirrors on it.| If you tap another time, the other diagonal mirror will appear.| If you tap one last time all the symbols will disappear on that square.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
@@ -142,9 +142,9 @@ public class MirrorTutorial : MonoBehaviour
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
         Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
-        question.text = "How can I put a person on a square?";
+        question.text = "How can I put a ghost on a square?";
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
-        answer.text = "Tap on the square on which you would like the person to be and the person will appear.";
+        answer.text = "Tap on the square on which you would like a ghost to be and a ghost will appear.";
     }
     public void Question2()
     {
@@ -160,9 +160,9 @@ public class MirrorTutorial : MonoBehaviour
         questions.transform.GetChild(1).gameObject.SetActive(false);
         questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
         Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
-        question.text = "How can I remove a person or mirror on top of a square?";
+        question.text = "How can I remove a ghost or mirror on top of a square?";
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
-        answer.text = "Just tap on that square until it is empty. If you want to remove all the people and mirrors, you can press the reset button.";
+        answer.text = "Just tap on that square until it is empty. If you want to remove all the ghosts and mirrors, you can press the reset button.";
     }
     public void Question4()
     {
@@ -183,16 +183,20 @@ public class MirrorTutorial : MonoBehaviour
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The highst button is the reset button with which you can reset the whole puzzle.";
     }
 
-    public void closeQuestionOverview()
+    public void close()
     {
-        options.SetActive(true);
-        inactive = false;
-        questions.SetActive(false);
-    }
-    public void closeQuestion()
-    {
-        questions.transform.GetChild(1).gameObject.SetActive(true);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+        if (questions.transform.GetChild(0).transform.GetChild(0).gameObject.activeSelf)
+        {
+            questions.transform.GetChild(1).gameObject.SetActive(true);
+            questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+        }
+        else
+        {
+            options.SetActive(true);
+            inactive = false;
+            questions.SetActive(false);
+        }
+
     }
     public void questionOverview()
     {

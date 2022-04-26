@@ -25,6 +25,7 @@ public class RegionDivision : MonoBehaviour
     private bool unselect;
     public GameObject griphoton;
     public GameObject player;
+    private Color colourEmpty;
     
 
 
@@ -71,7 +72,7 @@ public class RegionDivision : MonoBehaviour
                         float x = (size / 2) * i;
                         float y = (size / 2) * j;
                         tile.transform.localScale = new Vector3(size, size, 0); 
-                        tile.GetComponent<SpriteRenderer>().color = Color.white;
+                        tile.GetComponent<SpriteRenderer>().color = colourEmpty;
                         Instantiate(tile, node.worldPosition + new Vector3(x, y, 0), Quaternion.identity, tilemanager.transform);
                     }
                 }
@@ -89,7 +90,9 @@ public class RegionDivision : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        setUp();   
+        colourEmpty = new Color(1, 0.8f, 0.65f);
+        setUp();
+
     }
     private Rect tile2Rect(Transform tile)
     {
@@ -120,7 +123,7 @@ public class RegionDivision : MonoBehaviour
                 {
                     var rend = tilemanager.transform.GetChild(i).GetComponent<SpriteRenderer>();
                     GameObject child = tilemanager.transform.GetChild(i).gameObject;
-                    if (rend.color == Color.white && !unselect)
+                    if (rend.color == colourEmpty && !unselect)
                     {
                         if (touch.phase == TouchPhase.Began)
                         {
@@ -198,7 +201,7 @@ public class RegionDivision : MonoBehaviour
                         {
                             green.Remove(child);
                         }
-                        rend.color = Color.white;
+                        rend.color = colourEmpty;
                     }
                 }
 
@@ -288,7 +291,7 @@ public class RegionDivision : MonoBehaviour
         for(int i = 0; i < tilemanager.transform.childCount; i++)
         {
             var rend = tilemanager.transform.GetChild(i).GetComponent<SpriteRenderer>();
-            if (rend.color == Color.white)
+            if (rend.color == colourEmpty)
             {
                 return false;
             }

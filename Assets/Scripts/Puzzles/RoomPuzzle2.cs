@@ -25,6 +25,7 @@ public class RoomPuzzle2 : MonoBehaviour
     private List<Node> yellow;
     private bool select;
     private bool unselect;
+    private Color colourEmpty;
 
 
     private float size;
@@ -63,11 +64,11 @@ public class RoomPuzzle2 : MonoBehaviour
         foreach (Node node in grid.grid)
         {
             tile.transform.localScale = new Vector3(size * 2, size * 2, 0);
-            tile.GetComponent<SpriteRenderer>().color = Color.white;
+            tile.GetComponent<SpriteRenderer>().color = colourEmpty;
             Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
             if (textTiles.Contains(node) && canvas.transform.childCount < textTiles.Count)
             {
-                numbers.fontSize = 70;
+                numbers.fontSize = 120;
                 numbers.GetComponent<RectTransform>().sizeDelta = new Vector3(160, 160, 0);
                 numbers.text = "2";
                 Instantiate(numbers, node.worldPosition, Quaternion.identity, canvas.transform);
@@ -79,6 +80,7 @@ public class RoomPuzzle2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        colourEmpty = new Color(1, 0.8f, 0.65f);
         setUp();
     }
     private Rect tile2Rect(Transform tile)
@@ -110,7 +112,7 @@ public class RoomPuzzle2 : MonoBehaviour
 
                     var rend = tilemanager.transform.GetChild(i).GetComponent<SpriteRenderer>();
                     Node child = grid.GetNodeFromWorldPos(rect.center);
-                    if (rend.color == Color.white && !unselect)
+                    if (rend.color == colourEmpty && !unselect)
                     {
                         if (touch.phase == TouchPhase.Began)
                         {
@@ -174,7 +176,7 @@ public class RoomPuzzle2 : MonoBehaviour
                         {
                             yellow.Remove(child);
                         }
-                        rend.color = Color.white;
+                        rend.color = colourEmpty;
                     }
                 }
 

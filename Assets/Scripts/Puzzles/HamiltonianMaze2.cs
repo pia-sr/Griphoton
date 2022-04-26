@@ -35,7 +35,7 @@ public class HamiltonianMaze2 : MonoBehaviour
         }
         for (int i = 0; i < linesManager.transform.childCount; i++)
         {
-            linesManager.transform.GetChild(i).GetComponent<LineRenderer>().material.color = Color.white;
+            linesManager.transform.GetChild(i).GetComponent<LineRenderer>().material.color = Color.grey;
         }
 
         
@@ -74,9 +74,9 @@ public class HamiltonianMaze2 : MonoBehaviour
             {
                 if (!noThere.Contains(node))
                 {
-                    tile.transform.localScale = new Vector3(size, size, 0);
-                    tile.GetComponent<SpriteRenderer>().color = Color.white;
-                    Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
+                    tile.transform.localScale = new Vector3(size*5, size*5, 0);
+                    tile.GetComponent<SpriteRenderer>().color = Color.grey;
+                    Instantiate(tile, node.worldPosition - new Vector3(-0.06f, 0.3f,0), Quaternion.identity, tilemanager.transform);
 
                     if (neighbour.gridX - node.gridX >= 0 && neighbour.gridY - node.gridY >= 0)
                     {
@@ -172,15 +172,15 @@ public class HamiltonianMaze2 : MonoBehaviour
                 {
                     int value;
                     selected = true;
-                    if (lineRend.material.color != Color.magenta)
+                    if (lineRend.material.color != Color.blue)
                     {
-                        lineRend.material.color = Color.magenta;
+                        lineRend.material.color = Color.blue;
                         value = 1;
 
                     }
                     else
                     {
-                        lineRend.material.color = Color.white;
+                        lineRend.material.color = Color.grey;
                         value = -1;
 
                     }

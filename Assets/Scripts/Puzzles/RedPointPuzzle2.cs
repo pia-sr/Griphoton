@@ -54,7 +54,7 @@ public class RedPointPuzzle2 : MonoBehaviour
 
             circle.transform.localScale = new Vector3(grid.nodeRadius * 1.5f, grid.nodeRadius * 1.5f, 0);
             circle.GetComponent<SpriteRenderer>().color = Color.black;
-            Instantiate(circle, node.worldPosition, Quaternion.identity, circleManager.transform);
+            Instantiate(circle, node.worldPosition - new Vector3(0, 0.6f, 0), Quaternion.identity, circleManager.transform);
         }
     }
 

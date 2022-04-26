@@ -166,16 +166,20 @@ public class RedPointTutorial : MonoBehaviour
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The highst button is the reset button with which you can reset the whole puzzle.";
     }
 
-    public void closeQuestionOverview()
+    public void close()
     {
-        options.SetActive(true);
-        inactive = false;
-        questions.SetActive(false);
-    }
-    public void closeQuestion()
-    {
-        questions.transform.GetChild(1).gameObject.SetActive(true);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+        if (questions.transform.GetChild(0).transform.GetChild(0).gameObject.activeSelf)
+        {
+            questions.transform.GetChild(1).gameObject.SetActive(true);
+            questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+        }
+        else
+        {
+            options.SetActive(true);
+            inactive = false;
+            questions.SetActive(false);
+        }
+
     }
     public void questionOverview()
     {

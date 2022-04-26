@@ -32,13 +32,9 @@ public class CornerMaze2 : MonoBehaviour
 
     private void setUp()
     {
-        if (path.transform.childCount > 2)
+        for (int i = 0; i < path.transform.childCount; i++)
         {
-
-            for (int i = 2; i < path.transform.childCount; i++)
-            {
-                Destroy(path.transform.GetChild(i).gameObject);
-            }
+            Destroy(path.transform.GetChild(i).gameObject);
         }
         selectedTiles.Clear();
         selectedTiles.Add(startTile);
@@ -55,7 +51,7 @@ public class CornerMaze2 : MonoBehaviour
         };
         foreach (Node node in grid.grid)
         {
-            tile.GetComponent<SpriteRenderer>().color = Color.white;
+            tile.GetComponent<SpriteRenderer>().color = new Color(1, 0.8f, 0.65f);
             tile.transform.localScale = new Vector3(size, size, 0);
             Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
 
@@ -70,7 +66,7 @@ public class CornerMaze2 : MonoBehaviour
         };
         for (int i = 0; i < corners.Count; i++)
         {
-            numbers.fontSize = 70;
+            numbers.fontSize = 150;
             numbers.GetComponent<RectTransform>().sizeDelta = new Vector3(160, 160, 0);
             Instantiate(numbers, corners[i].worldPosition, Quaternion.identity, canvas.transform);
         }
@@ -151,7 +147,7 @@ public class CornerMaze2 : MonoBehaviour
             end
         };
         pathRend = currentLine.GetComponent<LineRenderer>();
-        pathRend.material.color = Color.blue;
+        pathRend.material.color = Color.black;
         pathRend.positionCount = linePath.Count;
         pathRend.SetPositions(linePath.ToArray());
 
@@ -160,21 +156,25 @@ public class CornerMaze2 : MonoBehaviour
     }
     private bool corner(Node node)
     {
-        List<float> differences = new List<float>();
-        for (int i = 0; i < path.transform.childCount; i++)
+        if (path.transform.childCount > 1)
         {
-            pathRend = path.transform.GetChild(i).gameObject.GetComponent<LineRenderer>();
-            if (pathRend.GetPosition(0) + new Vector3(0, 0, 0.1f) == node.worldPosition || pathRend.GetPosition(pathRend.positionCount - 1) + new Vector3(0, 0, 0.1f) == node.worldPosition)
+            List<float> differences = new List<float>();
+            for (int i = 0; i < path.transform.childCount; i++)
             {
-                float dif = pathRend.GetPosition(0).x - pathRend.GetPosition(pathRend.positionCount - 1).x;
-                differences.Add(dif);
+                pathRend = path.transform.GetChild(i).gameObject.GetComponent<LineRenderer>();
+                if (pathRend.GetPosition(0) + new Vector3(0, 0, 0.1f) == node.worldPosition || pathRend.GetPosition(pathRend.positionCount - 1) + new Vector3(0, 0, 0.1f) == node.worldPosition)
+                {
+                    float dif = pathRend.GetPosition(0).x - pathRend.GetPosition(pathRend.positionCount - 1).x;
+                    differences.Add(dif);
+                }
             }
+            if (differences.Count != 2 || (differences[0].ToString() == differences[1].ToString()) || (differences[0].ToString() == (-differences[1]).ToString()))
+            {
+                return false;
+            }
+            return true;
         }
-        if (differences.Count != 2 || (differences[0].ToString() == differences[1].ToString()) || (differences[0].ToString() == (-differences[1]).ToString()))
-        {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     private bool checkWin()

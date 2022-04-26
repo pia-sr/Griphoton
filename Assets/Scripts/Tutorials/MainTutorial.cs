@@ -26,6 +26,9 @@ public class MainTutorial : MonoBehaviour
     public Text message;
     public GridField grid;
     public GameObject Ghost;
+    public GameObject soundButton;
+    public Sprite soundOn;
+    public Sprite soundOff;
 
     private void Awake()
     {
@@ -41,6 +44,14 @@ public class MainTutorial : MonoBehaviour
     {
         Ghost.SetActive(true);
         Ghost.transform.localPosition = Vector3.zero;
+        if (data.sound)
+        {
+            soundButton.GetComponent<Image>().sprite = soundOn;
+        }
+        else
+        {
+            soundButton.GetComponent<Image>().sprite = soundOff;
+        }
         //data.namePlayer = null;
         if (data.namePlayer == null || data.namePlayer.Length == 0)
         {
@@ -152,7 +163,7 @@ public class MainTutorial : MonoBehaviour
                 case 10:
                     movement.SetActive(false);
                     griphoton.SetActive(true);
-                    sentence = "This here is my house.| It even has my name on it!| \nIf you tap on my house, you can enter the dungeon.| I will explain more about the dungeon once you drop by.| But for now, I will let you explore Griphoton a bit. ";
+                    sentence = "This here is my house.| You can recognise it by its black roof.| \nIf you tap on my house, you can enter the dungeon.| I will explain more about the dungeon once you drop by.| But for now, I will let you explore Griphoton a bit. ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 11:
@@ -284,9 +295,17 @@ public class MainTutorial : MonoBehaviour
 
     public void CloseHelp()
     {
-        options.SetActive(true);
-        player.GetComponent<Player>().unpause();
-        questions.SetActive(false);
+        if (questions.transform.GetChild(0).transform.GetChild(0).gameObject.activeSelf)
+        {
+            questions.transform.GetChild(1).gameObject.SetActive(true);
+            questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+        }
+        else
+        {
+            settings.SetActive(true);
+            questions.SetActive(false);
+        }
+
     }
     public void CloseSettings()
     {
@@ -294,15 +313,10 @@ public class MainTutorial : MonoBehaviour
         player.GetComponent<Player>().unpause();
         settings.SetActive(false);
     }
-    public void closeQuestion()
-    {
-        questions.transform.GetChild(1).gameObject.SetActive(true);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
-    }
+
     public void Help()
     {
-        options.SetActive(false);
-        player.GetComponent<Player>().pause();
+        settings.SetActive(false);
         questions.SetActive(true);
     }
 
@@ -315,6 +329,7 @@ public class MainTutorial : MonoBehaviour
 
     public void Exit()
     {
+        settings.SetActive(false);
         message.transform.parent.transform.parent.gameObject.SetActive(true);
         message.text = "Do you really want to leave the game? \nYour progress will be safed!";
 
@@ -322,6 +337,7 @@ public class MainTutorial : MonoBehaviour
 
     public void Reset()
     {
+        settings.SetActive(false);
         message.transform.parent.transform.parent.gameObject.SetActive(true);
         message.text = "Do you really want to reset the game? All your progress will be lost!";
     }
@@ -346,6 +362,7 @@ public class MainTutorial : MonoBehaviour
 
     public void No()
     {
+        settings.SetActive(true);
         message.transform.parent.transform.parent.gameObject.SetActive(false);
     }
 
@@ -354,10 +371,12 @@ public class MainTutorial : MonoBehaviour
         if (data.sound)
         {
             data.sound = false;
+            soundButton.GetComponent<Image>().sprite = soundOff;
         }
         else
         {
             data.sound = true;
+            soundButton.GetComponent<Image>().sprite = soundOn;
         }
     }
 }

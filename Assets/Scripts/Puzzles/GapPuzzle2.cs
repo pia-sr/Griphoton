@@ -15,6 +15,8 @@ public class GapPuzzle2 : MonoBehaviour
 
     public GapPuzzleTutorial tutorial;
     public GameObject message;
+    private Color colourEmpty;
+    private Color colourFull;
 
     void Awake()
     {
@@ -37,7 +39,7 @@ public class GapPuzzle2 : MonoBehaviour
         foreach (Node node in grid.grid)
         {
             tile.transform.localScale = new Vector3(size, size, 0);
-            tile.GetComponent<SpriteRenderer>().color = Color.white;
+            tile.GetComponent<SpriteRenderer>().color = colourEmpty;
             Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
 
         }
@@ -46,6 +48,9 @@ public class GapPuzzle2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        colourEmpty = new Color(1, 0.8f, 0.65f);
+        colourFull = new Color(0.6f,0.34f,0.3f);
         setUp();
 
     }
@@ -73,16 +78,16 @@ public class GapPuzzle2 : MonoBehaviour
 
                     Node node = grid.GetNodeFromWorldPos(rect.center);
                     var rend = tilemanager.transform.GetChild(i).GetComponent<SpriteRenderer>();
-                    if (rend.color == Color.white)
+                    if (rend.color == colourEmpty)
                     {
-                        rend.color = Color.black;
+                        rend.color = colourFull;
 
                         node.selected = true;
                         tilesBlack.Add(i);
                     }
                     else
                     {
-                        rend.color = Color.white;
+                        rend.color = colourEmpty;
                         tilesBlack.Remove(i);
                         node.selected = false;
                     }

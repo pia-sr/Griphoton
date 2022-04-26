@@ -125,13 +125,13 @@
     <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle3.cs" />
     <Compile Include="Assets\Scripts\Grid\Pathfinder.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries2.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\DungeonTutorial.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CornerMaze2.cs" />
     <Compile Include="Assets\Scripts\Puzzles\PiecesOf8_2.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level13.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries.cs" />
     <Compile Include="Assets\Scripts\Puzzles\MirrorPuzzle.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level9.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\DungeonTutorial.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\ProjectSettings\ProjectVersion.txt" />

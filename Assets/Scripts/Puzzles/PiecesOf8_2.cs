@@ -21,6 +21,7 @@ public class PiecesOf8_2 : MonoBehaviour
     public GameObject player;
     public PieceOf8Tutorial tutorial;
     public GameObject message;
+    private Color colourEmpty;
 
     private List<Color> colours;
 
@@ -71,9 +72,9 @@ public class PiecesOf8_2 : MonoBehaviour
         foreach (Node node in grid.grid)
         {
             tile.transform.localScale = new Vector3(size * 2, size * 2, 0);
-            tile.GetComponent<SpriteRenderer>().color = Color.white;
+            tile.GetComponent<SpriteRenderer>().color = colourEmpty;
             numbers.GetComponent<RectTransform>().sizeDelta = new Vector3(130, 130, 0);
-            numbers.fontSize = 70;
+            numbers.fontSize = 120;
             numbers.text = "";
             Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform); 
             Instantiate(numbers, node.worldPosition, Quaternion.identity, tileNumbers.transform);
@@ -85,6 +86,7 @@ public class PiecesOf8_2 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        colourEmpty = new Color(1, 0.8f, 0.65f);
         setUp();
     }
     private Rect tile2Rect(Transform tile)
@@ -114,7 +116,7 @@ public class PiecesOf8_2 : MonoBehaviour
                 {
                     var rend = tilemanager.transform.GetChild(i).GetComponent<SpriteRenderer>();
                     Node child = grid.GetNodeFromWorldPos(rect.center);
-                    if (rend.color == Color.white)
+                    if (rend.color == colourEmpty)
                     {
                         if (colourAlreadyExists())
                         {
@@ -136,7 +138,7 @@ public class PiecesOf8_2 : MonoBehaviour
                     }
                     else
                     {
-                        rend.color = Color.white;
+                        rend.color = colourEmpty;
                         tileNumbers.transform.GetChild(i).GetComponent<Text>().text = " ";
                     }
                 }
@@ -248,7 +250,7 @@ public class PiecesOf8_2 : MonoBehaviour
         for (int i = 0; i < tilemanager.transform.childCount; i++)
         {
             var rend = tilemanager.transform.GetChild(i).GetComponent<SpriteRenderer>();
-            if (rend.color == Color.white)
+            if (rend.color == colourEmpty)
             {
                 return false;
             }

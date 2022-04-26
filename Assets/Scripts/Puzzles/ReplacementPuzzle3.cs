@@ -45,7 +45,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
         rowNumber = 6;
         row = new List<int>() { 1 };
         symbol.transform.localScale = new Vector3(size, size, 0);
-        GameObject symbol1 = Instantiate(symbol, grid.grid[1, 6].worldPosition, Quaternion.identity, symbolManager.transform);
+        GameObject symbol1 = Instantiate(symbol, grid.grid[1, 6].worldPosition - new Vector3(0, 0.3f, 0), Quaternion.identity, symbolManager.transform);
         symbol1.GetComponent<SpriteRenderer>().color = Color.red;
         inputSymbols = new List<List<int>>()
         {
@@ -142,7 +142,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
                             {
 
                                 symbol.transform.localScale = new Vector3(size, size, 0);
-                                GameObject item = Instantiate(symbol, grid.grid[1 + i, rowNumber].worldPosition, Quaternion.identity, symbolManager.transform);
+                                GameObject item = Instantiate(symbol, grid.grid[1 + i, rowNumber].worldPosition - new Vector3(0, 0.3f, 0), Quaternion.identity, symbolManager.transform);
                                 if (row[i].ToString() == "0")
                                 {
                                     item.GetComponent<SpriteRenderer>().color = Color.black;
@@ -202,7 +202,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
                             symbol.transform.localScale = new Vector3(grid.nodeRadius*1.5f, grid.nodeRadius * 1.5f, 0);
                             Color tinted = new Color(0.5566038f, 0.4865907f, 0.4965926f, 1);
                             symbol.GetComponent<SpriteRenderer>().color = tinted;
-                            Instantiate(symbol, chosenSymbol.transform.position + new Vector3(0,0,0.5f), Quaternion.identity, selectedTiles.transform);
+                            Instantiate(symbol, chosenSymbol.transform.position + new Vector3(0,-0.3f,0.5f), Quaternion.identity, selectedTiles.transform);
 
                         }
                         else
