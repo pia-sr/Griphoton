@@ -13,6 +13,7 @@ public class Level2 : MonoBehaviour
     public GameObject door;
     private Game data;
     private float size;
+    private GameObject exitDoor;
 
     private void Awake()
     {
@@ -25,10 +26,8 @@ public class Level2 : MonoBehaviour
         string exit;
         if (data.activeLevel == int.Parse(this.gameObject.tag))
         {
-            for(int i = 0; i < transform.GetChild(0).childCount; i++)
-            {
-                transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
-            }
+
+            transform.GetChild(0).gameObject.SetActive(true);
             exit = "Exit";
         }
         else
@@ -56,7 +55,7 @@ public class Level2 : MonoBehaviour
             else if (node == grid.grid[middleX, grid.getGridSizeY() - 1] && node.onTop == "Exit")
             {
                 door.transform.localScale = new Vector3(2.75f, 1.85f, 0);
-                Instantiate(door, node.worldPosition + new Vector3(0, 0, -0.1f), Quaternion.identity, prefabManager.transform);
+                exitDoor = Instantiate(door, node.worldPosition + new Vector3(0, 0, -0.1f), Quaternion.identity, prefabManager.transform);
             }
         }
         foreach (Node node in grid.grid)
@@ -124,6 +123,7 @@ public class Level2 : MonoBehaviour
             {
                 if (node.onTop == "Exit")
                 {
+                    Destroy(exitDoor);
                     node.setItemOnTop("ExitOpen");
                     floorTile.transform.localScale = new Vector3(1.1f, 1.1f, 0);
                     Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);

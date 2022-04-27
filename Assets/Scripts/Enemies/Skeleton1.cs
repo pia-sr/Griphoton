@@ -23,6 +23,7 @@ public class Skeleton1 : MonoBehaviour
     public Animator animator;
     private int xInput;
     private int yInput;
+    private Node aim;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +43,7 @@ public class Skeleton1 : MonoBehaviour
         coroutineStart = false;
         healthBar = transform.GetChild(0).GetComponentInChildren<HealthBar>();
         healthBar.SetHealthBarValue(1);
+        aim = endNode;
     }
 
     // Update is called once per frame
@@ -98,51 +100,35 @@ public class Skeleton1 : MonoBehaviour
         }
         else
         {
-
             animator.SetBool("isWalking", true);
-            if (grid.GetNodeFromWorldPos(transform.position) != startNode)
+            if (grid.GetNodeFromWorldPos(transform.position) == startNode)
             {
-                Node targetNode = startNode;
-                List<Node> back2Pos = pathFinder.FindPath(transform.position, targetNode.worldPosition);
-                if (back2Pos.Count > 1)
+                aim = endNode;
+                
+            }
+            else if(grid.GetNodeFromWorldPos(transform.position) == endNode)
+            {
+                aim = startNode;
+                
+            }
+            List<Node> back2Pos = pathFinder.FindPath(transform.position, aim.worldPosition);
+            if (back2Pos.Count > 1)
+            {
+                if (targetNode == existingTarget)
                 {
-                    if (targetNode == existingTarget)
+                    if (!coroutineStart)
                     {
-                        if (!coroutineStart)
-                        {
-                            coroutineStart = true;
-                            StartCoroutine(move(back2Pos));
-                        }
+                        coroutineStart = true;
+                        StartCoroutine(move(back2Pos));
+                    }
 
-                    }
-                    else if (!coroutineStart)
-                    {
-                        existingTarget = targetNode;
-                    }
+                }
+                else if (!coroutineStart)
+                {
+                    existingTarget = targetNode;
                 }
             }
-            else
-            {
-                Node targetNode = endNode;
-                List<Node> back2Pos = pathFinder.FindPath(transform.position, targetNode.worldPosition);
-                if (back2Pos.Count > 1)
-                {
-                    if (targetNode == existingTarget)
-                    {
-                        if (!coroutineStart)
-                        {
-                            coroutineStart = true;
-                            StartCoroutine(move(back2Pos));
-                        }
 
-                    }
-                    else if (!coroutineStart)
-                    {
-                        existingTarget = targetNode;
-                    }
-                }
-            }
-            
         }
     }
 

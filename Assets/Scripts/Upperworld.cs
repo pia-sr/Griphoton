@@ -32,8 +32,8 @@ public class Upperworld : MonoBehaviour
     {
         foreach (Node node in grid.grid)
         {
-            if (node.onTop == null)
-            {
+            //if (node.onTop == null)
+            //{
                 int rand = Random.Range(0, 100);
                 GameObject grassObject;
                 if(rand < 2)
@@ -72,12 +72,13 @@ public class Upperworld : MonoBehaviour
                 grassTile.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 1);
                 grassTile.transform.localPosition += new Vector3(0, 0, 5);
 
-            }
+            //}
         }
         houses.SetActive(true);
         Node center = grid.grid[(int)grid.getGridSizeX() / 2, ((int)grid.getGridSizeY() / 2) +2];
         grid.setHouse(center, "Dungeon");
-        houses.transform.GetChild(houses.transform.childCount - 1).transform.localPosition = center.worldPosition;
+        
+        houses.transform.GetChild(houses.transform.childCount - 1).transform.localPosition = center.worldPosition + new Vector3(0, 0, -0.1f +( 150 * 150 * 0.000001f));
         houses.transform.GetChild(houses.transform.childCount - 1).GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 5);
         
         Pathfinder pathFinder = this.GetComponent<Pathfinder>();
@@ -123,7 +124,7 @@ public class Upperworld : MonoBehaviour
                 }
                 GameObject treeT = Instantiate(tree, grid.grid[x, y].worldPosition, Quaternion.identity, treeManager.transform);
                 treeT.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 4);
-                treeT.transform.localPosition += new Vector3(0, grid.nodeRadius, -0.1f +( y * x * 0.000001f));
+                treeT.transform.localPosition += new Vector3(0, 0, -0.1f +( y * x * 0.000001f));
                 grid.grid[x, y].setItemOnTop("Tree");
 
             }
@@ -146,7 +147,8 @@ public class Upperworld : MonoBehaviour
                 else if (node.onTop == "Tree")
                 {
                     GameObject treeT = Instantiate(tree, node.worldPosition, Quaternion.identity, treeManager.transform);
-                    treeT.transform.localScale = new Vector3(grid.nodeRadius * 4, grid.nodeRadius * 4, 1);
+                    treeT.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 4);
+                    treeT.transform.localPosition += new Vector3(0, 0, -0.1f + (node.gridX * node.gridY * 0.000001f));
                 }
                 else if(node.onTop == "SovedCenter")
                 {
@@ -162,6 +164,8 @@ public class Upperworld : MonoBehaviour
                     houses.transform.GetChild(i).gameObject.SetActive(false);
                 }
             }
+            findEndPath();
+            creatingPath();
 
 
         }
@@ -184,7 +188,7 @@ public class Upperworld : MonoBehaviour
     {
         GameObject house = GameObject.Find(node.onTop);
         house.transform.GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 5);
-        house.transform.localPosition = node.worldPosition + new Vector3(0, 0, -1);
+        house.transform.localPosition = node.worldPosition + new Vector3(0, 0, -0.1f + (node.gridX * node.gridY * 0.000001f));
     }
 
     // Update is called once per frame
@@ -249,7 +253,7 @@ public class Upperworld : MonoBehaviour
             }
             else if (node.onTop.Contains("End"))
             {
-                GameObject pathTile = Instantiate(pathEnd, node.worldPosition, Quaternion.identity, pathManager.transform);
+                GameObject pathTile = Instantiate(pathEnd, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, pathManager.transform); ;
                 pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                 var rotation = pathTile.transform.localRotation.eulerAngles;
                 if (node.onTop.Contains("Right"))
@@ -273,7 +277,7 @@ public class Upperworld : MonoBehaviour
 
             else if ((node.onTop.Contains("Up") && node.onTop.Contains("Down")) && !node.onTop.Contains("Left") && !node.onTop.Contains("Right"))
             {
-                GameObject pathTile = Instantiate(path1Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                GameObject pathTile = Instantiate(path1Direction, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, pathManager.transform);
                 pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
             }
 
@@ -283,7 +287,7 @@ public class Upperworld : MonoBehaviour
                 {
                     if (!node.onTop.Contains("Left"))
                     {
-                        GameObject pathTile = Instantiate(path3Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                        GameObject pathTile = Instantiate(path3Direction, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, pathManager.transform);
                         pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                         var rotation = pathTile.transform.localRotation.eulerAngles;
                         rotation.z = 90;
@@ -292,7 +296,7 @@ public class Upperworld : MonoBehaviour
                     }
                     else if (!node.onTop.Contains("Right"))
                     {
-                        GameObject pathTile = Instantiate(path3Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                        GameObject pathTile = Instantiate(path3Direction, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, pathManager.transform);
                         pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                         var rotation = pathTile.transform.localRotation.eulerAngles;
                         rotation.z = 270;
@@ -300,7 +304,7 @@ public class Upperworld : MonoBehaviour
                     }
                     else
                     {
-                        GameObject pathTile = Instantiate(path4Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                        GameObject pathTile = Instantiate(path4Direction, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, pathManager.transform);
                         pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                     }
                 }
@@ -308,12 +312,12 @@ public class Upperworld : MonoBehaviour
                 {
                     if (!node.onTop.Contains("Right"))
                     {
-                        GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition, Quaternion.identity, pathManager.transform);
+                        GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, pathManager.transform);
                         pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                     }
                     else if (!node.onTop.Contains("Left"))
                     {
-                        GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition, Quaternion.identity, pathManager.transform);
+                        GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, pathManager.transform);
                         pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                         var rotation = pathTile.transform.localRotation.eulerAngles;
                         rotation.z = 270;
@@ -323,7 +327,7 @@ public class Upperworld : MonoBehaviour
                     }
                     else
                     {
-                        GameObject pathTile = Instantiate(path3Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                        GameObject pathTile = Instantiate(path3Direction, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, pathManager.transform);
                         pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                         var rotation = pathTile.transform.localRotation.eulerAngles;
                         rotation.z = 180;
@@ -335,7 +339,7 @@ public class Upperworld : MonoBehaviour
             {
                 if (!node.onTop.Contains("Left"))
                 {
-                    GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition, Quaternion.identity, pathManager.transform);
+                    GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, pathManager.transform);
                     pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                     var rotation = pathTile.transform.localRotation.eulerAngles;
                     rotation.z = 180;
@@ -344,7 +348,7 @@ public class Upperworld : MonoBehaviour
                 }
                 else if (!node.onTop.Contains("Right"))
                 {
-                    GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition, Quaternion.identity, pathManager.transform);
+                    GameObject pathTile = Instantiate(pathChangingDirection, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, pathManager.transform);
                     pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                     var rotation = pathTile.transform.localRotation.eulerAngles;
                     rotation.z = 90;
@@ -353,13 +357,13 @@ public class Upperworld : MonoBehaviour
                 }
                 else
                 {
-                    GameObject pathTile = Instantiate(path3Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                    GameObject pathTile = Instantiate(path3Direction, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, pathManager.transform);
                     pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                 }
             }
             else if (node.onTop.Contains("Left") || node.onTop.Contains("Right"))
             {
-                GameObject pathTile = Instantiate(path1Direction, node.worldPosition, Quaternion.identity, pathManager.transform);
+                GameObject pathTile = Instantiate(path1Direction, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, pathManager.transform);
                 pathTile.transform.localScale = new Vector3(grid.nodeRadius * size, grid.nodeRadius * size, 1);
                 var rotation = pathTile.transform.localRotation.eulerAngles;
                 rotation.z = 90;

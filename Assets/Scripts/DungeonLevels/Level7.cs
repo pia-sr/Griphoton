@@ -13,6 +13,7 @@ public class Level7 : MonoBehaviour
     public GameObject spikes;
     public Game data;
     private float size;
+    private GameObject exitDoor;
 
     private void begin()
     {
@@ -110,6 +111,7 @@ public class Level7 : MonoBehaviour
             {
                 if (node.onTop == "Exit")
                 {
+                    Destroy(exitDoor);
                     node.setItemOnTop("ExitOpen");
                     floorTile.transform.localScale = new Vector3(1.1f, 1.1f, 0);
                     Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);

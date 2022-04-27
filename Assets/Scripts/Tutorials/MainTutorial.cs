@@ -44,17 +44,10 @@ public class MainTutorial : MonoBehaviour
     {
         Ghost.SetActive(true);
         Ghost.transform.localPosition = Vector3.zero;
-        if (data.sound)
-        {
-            soundButton.GetComponent<Image>().sprite = soundOn;
-        }
-        else
-        {
-            soundButton.GetComponent<Image>().sprite = soundOff;
-        }
-        //data.namePlayer = null;
+        
         if (data.namePlayer == null || data.namePlayer.Length == 0)
         {
+            data.sound = true;
             data.strenghtMultiplier = 0;
             running = false;
             counter = 0;
@@ -75,7 +68,14 @@ public class MainTutorial : MonoBehaviour
             {
                 node.setItemOnTop(data.nodeTags[counterNode]);
                 counterNode++;
-            };
+            }; if (data.sound)
+            {
+                soundButton.GetComponent<Image>().sprite = soundOn;
+            }
+            else
+            {
+                soundButton.GetComponent<Image>().sprite = soundOff;
+            }
 
         }
         //else enable script and gameobjects;
@@ -119,7 +119,6 @@ public class MainTutorial : MonoBehaviour
             switch (counter)
             {
                 case 1:
-                    //TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default);
                     Ghost.SetActive(false);
                     namePanel.SetActive(true);
                     this.gameObject.SetActive(false);
@@ -148,31 +147,35 @@ public class MainTutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 7:
-                    sentence = "What is so magical about it, you ask?| \nYou see, this world is a place where souls go who still have unsolved puzzles from their previous life.| These souls can strengthen this sword when you help them solve their puzzle.";
+                    sentence = "What is so magical about it, you ask?";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 8:
-                    sentence = "Every soul has their own house here in Griphoton.| \nJust drop by their houses, and they will explain their puzzle.";
+                    sentence = "You see, this world is a place where souls go who still have unsolved puzzles from their previous life.| These souls can strengthen this sword when you help them solve their puzzle.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 9:
+                    sentence = "Every soul has their own house here in Griphoton.| \nJust drop by their houses, and they will explain their puzzle.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 10:
                     Ghost.SetActive(false);
                     movement.SetActive(true);
                     sentence = "Let me show you how you walk in this world.| \nSimply tap on the place where you want to go and that's it!";
                     StartCoroutine(WordbyWord(sentence));
                     break;
-                case 10:
+                case 11:
                     movement.SetActive(false);
                     griphoton.SetActive(true);
                     sentence = "This here is my house.| You can recognise it by its black roof.| \nIf you tap on my house, you can enter the dungeon.| I will explain more about the dungeon once you drop by.| But for now, I will let you explore Griphoton a bit. ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
-                case 11:
+                case 12:
                     options.SetActive(true);
                     sentence = "If you have any questions, there is a help button in the settings| \nYou can also access the setting or leave the game by tapping the setting icon.| \nGood luck, " + playerName + "!";
                     StartCoroutine(WordbyWord(sentence));
                     break;
-                case 12:
+                case 13:
                     player.SetActive(true);
                     player.GetComponent<Player>().pause();
                     player.GetComponent<Player>().unpause();
@@ -199,7 +202,6 @@ public class MainTutorial : MonoBehaviour
             for (int j = 1; j < words.Length; ++j)
             {
                 yield return new WaitForSeconds(0.2f);
-                //Typewriter sound
                 mainDialog.text += " " + words[j];
             }
             yield return new WaitForSeconds(0.4f);
@@ -225,6 +227,7 @@ public class MainTutorial : MonoBehaviour
         }
         
     }
+
     public void skipTutorial()
     {
         options.SetActive(true);

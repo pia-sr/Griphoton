@@ -36,15 +36,15 @@ public class FollowPlayer : MonoBehaviour
             if (targetBoundsMax.x < grid.grid[grid.getGridSizeX() - 1, 0].worldPosition.x && targetBoundsMin.y > grid.grid[grid.getGridSizeX() - 1, 0].worldPosition.y &&
                 targetBoundsMax.y < grid.grid[0, grid.getGridSizeY() - 1].worldPosition.y && targetBoundsMin.x > grid.grid[0, grid.getGridSizeY() - 1].worldPosition.x)
             {
-                camTransform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, 1 * Time.deltaTime);
+                camTransform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, 2 * Time.deltaTime);
             }
             else if (targetBoundsMax.x < grid.grid[grid.getGridSizeX() - 1, 0].worldPosition.x && targetBoundsMin.x > grid.grid[0, grid.getGridSizeY() - 1].worldPosition.x)
             {
-                camTransform.position = Vector3.SmoothDamp(transform.position, new Vector3(targetPosition.x, transform.localPosition.y, targetPosition.z), ref velocity, 1.5f * Time.deltaTime);
+                camTransform.position = Vector3.SmoothDamp(transform.position, new Vector3(targetPosition.x, transform.localPosition.y, targetPosition.z), ref velocity, 2f * Time.deltaTime);
             }
             else if (targetBoundsMin.y > grid.grid[grid.getGridSizeX() - 1, 0].worldPosition.y && targetBoundsMax.y < grid.grid[0, grid.getGridSizeY() - 1].worldPosition.y)
             {
-                camTransform.position = Vector3.SmoothDamp(transform.position, new Vector3(transform.localPosition.x, targetPosition.y, targetPosition.z), ref velocity, 1.5f * Time.deltaTime);
+                camTransform.position = Vector3.SmoothDamp(transform.position, new Vector3(transform.localPosition.x, targetPosition.y, targetPosition.z), ref velocity, 2f * Time.deltaTime);
             }
         }
         else

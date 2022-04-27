@@ -129,10 +129,10 @@ public class Player : MonoBehaviour
         else if (targetNode != null)
         {
             path = pathFinder.FindPathPlayer(transform.position, targetNode.worldPosition);
-            if(path.Count > 1)
+            if (path.Count > 1)
             {
                 animator.SetBool("isWalking", true);
-                if(targetNode == existingTarget)
+                if (targetNode == existingTarget)
                 {
                     if (!coroutineStart)
                     {
@@ -148,11 +148,11 @@ public class Player : MonoBehaviour
                 }
 
             }
-            else if(targetNode.onTop == "Portal")
+            else if (targetNode.onTop == "Portal")
             {
                 pause();
                 int unsolvedPuzzles = 23 - data.strenghtMultiplier;
-                if(unsolvedPuzzles == 0)
+                if (unsolvedPuzzles == 0)
                 {
                     messageSimple.SetActive(true);
                 }
@@ -177,7 +177,6 @@ public class Player : MonoBehaviour
             }
             else if (grid.ghostNames().Contains(targetNode.onTop) || grid.ghostNames().Contains(targetNode.owner))
             {
-
                 animator.SetBool("isWalking", false);
                 options.SetActive(false);
                 data.SaveGame();
@@ -188,14 +187,15 @@ public class Player : MonoBehaviour
                 targetNode = null;
                 setAllBoolsFalse();
                 this.gameObject.SetActive(false);
-            }else if(targetNode.onTop == "Dungeon" || targetNode.owner == "Dungeon")
+            }
+            else if (targetNode.onTop == "Dungeon" || targetNode.owner == "Dungeon")
             {
 
                 animator.SetBool("isWalking", false);
                 data.SaveGame();
                 SceneManager.LoadScene("Dungeon");
             }
-            else
+            else if (targetNode == grid.GetNodeFromWorldPos(transform.position))
             {
                 animator.SetBool("isWalking", false);
             }
@@ -316,7 +316,7 @@ public class Player : MonoBehaviour
             goal = path[1].worldPosition.y;
             while (pos.y != goal)
             {
-                pos.y = Mathf.MoveTowards(pos.y, goal, 1.5f * Time.deltaTime);
+                pos.y = Mathf.MoveTowards(pos.y, goal, 2f * Time.deltaTime);
                 transform.localPosition = pos;
                 yield return null;
             }
@@ -327,7 +327,7 @@ public class Player : MonoBehaviour
 
             while (pos.x != goal)
             {
-                pos.x = Mathf.MoveTowards(pos.x, goal, 1.5f * Time.deltaTime);
+                pos.x = Mathf.MoveTowards(pos.x, goal, 2f * Time.deltaTime);
                 transform.localPosition = pos;
                 yield return null;
             }

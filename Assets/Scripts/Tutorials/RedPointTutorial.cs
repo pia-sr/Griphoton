@@ -90,6 +90,7 @@ public class RedPointTutorial : MonoBehaviour
                     this.transform.parent.transform.GetChild(1).gameObject.SetActive(true);
                     inactive = false;
                     this.gameObject.SetActive(false);
+
                     break;
             }
         }
@@ -110,7 +111,6 @@ public class RedPointTutorial : MonoBehaviour
             for (int j = 1; j < words.Length; ++j)
             {
                 yield return new WaitForSeconds(0.2f);
-                //Typewriter sound
                 mainDialog.text += " " + words[j];
             }
             yield return new WaitForSeconds(0.4f);

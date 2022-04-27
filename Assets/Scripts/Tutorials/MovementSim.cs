@@ -24,8 +24,8 @@ public class MovementSim : MonoBehaviour
             animator.SetFloat("XInput", 1);
             animator.SetBool("isWalking", true);
 
-            this.transform.localPosition = Vector2.MoveTowards(transform.localPosition, new Vector2(2, 2), 1f * Time.deltaTime);
-            if(transform.localPosition == new Vector3(2, 2, 0))
+            this.transform.localPosition = Vector2.MoveTowards(transform.localPosition, new Vector2(2, 3), 1f * Time.deltaTime);
+            if(transform.localPosition == new Vector3(2, 3, 0))
             {
                 animator.SetBool("isWalking", false);
             }

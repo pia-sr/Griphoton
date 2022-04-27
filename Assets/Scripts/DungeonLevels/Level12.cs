@@ -13,6 +13,7 @@ public class Level12 : MonoBehaviour
     public GameObject spikes;
     private Game data;
     private float size;
+    private GameObject exitDoor;
 
     private void Awake()
     {
@@ -50,7 +51,7 @@ public class Level12 : MonoBehaviour
             else if (node == grid.grid[middleX, grid.getGridSizeY() - 1] && node.onTop == "Exit")
             {
                 door.transform.localScale = new Vector3(2.75f, 1.85f, 0);
-                Instantiate(door, node.worldPosition + new Vector3(0, 0, -0.1f), Quaternion.identity, prefabManager.transform);
+                exitDoor = Instantiate(door, node.worldPosition + new Vector3(0, 0, -0.1f), Quaternion.identity, prefabManager.transform);
             }
         }
         foreach (Node node in grid.grid)
@@ -115,6 +116,8 @@ public class Level12 : MonoBehaviour
             {
                 if (node.onTop == "Exit")
                 {
+
+                    Destroy(exitDoor);
                     node.setItemOnTop("ExitOpen");
                     floorTile.transform.localScale = new Vector3(1.1f, 1.1f, 0);
                     Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);

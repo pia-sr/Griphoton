@@ -111,7 +111,6 @@ public class GapPuzzleTutorial : MonoBehaviour
             for (int j = 1; j < words.Length; ++j)
             {
                 yield return new WaitForSeconds(0.2f);
-                //Typewriter sound
                 mainDialog.text += " " + words[j];
             }
             yield return new WaitForSeconds(0.4f);

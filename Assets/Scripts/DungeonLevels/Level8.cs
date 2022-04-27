@@ -12,6 +12,7 @@ public class Level8 : MonoBehaviour
     public GameObject door;
     private Game data;
     private float size;
+    private GameObject exitDoor;
 
     private void Awake()
     {
@@ -43,7 +44,7 @@ public class Level8 : MonoBehaviour
             if (node == grid.grid[middleX, 0] && node.onTop == "Exit")
             {
                 door.transform.localScale = new Vector3(2.75f, 1.85f, 0);
-                Instantiate(door, node.worldPosition + new Vector3(0, 0, -0.1f), Quaternion.identity, prefabManager.transform);
+                exitDoor = Instantiate(door, node.worldPosition + new Vector3(0, 0, -0.1f), Quaternion.identity, prefabManager.transform);
             }
             else if (node.gridX > middleX - 7 && node.gridX < middleX + 7 && node.gridY > middleY - 3 && node.gridY < middleY + 3)
             {
@@ -112,6 +113,7 @@ public class Level8 : MonoBehaviour
             {
                 if (node.onTop == "Exit")
                 {
+                    Destroy(exitDoor);
                     node.setItemOnTop("ExitOpen");
                     floorTile.transform.localScale = new Vector3(1.1f, 1.1f, 0);
                     Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);
