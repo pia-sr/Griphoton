@@ -98,7 +98,7 @@ public class MatchstickPuzzle2 : MonoBehaviour
                             if(movedSticks.Count == 3 && !movedSticks.Contains(matchstick))
                             {
                                 tutorial.inactive = true;
-                                message.transform.parent.gameObject.SetActive(true);
+                                message.transform.parent.transform.parent.gameObject.SetActive(true);
                                 message.text = "You already moved 3 matchsticks! \nYou can reset the matchsticks with the reset button, if you want to move a different one.";
                             }
                             selected = true;
@@ -258,7 +258,7 @@ public class MatchstickPuzzle2 : MonoBehaviour
 
     public void close()
     {
-        message.transform.parent.gameObject.SetActive(false);
+        message.transform.parent.transform.parent.gameObject.SetActive(false);
         tutorial.inactive = false;
     }
 }

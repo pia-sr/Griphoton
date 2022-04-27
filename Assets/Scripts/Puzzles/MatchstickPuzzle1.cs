@@ -93,7 +93,7 @@ public class MatchstickPuzzle1 : MonoBehaviour
                             if(movedStick != null && movedStick != matchstick)
                             {
                                 tutorial.inactive = true;
-                                message.transform.parent.gameObject.SetActive(true);
+                                message.transform.parent.transform.parent.gameObject.SetActive(true);
                                 message.text = "You already moved a matchstick! \nYou can reset the matchsticks with the reset button, if you want to move a different one.";
                             }
                             selected = true;
@@ -217,7 +217,7 @@ public class MatchstickPuzzle1 : MonoBehaviour
 
     public void close()
     {
-        message.transform.parent.gameObject.SetActive(false);
+        message.transform.parent.transform.parent.gameObject.SetActive(false);
         tutorial.inactive = false;
     }
 }

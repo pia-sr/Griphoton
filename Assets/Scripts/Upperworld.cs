@@ -77,8 +77,8 @@ public class Upperworld : MonoBehaviour
         houses.SetActive(true);
         Node center = grid.grid[(int)grid.getGridSizeX() / 2, ((int)grid.getGridSizeY() / 2) +2];
         grid.setHouse(center, "Dungeon");
-        houses.transform.GetChild(houses.transform.childCount - 1).transform.localPosition = center.worldPosition + new Vector3(0, 0, -1);
-        houses.transform.GetChild(houses.transform.childCount - 1).GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 2);
+        houses.transform.GetChild(houses.transform.childCount - 1).transform.localPosition = center.worldPosition;
+        houses.transform.GetChild(houses.transform.childCount - 1).GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 5);
         
         Pathfinder pathFinder = this.GetComponent<Pathfinder>();
         
@@ -122,8 +122,8 @@ public class Upperworld : MonoBehaviour
 
                 }
                 GameObject treeT = Instantiate(tree, grid.grid[x, y].worldPosition, Quaternion.identity, treeManager.transform);
-                treeT.transform.localScale = new Vector3(grid.nodeRadius * 6, grid.nodeRadius * 6, 4);
-                treeT.transform.localPosition += new Vector3(0, grid.nodeRadius, -2 + ( y * x * 0.00001f));
+                treeT.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 4);
+                treeT.transform.localPosition += new Vector3(0, grid.nodeRadius, -0.1f +( y * x * 0.000001f));
                 grid.grid[x, y].setItemOnTop("Tree");
 
             }
@@ -183,7 +183,7 @@ public class Upperworld : MonoBehaviour
     private void buildHouse(Node node)
     {
         GameObject house = GameObject.Find(node.onTop);
-        house.transform.GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 1);
+        house.transform.GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 5);
         house.transform.localPosition = node.worldPosition + new Vector3(0, 0, -1);
     }
 

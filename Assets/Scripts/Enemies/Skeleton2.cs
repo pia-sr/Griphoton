@@ -21,6 +21,9 @@ public class Skeleton2 : MonoBehaviour
     private Node targetNode;
     private bool coroutineStart;
     private HealthBar healthBar;
+    public Animator animator;
+    private int xInput;
+    private int yInput;
 
     // Start is called before the first frame update
     void Start()
@@ -30,9 +33,14 @@ public class Skeleton2 : MonoBehaviour
     }
     private void begin()
     {
+        if (targetNode == null)
+        {
+
+            animator.SetBool("isWalking", false);
+        }
         blockPlayer = false;
         hitPlayer = false;
-        hitValue = 50;
+        hitValue = 100;
         pos = new List<int[]>();
         for (int i = 0; i < xPos.Length; i++)
         {
@@ -83,6 +91,7 @@ public class Skeleton2 : MonoBehaviour
         }
         else if(path2Player.Count < 9 && path2Player.Count > 1)
         {
+            animator.SetBool("isWalking", true);
             if (targetNode == existingTarget)
             {
                 if (!coroutineStart)
@@ -99,7 +108,8 @@ public class Skeleton2 : MonoBehaviour
         }
         else
         {
-            if(grid.GetNodeFromWorldPos(transform.position) != grid.grid[pos[posCounter][0], pos[posCounter][1]])
+            animator.SetBool("isWalking", true);
+            if (grid.GetNodeFromWorldPos(transform.position) != grid.grid[pos[posCounter][0], pos[posCounter][1]])
             {
                 Node targetNode = grid.grid[pos[posCounter][0], pos[posCounter][1]];
                 List<Node> back2Pos = pathFinder.FindPath(transform.position, targetNode.worldPosition);
@@ -140,7 +150,13 @@ public class Skeleton2 : MonoBehaviour
             existingTarget = targetNode;
         }
         Vector3 pos = transform.position;
-        Node currentNode = grid.GetNodeFromWorldPos(transform.position);
+
+        xInput = path[1].gridX - grid.GetNodeFromWorldPos(pos).gridX;
+        yInput = path[1].gridY - grid.GetNodeFromWorldPos(pos).gridY;
+
+
+        animator.SetFloat("XInput", xInput);
+        animator.SetFloat("YInput", yInput);
         float goal;
         if (pos.x == path[1].worldPosition.x)
         {
@@ -172,10 +188,16 @@ public class Skeleton2 : MonoBehaviour
 
     private bool next2Player()
     {
-        foreach (Node neightbour in grid.GetNodeNeighbours(grid.GetNodeFromWorldPos(transform.position)))
+        foreach (Node neighbour in grid.GetNodeNeighbours(grid.GetNodeFromWorldPos(transform.position)))
         {
-            if(neightbour == grid.GetNodeFromWorldPos(player.transform.position))
+            if(neighbour == grid.GetNodeFromWorldPos(player.transform.position))
             {
+
+                xInput = neighbour.gridX - grid.GetNodeFromWorldPos(transform.position).gridX;
+                yInput = neighbour.gridY - grid.GetNodeFromWorldPos(transform.position).gridY;
+
+                animator.SetFloat("XInput", xInput);
+                animator.SetFloat("YInput", yInput);
                 return true;
             }
         }
@@ -183,6 +205,10 @@ public class Skeleton2 : MonoBehaviour
     }
     IEnumerator hit()
     {
+
+        animator.SetBool("isWalking", false);
+
+        animator.SetTrigger("attack");
         player.GetComponent<Player>().reduceStrength(hitValue);
         yield return new WaitForSeconds(2);
 
@@ -190,6 +216,7 @@ public class Skeleton2 : MonoBehaviour
     }
     IEnumerator block()
     {
+        animator.SetBool("isWalking", false);
         yield return new WaitForSeconds(3);
         blockPlayer = true;
         yield return new WaitForSeconds(1);

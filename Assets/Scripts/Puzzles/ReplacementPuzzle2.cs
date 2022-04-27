@@ -72,8 +72,8 @@ public class ReplacementPuzzle2 : MonoBehaviour
         for (int i = 0; i < grid.getGridSizeY(); i++)
         {
             rowText.GetComponent<RectTransform>().sizeDelta = new Vector3(130, 130, 0);
-            rowText.fontSize = 100;
-            Text text = Instantiate(rowText, grid.grid[0, i].worldPosition, Quaternion.identity, rowCanvas.transform);
+            rowText.fontSize = 160;
+            Text text = Instantiate(rowText, grid.grid[0, i].worldPosition + new Vector3(0, 0.1f, 0), Quaternion.identity, rowCanvas.transform);
             text.text = (7 - i).ToString();
         }
         setUp();
@@ -159,14 +159,14 @@ public class ReplacementPuzzle2 : MonoBehaviour
                         else
                         {
                             tutorial.inactive = true;
-                            message.transform.parent.gameObject.SetActive(true);
+                            message.transform.parent.transform.parent.gameObject.SetActive(true);
                             message.text = "You reached the limit of symbols for this row. \nPlease select a different pattern or reset the puzzle.";
                         }
                     }
                     else
                     {
                         tutorial.inactive = true;
-                        message.transform.parent.gameObject.SetActive(true);
+                        message.transform.parent.transform.parent.gameObject.SetActive(true);
                         message.text = "Your selected pattern is not valid. \nPlease select a different pattern.";
                     }
 
@@ -174,7 +174,7 @@ public class ReplacementPuzzle2 : MonoBehaviour
                 else
                 {
                     tutorial.inactive = true;
-                    message.transform.parent.gameObject.SetActive(true);
+                    message.transform.parent.transform.parent.gameObject.SetActive(true);
                     message.text = "Your selected pattern is not valid. \nPlease select a different pattern.";
                 }
 
@@ -369,7 +369,7 @@ public class ReplacementPuzzle2 : MonoBehaviour
     public void close()
     {
         tutorial.inactive = false;
-        message.transform.parent.gameObject.SetActive(false);
+        message.transform.parent.transform.parent.gameObject.SetActive(false);
     }
 
 }

@@ -301,7 +301,7 @@ public class GridField : MonoBehaviour
     {
         for (int i = -1; i < 2; i++)
         {
-            for (int j = -1; j < 2; j++)
+            for (int j = -1; j < 3; j++)
             {
                 if(i == 0 && j == 0)
                 {
@@ -314,6 +314,16 @@ public class GridField : MonoBehaviour
                     grid[node.gridX + i, node.gridY + j].isWalkable = false;
                     grid[node.gridX + i, node.gridY + j].owner = name;
                 }
+            }
+        }
+    }
+    public void setTree(Node node)
+    {
+        for (int i = -1; i < 2; i++)
+        {
+            for (int j = -1; j < 3; j++)
+            {
+                grid[node.gridX + i, node.gridY + j].isWalkable = false;
             }
         }
     }

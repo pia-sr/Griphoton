@@ -74,7 +74,7 @@ public class CannibalsMissionaries2 : MonoBehaviour
         };
 
         boatLeft = true;
-        boat.transform.localPosition = new Vector2(-2.1f, 0);
+        boat.transform.localPosition = new Vector2(-1.8f, 0);
         counterText.text = moveCounter.ToString();
     }
     
@@ -198,7 +198,7 @@ public class CannibalsMissionaries2 : MonoBehaviour
                 {
                     onBoat[i].transform.Translate(new Vector3(2.2f,0,0) * 0.6f * Time.deltaTime);
                 }
-                if(boat.transform.localPosition.x >= 2.1f)
+                if(boat.transform.localPosition.x >= 1.8f)
                 {
 
                     onTheMove = false;
@@ -211,6 +211,9 @@ public class CannibalsMissionaries2 : MonoBehaviour
                     boatSeats[1] = null;
                     boatSeats[2] = null;
                     onBoat.Clear();
+                    var rotation = boat.transform.localRotation.eulerAngles;
+                    rotation.z = 180;
+                    boat.transform.localRotation = Quaternion.Euler(rotation);
                 }
             }
             else
@@ -220,7 +223,7 @@ public class CannibalsMissionaries2 : MonoBehaviour
                 {
                     onBoat[i].transform.Translate(new Vector3(-2.2f, 0, 0) * 0.6f * Time.deltaTime);
                 }
-                if (boat.transform.localPosition.x <= -2.1f)
+                if (boat.transform.localPosition.x <= -1.8f)
                 {
 
                     onTheMove = false;
@@ -233,6 +236,9 @@ public class CannibalsMissionaries2 : MonoBehaviour
                     boatSeats[1] = null;
                     boatSeats[2] = null;
                     onBoat.Clear();
+                    var rotation = boat.transform.localRotation.eulerAngles;
+                    rotation.z = 0;
+                    boat.transform.localRotation = Quaternion.Euler(rotation);
                 }
                 
             }
@@ -299,14 +305,14 @@ public class CannibalsMissionaries2 : MonoBehaviour
         if (boatLeft)
         {
             seat1 = -3.1f;
-            seat2 = -2.2f;
-            seat3 = -1.3f;
+            seat2 = -2f;
+            seat3 = -0.9f;
         }
         else
         {
-            seat1 = 2.9f;
-            seat2 = 2f;
-            seat3 = 1.1f;
+            seat1 = 3.2f;
+            seat2 = 2.1f;
+            seat3 = 1f;
         }
         if(boatSeats[0] != null)
         {

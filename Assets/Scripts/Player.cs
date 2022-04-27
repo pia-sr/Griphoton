@@ -4,6 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -31,6 +32,11 @@ public class Player : MonoBehaviour
     public bool leaveLevel;
     private bool chooseExit;
     private bool attackBool;
+    public GameObject messageSimple;
+    public Text message2Options;
+    public Animator animator;
+    private int xInput;
+    private int yInput;
 
     private void setAllBoolsFalse()
     {
@@ -51,10 +57,10 @@ public class Player : MonoBehaviour
     void Start()
     {
         enemyHit = false;
-        hitValue = 25 + (5 * data.strenghtMultiplier);
+        hitValue = 25 + (10 * data.strenghtMultiplier);
         targetNode = null;
         existingTarget = null;
-        strength = 100 + (25 + data.strenghtMultiplier);
+        strength = 100 + (75 + data.strenghtMultiplier);
         fullHealth = strength;
         foundPos = false;
         if (!upperWorld)
@@ -67,8 +73,24 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(targetNode == null)
+        {
+
+            animator.SetBool("isWalking", false);
+        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            if (upperWorld)
+            {
+                data.xPos = 150;
+                data.yPos = 150;
+            }
+            else
+            {
+                data.xPos = grid.GetNodeFromWorldPos(transform.position).gridX;
+                data.yPos = grid.GetNodeFromWorldPos(transform.position).gridY;
+                
+            }
             data.SaveGame();
             Application.Quit();
         }
@@ -109,6 +131,7 @@ public class Player : MonoBehaviour
             path = pathFinder.FindPathPlayer(transform.position, targetNode.worldPosition);
             if(path.Count > 1)
             {
+                animator.SetBool("isWalking", true);
                 if(targetNode == existingTarget)
                 {
                     if (!coroutineStart)
@@ -125,18 +148,37 @@ public class Player : MonoBehaviour
                 }
 
             }
+            else if(targetNode.onTop == "Portal")
+            {
+                pause();
+                int unsolvedPuzzles = 23 - data.strenghtMultiplier;
+                if(unsolvedPuzzles == 0)
+                {
+                    messageSimple.SetActive(true);
+                }
+                else
+                {
+                    message2Options.text = "You still have " + unsolvedPuzzles + " unsolved Puzzles left. \n Do you want to stay and solve them or do you want to leave?";
+                }
+            }
             else if (grid.GetNodeFromWorldPos(transform.position).onTop == "Entrance" && targetNode.onTop == "Entrance")
             {
+
+                animator.SetBool("isWalking", false);
                 previousLevel();
                 data.SaveGame();
             }
             else if (grid.GetNodeFromWorldPos(transform.position).onTop == "ExitOpen")
             {
+
+                animator.SetBool("isWalking", false);
                 nextLevel();
                 data.SaveGame();
             }
             else if (grid.ghostNames().Contains(targetNode.onTop) || grid.ghostNames().Contains(targetNode.owner))
             {
+
+                animator.SetBool("isWalking", false);
                 options.SetActive(false);
                 data.SaveGame();
                 string ghostName = grid.grid[path[0].gridX, path[0].gridY + 2].onTop;
@@ -148,8 +190,14 @@ public class Player : MonoBehaviour
                 this.gameObject.SetActive(false);
             }else if(targetNode.onTop == "Dungeon" || targetNode.owner == "Dungeon")
             {
+
+                animator.SetBool("isWalking", false);
                 data.SaveGame();
                 SceneManager.LoadScene("Dungeon");
+            }
+            else
+            {
+                animator.SetBool("isWalking", false);
             }
         }
         if (Input.touchCount > 0 && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) && Input.GetTouch(0).phase == TouchPhase.Began)
@@ -246,6 +294,7 @@ public class Player : MonoBehaviour
             unpause();
         }
     }
+    
 
     private IEnumerator move()
     {
@@ -255,6 +304,12 @@ public class Player : MonoBehaviour
             existingTarget = targetNode;
         }
         Vector3 pos = transform.position;
+        xInput = path[1].gridX - grid.GetNodeFromWorldPos(pos).gridX;
+        yInput = path[1].gridY - grid.GetNodeFromWorldPos(pos).gridY;
+
+        
+        animator.SetFloat("XInput", xInput);
+        animator.SetFloat("YInput", yInput);
         float goal;
         if (pos.x == path[1].worldPosition.x)
         {
@@ -323,6 +378,7 @@ public class Player : MonoBehaviour
 
         if (enemyNearby() && !attackBool)
         {
+            animator.SetTrigger("Attack");
             targetNode = null;
             coroutineStart = false;
             StartCoroutine(wait2Hit());
@@ -344,6 +400,12 @@ public class Player : MonoBehaviour
         {
             if (grid.getEnemiesPos().Contains(neighbour))
             {
+                xInput = neighbour.gridX - grid.GetNodeFromWorldPos(transform.position).gridX;
+                yInput = neighbour.gridY - grid.GetNodeFromWorldPos(transform.position).gridY;
+
+                animator.SetFloat("XInput", xInput);
+                animator.SetFloat("YInput", yInput);
+
                 return true;
             }
         }
@@ -401,5 +463,18 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         coroutineStart = false;
 
+    }
+
+    public void Restart()
+    {
+        data.namePlayer = null;
+        data.SaveGame();
+        Application.Quit();
+    }
+
+    public void Stay()
+    {
+        message2Options.transform.parent.transform.parent.gameObject.SetActive(false);
+        unpause();
     }
 }

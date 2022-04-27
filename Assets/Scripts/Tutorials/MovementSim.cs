@@ -6,6 +6,7 @@ public class MovementSim : MonoBehaviour
 {
     public GameObject touchSim;
     private bool go;
+    public Animator animator;
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +20,15 @@ public class MovementSim : MonoBehaviour
     {
         if (go)
         {
+            animator.SetFloat("YInput", 0);
+            animator.SetFloat("XInput", 1);
+            animator.SetBool("isWalking", true);
+
             this.transform.localPosition = Vector2.MoveTowards(transform.localPosition, new Vector2(2, 2), 1f * Time.deltaTime);
+            if(transform.localPosition == new Vector3(2, 2, 0))
+            {
+                animator.SetBool("isWalking", false);
+            }
         }
     }
     IEnumerator wait()

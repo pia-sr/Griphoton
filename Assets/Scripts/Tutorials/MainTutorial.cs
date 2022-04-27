@@ -104,6 +104,7 @@ public class MainTutorial : MonoBehaviour
                 griphoton.SetActive(true);
                 options.SetActive(true);
                 player.SetActive(true);
+                player.transform.position = grid.grid[data.xPos, data.yPos].worldPosition;
                 player.GetComponent<Player>().pause();
                 player.GetComponent<Player>().unpause();
                 running = true;
@@ -346,6 +347,9 @@ public class MainTutorial : MonoBehaviour
     {
         if(message.text == "Do you really want to leave the game? \nYour progress will be safed!")
         {
+
+            data.xPos = grid.GetNodeFromWorldPos(player.transform.position).gridX;
+            data.yPos = grid.GetNodeFromWorldPos(player.transform.position).gridY;
             data.SaveGame();
             Application.Quit();
 

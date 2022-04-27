@@ -8,6 +8,8 @@ public class Game : MonoBehaviour
     public int activeLevel;
     public string namePlayer;
     public bool sound;
+    public int xPos;
+    public int yPos;
 
     public string[] nodeTags;
     public int strenghtMultiplier;
@@ -65,6 +67,8 @@ public class Game : MonoBehaviour
         nodeTags = data.nodeTags;
         sound = data.sound;
         strenghtMultiplier = data.strenghtMultiplier;
+        xPos = data.xPos;
+        yPos = data.yPos;
 
     }
     private void Start()

@@ -22,6 +22,9 @@ public class EvilGhost2 : MonoBehaviour
     private bool coroutineStart;
     private Node playerPos;
     private HealthBar healthBar;
+    public Animator animator;
+    private int xInput;
+    private int yInput;
 
     // Start is called before the first frame update
     void Start()
@@ -36,7 +39,7 @@ public class EvilGhost2 : MonoBehaviour
         stay = false;
         attackPlayer = false;
         coroutineStart = false;
-        healthValue = 500;
+        healthValue = 400;
         Node startNode = grid.grid[startPos[0], startPos[1]];
         transform.position = startNode.worldPosition - new Vector3(0, 0, 1);
         targetNode = startNode;
@@ -47,6 +50,11 @@ public class EvilGhost2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (targetNode == null)
+        {
+
+            animator.SetBool("isWalking", false);
+        }
         if (player.GetComponent<Player>().leaveLevel)
         {
             begin();
@@ -59,6 +67,7 @@ public class EvilGhost2 : MonoBehaviour
         path2Player = pathFinder.FindPathEnemies(transform.position, player.transform.position);
         if (next2Player() && !moveAway)
         {
+            animator.SetBool("isWalking", true);
             attackPlayer = false;
             if (!stay)
             {
@@ -118,6 +127,11 @@ public class EvilGhost2 : MonoBehaviour
                 existingTarget = targetNode;
             }
         }
+        else
+        {
+
+            animator.SetBool("isWalking", false);
+        }
     }
 
     private IEnumerator move(List<Node> path)
@@ -128,6 +142,13 @@ public class EvilGhost2 : MonoBehaviour
             existingTarget = targetNode;
         }
         Vector3 pos = transform.position;
+
+        xInput = path[1].gridX - grid.GetNodeFromWorldPos(pos).gridX;
+        yInput = path[1].gridY - grid.GetNodeFromWorldPos(pos).gridY;
+
+
+        animator.SetFloat("XInput", xInput);
+        animator.SetFloat("YInput", yInput);
         float goal;
         float speed;
         if (attackPlayer)
@@ -194,6 +215,7 @@ public class EvilGhost2 : MonoBehaviour
 
     IEnumerator fight()
     {
+        animator.SetBool("isWalking", false);
         yield return new WaitForSeconds(2);
         moveAway = true;
         hitSpeed = 0;

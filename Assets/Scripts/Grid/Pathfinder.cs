@@ -7,6 +7,7 @@ public class Pathfinder : MonoBehaviour
 {
     public GridField _grid;
     public List<Node> path;
+    
     /*
     void Awake()
     {

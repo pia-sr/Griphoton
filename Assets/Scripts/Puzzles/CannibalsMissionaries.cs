@@ -183,7 +183,10 @@ public class CannibalsMissionaries : MonoBehaviour
                     }
                     boatSeats[0] = null;
                     boatSeats[1] = null;
-                    onBoat.Clear();
+                    onBoat.Clear(); 
+                    var rotation = boat.transform.localRotation.eulerAngles;
+                    rotation.z = 180;
+                    boat.transform.localRotation = Quaternion.Euler(rotation);
                 }
             }
             else
@@ -204,7 +207,10 @@ public class CannibalsMissionaries : MonoBehaviour
                     }
                     boatSeats[0] = null;
                     boatSeats[1] = null;
-                    onBoat.Clear();
+                    onBoat.Clear(); 
+                    var rotation = boat.transform.localRotation.eulerAngles;
+                    rotation.z = 0;
+                    boat.transform.localRotation = Quaternion.Euler(rotation);
                 }
                 
             }
@@ -260,11 +266,11 @@ public class CannibalsMissionaries : MonoBehaviour
         if (boatLeft)
         {
             seat1 = -2.8f;
-            seat2 = -1.9f;
+            seat2 = -1.6f;
         }
         else
         {
-            seat1 = 2.7f;
+            seat1 = 2.9f;
             seat2 = 1.8f;
         }
         if(boatSeats[0] != null)

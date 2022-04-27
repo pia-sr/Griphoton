@@ -234,15 +234,19 @@ public class DungeonTutorial : MonoBehaviour
 
     public void CloseHelp()
     {
-        options.SetActive(true);
-        Time.timeScale = 1;
-        player.GetComponent<Player>().unpause();
-        questions.SetActive(false);
-    }
-    public void closeQuestion()
-    {
-        questions.transform.GetChild(1).gameObject.SetActive(true);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+        if (questions.transform.GetChild(0).transform.GetChild(0).gameObject.activeSelf)
+        {
+            questions.transform.GetChild(1).gameObject.SetActive(true);
+            questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+        }
+        else
+        {
+            options.SetActive(true);
+            Time.timeScale = 1;
+            player.GetComponent<Player>().unpause();
+            questions.SetActive(false);
+        }
+
     }
     public void Help()
     {
@@ -263,6 +267,8 @@ public class DungeonTutorial : MonoBehaviour
     public void Yes()
     {
         Time.timeScale = 1;
+        data.yPos = 150;
+        data.xPos = 150;
         data.SaveGame();
         SceneManager.LoadScene("Upperworld");
 

@@ -5,12 +5,12 @@ using UnityEngine;
 public class Level1 : MonoBehaviour
 {
     public GridField grid;
-    public GameObject wall;
+    public GameObject wallUp;
+    public GameObject wallSides;
     public GameObject prefabManager;
     public GameObject floorTile;
     public GameObject door;
     private Game data;
-    private bool build;
 
     private void Awake()
     {
@@ -33,6 +33,7 @@ public class Level1 : MonoBehaviour
         else
         {
             exit = "ExitOpen";
+            transform.GetChild(0).gameObject.SetActive(false);
         }
 
         int middleX = Mathf.RoundToInt(grid.getGridSizeX() / 2);
@@ -44,20 +45,32 @@ public class Level1 : MonoBehaviour
             if (node == grid.grid[middleX, grid.getGridSizeY() - 1] && node.onTop == "Exit")
             {
 
-                door.transform.localScale = new Vector3(size * 3, size, 0);
-                Instantiate(door, node.worldPosition, Quaternion.identity, prefabManager.transform);
+                door.transform.localScale = new Vector3(2.75f, 1.85f, 0);
+                Instantiate(door, node.worldPosition + new Vector3(0,0,-0.1f), Quaternion.identity, prefabManager.transform);
             }
             else if (node.gridX == 0 || node.gridX == grid.getGridSizeX() - 1 || node.gridY == 0 || node.gridY == grid.getGridSizeY() - 1)
             {
-                if (node.onTop == null)
+                GameObject wall = null;
+                wallUp.transform.localScale = new Vector3(size*6.5f, size*7, 0);
+                wallSides.transform.localScale = new Vector3(size*6.5f, size*6.5f, 0);
+                foreach(Node neighbour in grid.GetNodeNeighbours(node))
                 {
-
-
-                    node.setItemOnTop("Wall");
-                    Instantiate(wall, node.worldPosition, Quaternion.identity, prefabManager.transform);
-
-                    wall.transform.localScale = new Vector3(size, size, 0);
+                    if (node.onTop == null && neighbour.gridY < node.gridY && neighbour.onTop == "Wall")
+                    {
+                        wall = wallUp;
+                        break;
+                    }
+                    else if (node.onTop == null)
+                    {
+                        wall = wallSides;
+                    }
                 }
+                if(wall != null)
+                {
+                    node.setItemOnTop("Wall");
+                    Instantiate(wall, node.worldPosition + new Vector3(0,0,1), Quaternion.identity, prefabManager.transform);
+                }
+                
             }
         }
         foreach (Node node in grid.grid)
@@ -66,11 +79,10 @@ public class Level1 : MonoBehaviour
             {
                 if (node.onTop == null)
                 {
-
                     node.setItemOnTop("Floor");
                 }
+                floorTile.transform.localScale = new Vector3(1.1f, 1.1f, 0);
                 Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);
-                floorTile.transform.localScale = new Vector3(size, size, 0);
 
             }
         }
@@ -93,7 +105,7 @@ public class Level1 : MonoBehaviour
                 if(node.onTop == "Exit")
                 {
                     node.setItemOnTop("ExitOpen");
-                    floorTile.transform.localScale = new Vector3(2 * grid.nodeRadius, 2 * grid.nodeRadius, 0);
+                    floorTile.transform.localScale = new Vector3(1.1f, 1.1f, 0);
                     Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);
 
                 }

@@ -11,6 +11,8 @@ public class GameData
     public string[] nodeTags;
     public bool sound;
     public int strenghtMultiplier;
+    public int xPos;
+    public int yPos;
 
     public GameData(Game game)
     {
@@ -20,6 +22,8 @@ public class GameData
         nodeTags = game.getGrid();
         sound = game.sound;
         strenghtMultiplier = game.strenghtMultiplier;
+        xPos = game.xPos;
+        yPos = game.yPos;
     }
 
     
