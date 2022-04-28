@@ -17,6 +17,8 @@ public class ReplacementTutorial : MonoBehaviour
     public bool inactive;
     public GameObject questions;
     public GameObject ghost;
+    public AudioSource typewriter;
+    public AudioSource puzzleSound;
 
     public void setUp()
     {
@@ -42,6 +44,10 @@ public class ReplacementTutorial : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!this.transform.parent.transform.GetChild(0).gameObject.activeSelf)
+        {
+            puzzleSound.Stop();
+        }
         if (Input.touchCount > 0 && !running && EventSystem.current != GameObject.Find("Skip"))
         {
 
@@ -93,6 +99,7 @@ public class ReplacementTutorial : MonoBehaviour
                 case 7:
                     inactive = false;
                     this.gameObject.SetActive(false);
+                    puzzleSound.Play();
                     break;
             }
         }
@@ -109,10 +116,12 @@ public class ReplacementTutorial : MonoBehaviour
         for (int i = 0; i < sentences.Length; i++)
         {
             string[] words = sentences[i].Split(' ');
+            typewriter.Play();
             mainDialog.text += words[0];
             for (int j = 1; j < words.Length; ++j)
             {
                 yield return new WaitForSeconds(0.2f);
+                typewriter.Play();
                 mainDialog.text += " " + words[j];
             }
             yield return new WaitForSeconds(0.4f);
@@ -128,6 +137,7 @@ public class ReplacementTutorial : MonoBehaviour
         options.SetActive(true);
         inactive = false;
         this.gameObject.SetActive(false);
+        puzzleSound.Play();
     }
 
     public void Question1()

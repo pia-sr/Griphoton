@@ -22,6 +22,7 @@ public class DungeonTutorial : MonoBehaviour
     public GameObject message;
     private int clickIndex;
     public GameObject ghost;
+    public AudioSource typewriter;
 
     private void Awake()
     {
@@ -54,6 +55,10 @@ public class DungeonTutorial : MonoBehaviour
             dungeon.SetActive(true);
             this.transform.parent.transform.parent.gameObject.SetActive(false);
 
+        }
+        if (!data.sound)
+        {
+            muteSound();
         }
         //else enable script and gameobjects;
     }
@@ -280,7 +285,7 @@ public class DungeonTutorial : MonoBehaviour
 
     public void CloseLexicon()
     {
-       for(int i = 1; i < lexicon.transform.GetChild(0).transform.GetChild(0).transform.childCount; i++)
+        for (int i = 1; i < lexicon.transform.GetChild(0).transform.GetChild(0).transform.childCount; i++)
         {
             lexicon.transform.GetChild(0).transform.GetChild(0).transform.GetChild(i).gameObject.SetActive(false);
         }
@@ -305,4 +310,21 @@ public class DungeonTutorial : MonoBehaviour
         lexicon.transform.GetChild(0).transform.GetChild(0).transform.GetChild(clickIndex).gameObject.SetActive(true);
     }
 
+    private void muteSound()
+    {
+        GameObject sound = GameObject.Find("Sounds");
+        for (int i = 0; i < sound.transform.childCount; i++)
+        {
+            var audiosource = sound.transform.GetChild(i).gameObject.GetComponent<AudioSource>();
+            if (audiosource.mute)
+            {
+                audiosource.mute = false;
+            }
+            else
+            {
+                audiosource.mute = true;
+            }
+
+        }
+    }
 }

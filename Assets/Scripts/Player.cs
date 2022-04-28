@@ -37,6 +37,8 @@ public class Player : MonoBehaviour
     public Animator animator;
     private int xInput;
     private int yInput;
+    public AudioSource griphotonSound;
+    public AudioSource dungeonSound;
 
     private void setAllBoolsFalse()
     {
@@ -67,12 +69,21 @@ public class Player : MonoBehaviour
         {
             healthBar.SetHealthBarValue(1);
             chooseExit = false;
+            dungeonSound.Play();
+        }
+        else
+        {
+            griphotonSound.Play();
         }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!this.gameObject.activeSelf)
+        {
+            griphotonSound.Stop();
+        }
         if(targetNode == null)
         {
 
@@ -100,6 +111,10 @@ public class Player : MonoBehaviour
             {
                 options.SetActive(true);
 
+            }
+            if (!griphotonSound.isPlaying)
+            {
+                griphotonSound.Play();
             }
         }
         restart();

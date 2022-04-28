@@ -29,6 +29,7 @@ public class MainTutorial : MonoBehaviour
     public GameObject soundButton;
     public Sprite soundOn;
     public Sprite soundOff;
+    public AudioSource typewriter;
 
     private void Awake()
     {
@@ -44,7 +45,6 @@ public class MainTutorial : MonoBehaviour
     {
         Ghost.SetActive(true);
         Ghost.transform.localPosition = Vector3.zero;
-        
         if (data.namePlayer == null || data.namePlayer.Length == 0)
         {
             data.sound = true;
@@ -68,13 +68,15 @@ public class MainTutorial : MonoBehaviour
             {
                 node.setItemOnTop(data.nodeTags[counterNode]);
                 counterNode++;
-            }; if (data.sound)
+            } 
+            if (data.sound)
             {
                 soundButton.GetComponent<Image>().sprite = soundOn;
             }
             else
             {
                 soundButton.GetComponent<Image>().sprite = soundOff;
+                muteSound();
             }
 
         }
@@ -198,10 +200,12 @@ public class MainTutorial : MonoBehaviour
         for (int i = 0; i < sentences.Length; i++)
         {
             string[] words = sentences[i].Split(' ');
+            typewriter.Play();
             mainDialog.text += words[0];
             for (int j = 1; j < words.Length; ++j)
             {
                 yield return new WaitForSeconds(0.2f);
+                typewriter.Play();
                 mainDialog.text += " " + words[j];
             }
             yield return new WaitForSeconds(0.4f);
@@ -379,11 +383,29 @@ public class MainTutorial : MonoBehaviour
         {
             data.sound = false;
             soundButton.GetComponent<Image>().sprite = soundOff;
+            muteSound();
         }
         else
         {
             data.sound = true;
             soundButton.GetComponent<Image>().sprite = soundOn;
+            muteSound();
+        }
+    }
+    private void muteSound()
+    {
+        GameObject sound = GameObject.Find("Sounds");
+        for(int i = 0; i < sound.transform.childCount; i++)
+        {
+            var audiosource = sound.transform.GetChild(i).gameObject.GetComponent<AudioSource>();
+            if (audiosource.mute)
+            {
+                audiosource.mute = false;
+            }
+            else
+            {
+                audiosource.mute = true;
+            }
         }
     }
 }
