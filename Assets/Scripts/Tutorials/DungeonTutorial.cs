@@ -183,7 +183,7 @@ public class DungeonTutorial : MonoBehaviour
         Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
         question.text = "How can I get stronger?";
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
-        answer.text = "How can I get stronger?";
+        answer.text = "Your sword can get stronger by solving the puzzles of Griphoton's residents. you can leave the dungeon at any time to solve a puzzle.";
     }
     public void Question4()
     {

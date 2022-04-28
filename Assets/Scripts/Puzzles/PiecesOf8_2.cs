@@ -144,7 +144,7 @@ public class PiecesOf8_2 : MonoBehaviour
                 }
 
             }
-            if (rectColour.Contains(touchPosition))
+            if (rectColour.Contains(touchPosition) && touch.phase == TouchPhase.Began)
             {
 
                 for(int i = 0; i < colours.Count; i++)
