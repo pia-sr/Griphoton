@@ -82,7 +82,21 @@ public class CannibalsMissionaries : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount > 0 && !onTheMove && !tutorial.inactive)
+        if (lost())
+        {
+            message.transform.parent.transform.parent.gameObject.SetActive(true);
+            message.transform.parent.transform.GetChild(0).transform.GetComponentInChildren<Text>().text = "Yes";
+            message.transform.parent.transform.GetChild(1).transform.GetComponentInChildren<Text>().text = "No";
+            message.text = "Game over! \nDo you want to try again?";
+        }
+        else if (won())
+        {
+            griphoton.SetActive(true);
+            player.SetActive(true);
+            griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+            this.transform.parent.transform.parent.gameObject.SetActive(false);
+        }
+        if (Input.touchCount > 0 && !onTheMove && !tutorial.inactive && !lost())
         {
             GameObject animal;
             Touch touch = Input.GetTouch(0);
@@ -152,7 +166,7 @@ public class CannibalsMissionaries : MonoBehaviour
                     }
                 }
             }
-            if (button.GetComponent<SpriteRenderer>().bounds.Contains(new Vector3(touchPosition.x,touchPosition.y,-0.1f)))
+            if (button.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
             {
                 if (onBoat.Count != 0)
                 {
@@ -167,7 +181,7 @@ public class CannibalsMissionaries : MonoBehaviour
         {
             if (boatLeft)
             {
-                boat.transform.Translate(new Vector3(0,-2.2f,0) * 0.6f * Time.deltaTime);
+                boat.transform.Translate(new Vector3(2.2f, 0, 0) * 0.6f * Time.deltaTime);
                 for (int i = 0; i < onBoat.Count; i++)
                 {
                     onBoat[i].transform.Translate(new Vector3(2.2f,0,0) * 0.6f * Time.deltaTime);
@@ -191,7 +205,7 @@ public class CannibalsMissionaries : MonoBehaviour
             }
             else
             {
-                boat.transform.Translate(new Vector3(0, 2.2f, 0) * 0.6f * Time.deltaTime);
+                boat.transform.Translate(new Vector3(2.2f, 0, 0) * 0.6f * Time.deltaTime);
                 for (int i = 0; i < onBoat.Count; i++)
                 {
                     onBoat[i].transform.Translate(new Vector3(-2.2f, 0, 0) * 0.6f * Time.deltaTime);
@@ -215,20 +229,6 @@ public class CannibalsMissionaries : MonoBehaviour
                 
             }
         }positions();
-        if (lost())
-        {
-            message.transform.parent.gameObject.SetActive(true);
-            message.transform.parent.transform.GetChild(0).transform.GetComponentInChildren<Text>().text = "Yes";
-            message.transform.parent.transform.GetChild(1).transform.GetComponentInChildren<Text>().text = "No";
-            message.text = "Game over! \nDo you want to try again?";
-        }
-        else if (won())
-        {
-            griphoton.SetActive(true);
-            player.SetActive(true);
-            griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
-            this.transform.parent.transform.parent.gameObject.SetActive(false);
-        }
     }
     private void positions()
     {
@@ -341,6 +341,10 @@ public class CannibalsMissionaries : MonoBehaviour
             setUp();
 
         }
+        if (message.transform.parent.parent.gameObject.activeSelf)
+        {
+            message.transform.parent.parent.gameObject.SetActive(false);
+        }
     }
     public void leave()
     {
@@ -349,18 +353,21 @@ public class CannibalsMissionaries : MonoBehaviour
             tutorial.inactive = true;
             messageExit.SetActive(true);
         }
+        if (message.transform.parent.parent.gameObject.activeSelf)
+        {
+            message.transform.parent.parent.gameObject.SetActive(false);
+        }
 
     }
 
     public void yes()
     {
         setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+        tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         messageExit.SetActive(false);
-        tutorial.gameObject.SetActive(true);
-        tutorial.setUp();
-        this.transform.parent.transform.parent.gameObject.SetActive(false);
     }
     public void no()
     {

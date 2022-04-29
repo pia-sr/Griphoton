@@ -77,8 +77,8 @@ public class Upperworld : MonoBehaviour
         houses.SetActive(true);
         Node center = grid.grid[(int)grid.getGridSizeX() / 2, ((int)grid.getGridSizeY() / 2) +2];
         grid.setHouse(center, "Dungeon");
-        
-        houses.transform.GetChild(houses.transform.childCount - 1).transform.localPosition = center.worldPosition + new Vector3(0, 0, -0.1f +( 150 * 150 * 0.000001f));
+
+        houses.transform.GetChild(houses.transform.childCount - 1).transform.localPosition = center.worldPosition + new Vector3(0, 0, ( 150 * 150 * 0.000001f));
         houses.transform.GetChild(houses.transform.childCount - 1).GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 5);
         
         Pathfinder pathFinder = this.GetComponent<Pathfinder>();
@@ -128,6 +128,9 @@ public class Upperworld : MonoBehaviour
                 grid.grid[x, y].setItemOnTop("Tree");
 
             }
+
+            data.xPos = center.gridX;
+            data.yPos = center.gridY - 2;
             findEndPath();
             creatingPath();
             data.namePlayer = playerName;
@@ -141,6 +144,7 @@ public class Upperworld : MonoBehaviour
             {
                 if (grid.ghostNames().Contains(node.onTop))
                 {
+                    grid.setHouse(node, node.onTop);
                     buildHouse(node);
                     
                 }
@@ -153,7 +157,7 @@ public class Upperworld : MonoBehaviour
                 else if(node.onTop == "SovedCenter")
                 {
                     GameObject solvedHouse = Instantiate(moudField, node.worldPosition, Quaternion.identity, houses.transform);
-                    solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 1);
+                    solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 1);
                 }
                 counter++;
             }
@@ -188,7 +192,7 @@ public class Upperworld : MonoBehaviour
     {
         GameObject house = GameObject.Find(node.onTop);
         house.transform.GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 5);
-        house.transform.localPosition = node.worldPosition + new Vector3(0, 0, -0.1f + (node.gridX * node.gridY * 0.000001f));
+        house.transform.localPosition = node.worldPosition + new Vector3(0, 0, 1 + (node.gridX * node.gridY * 0.000001f));
     }
 
     // Update is called once per frame
@@ -231,7 +235,7 @@ public class Upperworld : MonoBehaviour
                 GameObject house = GameObject.Find(houseName);
                 house.SetActive(false);
                 GameObject solvedHouse = Instantiate(moudField, node.worldPosition, Quaternion.identity, houses.transform);
-                solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 1);
+                solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 1);
                 messageSimple.transform.parent.gameObject.SetActive(true);
                 messageSimple.text = wonSentences[randIndex];
             }

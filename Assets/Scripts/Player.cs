@@ -39,6 +39,8 @@ public class Player : MonoBehaviour
     private int yInput;
     public AudioSource griphotonSound;
     public AudioSource dungeonSound;
+    public AudioSource puzzleSound;
+    public bool activateTutorial;
 
     private void setAllBoolsFalse()
     {
@@ -58,13 +60,13 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        animator.SetBool("isWalking", false);
         enemyHit = false;
         hitValue = 25 + (10 * data.strenghtMultiplier);
         targetNode = null;
         existingTarget = null;
         strength = 100 + (75 + data.strenghtMultiplier);
         fullHealth = strength;
-        foundPos = false;
         if (!upperWorld)
         {
             healthBar.SetHealthBarValue(1);
@@ -74,15 +76,34 @@ public class Player : MonoBehaviour
         else
         {
             griphotonSound.Play();
+            transform.position = grid.grid[data.xPos, data.yPos].worldPosition;
+
+            foundPos = true;
         }
+        xInput = 0;
+        yInput = -1;
+
+
+        animator.SetFloat("XInput", xInput);
+        animator.SetFloat("YInput", yInput);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!this.gameObject.activeSelf)
+        if(xInput == 0 && yInput == 0)
         {
-            griphotonSound.Stop();
+
+            xInput = 0;
+            yInput = -1;
+
+
+            animator.SetFloat("XInput", xInput);
+            animator.SetFloat("YInput", yInput);
+        }
+        if (!this.gameObject.activeSelf && griphotonSound.isPlaying)
+        {
+            griphotonSound.Pause();
         }
         if(targetNode == null)
         {
@@ -91,7 +112,7 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (upperWorld)
+            if (!upperWorld)
             {
                 data.xPos = 150;
                 data.yPos = 150;
@@ -116,18 +137,15 @@ public class Player : MonoBehaviour
             {
                 griphotonSound.Play();
             }
+            if(puzzleSound.isPlaying && griphotonSound.isPlaying)
+            {
+                puzzleSound.Pause();
+            }
         }
         restart();
         if (!foundPos)
         {
-            if (dungeon == null && grid.dungeonNode() != null && upperWorld)
-            {
-                dungeon = grid.dungeonNode();
-                Node startPos = grid.grid[dungeon.gridX, dungeon.gridY - 2];
-                transform.position = startPos.worldPosition;
-                foundPos = true;
-            }
-            else if (!upperWorld)
+            if (!upperWorld)
             {
                 if (!chooseExit)
                 {
@@ -146,11 +164,11 @@ public class Player : MonoBehaviour
             path = pathFinder.FindPathPlayer(transform.position, targetNode.worldPosition);
             if (path.Count > 1)
             {
-                animator.SetBool("isWalking", true);
                 if (targetNode == existingTarget)
                 {
                     if (!coroutineStart)
                     {
+                        animator.SetBool("isWalking", true);
                         coroutineStart = true;
                         StartCoroutine(move());
                     }
@@ -192,7 +210,9 @@ public class Player : MonoBehaviour
             }
             else if (grid.ghostNames().Contains(targetNode.onTop) || grid.ghostNames().Contains(targetNode.owner))
             {
+                griphotonSound.Pause();
                 animator.SetBool("isWalking", false);
+                activateTutorial = true;
                 options.SetActive(false);
                 data.SaveGame();
                 string ghostName = grid.grid[path[0].gridX, path[0].gridY + 2].onTop;
@@ -205,7 +225,8 @@ public class Player : MonoBehaviour
             }
             else if (targetNode.onTop == "Dungeon" || targetNode.owner == "Dungeon")
             {
-
+                data.xPos = grid.GetNodeFromWorldPos(transform.position).gridX;
+                data.yPos = grid.GetNodeFromWorldPos(transform.position).gridY;
                 animator.SetBool("isWalking", false);
                 data.SaveGame();
                 SceneManager.LoadScene("Dungeon");
@@ -215,11 +236,11 @@ public class Player : MonoBehaviour
                 animator.SetBool("isWalking", false);
             }
         }
-        if (Input.touchCount > 0 && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId) && Input.GetTouch(0).phase == TouchPhase.Began)
+        if (Input.touchCount > 0 && EventSystem.current.currentSelectedGameObject == null)
         {
             Touch touch = Input.GetTouch(0);
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-            if (grid.bounds().Contains(touchPosition))
+            if(grid.bounds().Contains(touchPosition))
             {
                 targetNode = grid.GetNodeFromWorldPos(touchPosition);
             }
@@ -369,6 +390,7 @@ public class Player : MonoBehaviour
     {
         if (lost)
         {
+            pause();
             lost = false;
             GameObject levels = GameObject.FindWithTag("Levels");
             targetNode = null;
@@ -385,26 +407,29 @@ public class Player : MonoBehaviour
             foundPos = false;
             strength = fullHealth;
             StartCoroutine(wait());
+            unpause();
         }
     }
 
     public void attack()
     {
-
+        animator.SetBool("isWalking", false);
+        targetNode = null;
+        coroutineStart = false;
         if (enemyNearby() && !attackBool)
         {
             animator.SetTrigger("Attack");
-            targetNode = null;
-            coroutineStart = false;
             StartCoroutine(wait2Hit());
         }
     }
     public void block()
     {
+
+        animator.SetBool("isWalking", false);
+        targetNode = null;
+        coroutineStart = false;
         if (!blockBool && enemyNearby())
         {
-            targetNode = null;
-            coroutineStart = false;
             StartCoroutine(wait2Block());
         }
     }
@@ -464,6 +489,7 @@ public class Player : MonoBehaviour
     }
     public void pause()
     {
+        animator.SetBool("isWalking", false);
         StopAllCoroutines();
         targetNode = null;
         coroutineStart = true;
@@ -475,7 +501,7 @@ public class Player : MonoBehaviour
 
     IEnumerator wait2Move()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(2f);
         coroutineStart = false;
 
     }

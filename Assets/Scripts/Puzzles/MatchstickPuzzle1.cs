@@ -29,6 +29,8 @@ public class MatchstickPuzzle1 : MonoBehaviour
 
     private void setUp()
     {
+        moveButton.SetActive(false);
+        rotateButton.SetActive(false);
         movedStick = null;
         selectedStick = null;
         matchsticks = new List<GameObject>();
@@ -202,12 +204,11 @@ public class MatchstickPuzzle1 : MonoBehaviour
     public void yes()
     {
         setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+        tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         messageExit.SetActive(false);
-        tutorial.gameObject.SetActive(true);
-        tutorial.setUp();
-        this.transform.parent.transform.parent.gameObject.SetActive(false);
     }
     public void no()
     {

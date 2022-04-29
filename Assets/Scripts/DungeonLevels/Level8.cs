@@ -26,6 +26,10 @@ public class Level8 : MonoBehaviour
         if (data.activeLevel == int.Parse(this.gameObject.tag))
         {
             transform.GetChild(0).gameObject.SetActive(true);
+            for (int i = 0; i < transform.GetChild(0).childCount; i++)
+            {
+                transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+            }
             exit = "Exit";
         }
         else

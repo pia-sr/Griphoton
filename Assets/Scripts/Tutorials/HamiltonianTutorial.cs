@@ -19,6 +19,7 @@ public class HamiltonianTutorial : MonoBehaviour
     public GameObject ghost;
     public AudioSource typewriter;
     public AudioSource puzzleSound;
+    public Player player;
 
     public void setUp()
     {
@@ -39,15 +40,20 @@ public class HamiltonianTutorial : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        setUp();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!this.transform.parent.transform.GetChild(0).gameObject.activeSelf)
+
+        if (this.gameObject.activeSelf && player.activateTutorial)
         {
-            puzzleSound.Stop();
+            player.activateTutorial = false;
+            setUp();
+        }
+        if (player.gameObject.activeSelf)
+        {
+            puzzleSound.Pause();
         }
         if (Input.touchCount > 0 && !running && EventSystem.current != GameObject.Find("Skip"))
         {
@@ -115,11 +121,12 @@ public class HamiltonianTutorial : MonoBehaviour
             string[] words = sentences[i].Split(' ');
             typewriter.Play();
             mainDialog.text += words[0];
+            yield return new WaitForSeconds(0.33f);
             for (int j = 1; j < words.Length; ++j)
             {
-                yield return new WaitForSeconds(0.2f);
                 typewriter.Play();
                 mainDialog.text += " " + words[j];
+                yield return new WaitForSeconds(0.33f);
             }
             yield return new WaitForSeconds(0.4f);
         }

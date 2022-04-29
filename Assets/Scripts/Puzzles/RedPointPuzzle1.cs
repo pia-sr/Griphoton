@@ -55,14 +55,13 @@ public class RedPointPuzzle1 : MonoBehaviour
 
             circle.transform.localScale = new Vector3(grid.nodeRadius * 1.5f, grid.nodeRadius * 1.5f, 0);
             circle.GetComponent<SpriteRenderer>().color = Color.black;
-            Instantiate(circle, node.worldPosition - new Vector3(0,0.6f,0), Quaternion.identity, circleManager.transform);
+            Instantiate(circle, node.worldPosition, Quaternion.identity, circleManager.transform);
         }
     }
 
     private Rect tile2Rect(Transform tile)
     {
-
-        Rect rect = new Rect(tile.transform.position.x - grid.nodeRadius, tile.transform.position.y - grid.nodeRadius, grid.nodeRadius *1.5f, grid.nodeRadius*1.5f);
+        Rect rect = new Rect(tile.transform.position.x - (grid.nodeRadius * 0.75f), tile.transform.position.y - (grid.nodeRadius * 0.75f), grid.nodeRadius * 1.5f, grid.nodeRadius * 1.5f);
         return rect;
     }
 
@@ -142,7 +141,6 @@ public class RedPointPuzzle1 : MonoBehaviour
                     }
                 }
             }
-            Debug.Log(distances.Count);
         }
         if(distances.Count == 10)
         {
@@ -171,12 +169,11 @@ public class RedPointPuzzle1 : MonoBehaviour
     public void yes()
     {
         setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+        tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         message.SetActive(false);
-        tutorial.gameObject.SetActive(true);
-        tutorial.setUp();
-        this.transform.parent.transform.parent.gameObject.SetActive(false);
     }
     public void no()
     {

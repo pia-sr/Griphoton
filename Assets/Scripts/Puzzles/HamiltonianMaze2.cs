@@ -76,7 +76,7 @@ public class HamiltonianMaze2 : MonoBehaviour
                 {
                     tile.transform.localScale = new Vector3(size*5, size*5, 0);
                     tile.GetComponent<SpriteRenderer>().color = Color.grey;
-                    Instantiate(tile, node.worldPosition - new Vector3(-0.06f, 0.3f,0), Quaternion.identity, tilemanager.transform);
+                    Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
 
                     if (neighbour.gridX - node.gridX >= 0 && neighbour.gridY - node.gridY >= 0)
                     {
@@ -259,12 +259,11 @@ public class HamiltonianMaze2 : MonoBehaviour
     public void yes()
     {
         setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+        tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         message.SetActive(false);
-        tutorial.gameObject.SetActive(true);
-        tutorial.setUp();
-        this.transform.parent.transform.parent.gameObject.SetActive(false);
     }
     public void no()
     {

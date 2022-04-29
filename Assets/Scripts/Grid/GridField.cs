@@ -45,15 +45,16 @@ public class GridField : MonoBehaviour
         _gridSizeY = Mathf.RoundToInt(gridWorldSize.y / _nodeDiameter);
         CreateGrid();
     }
+    
     /*
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector2(gridWorldSize.x, gridWorldSize.y));
 
-        /*
+        
         foreach(Node node in grid)
         {
-            
+            /*
             if (node == grid[getGridSizeX()/2, getGridSizeY()/2])
             {
                 Gizmos.color = Color.red;
@@ -62,23 +63,11 @@ public class GridField : MonoBehaviour
             {
                 Gizmos.color = Color.cyan;
             }
-            Gizmos.DrawCube(node.worldPosition, new Vector3(1,1,1) * (_nodeDiameter - 0.05f));
+            Gizmos.DrawWireCube(node.worldPosition, new Vector3(1,1,1) * (_nodeDiameter - 0.05f));
         }
         
     }*/
 
-    public Node dungeonNode()
-    {
-        Node dungeon = null;
-        foreach(Node node in grid)
-        {
-            if(node.onTop == "Dungeon")
-            {
-                dungeon = node;
-            }
-        }
-        return dungeon;
-    }
     
     //Getter for the total number of nodes in the grid
     public int GetMaxGridSize
@@ -301,7 +290,7 @@ public class GridField : MonoBehaviour
     {
         for (int i = -1; i < 2; i++)
         {
-            for (int j = -1; j < 3; j++)
+            for (int j = -1; j < 4; j++)
             {
                 if(i == 0 && j == 0)
                 {
@@ -331,7 +320,7 @@ public class GridField : MonoBehaviour
     {
         for (int i = -1; i < 2; i++)
         {
-            for (int j = -1; j < 2; j++)
+            for (int j = -1; j < 4; j++)
             {
                 if (i == 0 && j == 0)
                 {

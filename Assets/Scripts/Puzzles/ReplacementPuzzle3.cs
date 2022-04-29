@@ -45,7 +45,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
         rowNumber = 6;
         row = new List<int>() { 1 };
         symbol.transform.localScale = new Vector3(size, size, 0);
-        GameObject symbol1 = Instantiate(symbol, grid.grid[1, 6].worldPosition - new Vector3(0, 0.3f, 0), Quaternion.identity, symbolManager.transform);
+        GameObject symbol1 = Instantiate(symbol, grid.grid[1, 6].worldPosition, Quaternion.identity, symbolManager.transform);
         symbol1.GetComponent<SpriteRenderer>().color = Color.red;
         inputSymbols = new List<List<int>>()
         {
@@ -71,7 +71,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
         {
             rowText.GetComponent<RectTransform>().sizeDelta = new Vector3(130, 130, 0);
             rowText.fontSize = 160;
-            Text text = Instantiate(rowText, grid.grid[0, i].worldPosition + new Vector3(0, 0.1f, 0), Quaternion.identity, rowCanvas.transform);
+            Text text = Instantiate(rowText, grid.grid[0, i].worldPosition, Quaternion.identity, rowCanvas.transform);
             text.text = (7 - i).ToString();
         }
         setUp();
@@ -79,8 +79,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
 
     private Rect tile2Rect(GameObject tile)
     {
-
-        Rect rect = new Rect(tile.transform.position.x - (grid.nodeRadius/2), tile.transform.position.y - (grid.nodeRadius/2), grid.nodeRadius, grid.nodeRadius);
+        Rect rect = new Rect(tile.transform.position.x - (grid.nodeRadius * 0.75f), tile.transform.position.y - (grid.nodeRadius * 0.75f), grid.nodeRadius * 1.5f, grid.nodeRadius * 1.5f);
         return rect;
     }
 
@@ -142,7 +141,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
                             {
 
                                 symbol.transform.localScale = new Vector3(size, size, 0);
-                                GameObject item = Instantiate(symbol, grid.grid[1 + i, rowNumber].worldPosition - new Vector3(0, 0.3f, 0), Quaternion.identity, symbolManager.transform);
+                                GameObject item = Instantiate(symbol, grid.grid[1 + i, rowNumber].worldPosition, Quaternion.identity, symbolManager.transform);
                                 if (row[i].ToString() == "0")
                                 {
                                     item.GetComponent<SpriteRenderer>().color = Color.black;
@@ -202,7 +201,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
                             symbol.transform.localScale = new Vector3(grid.nodeRadius*1.5f, grid.nodeRadius * 1.5f, 0);
                             Color tinted = new Color(0.5566038f, 0.4865907f, 0.4965926f, 1);
                             symbol.GetComponent<SpriteRenderer>().color = tinted;
-                            Instantiate(symbol, chosenSymbol.transform.position + new Vector3(0,-0.3f,0.5f), Quaternion.identity, selectedTiles.transform);
+                            Instantiate(symbol, chosenSymbol.transform.position + new Vector3(0,0,0.5f), Quaternion.identity, selectedTiles.transform);
 
                         }
                         else
@@ -351,12 +350,11 @@ public class ReplacementPuzzle3 : MonoBehaviour
     public void yes()
     {
         setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+        tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         messageExit.SetActive(false);
-        tutorial.gameObject.SetActive(true);
-        tutorial.setUp();
-        this.transform.parent.transform.parent.gameObject.SetActive(false);
     }
     public void no()
     {

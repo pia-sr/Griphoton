@@ -346,13 +346,12 @@ public class RoomPuzzle2 : MonoBehaviour
 
     public void yes()
     {
-        tutorial.setUp();
         setUp();
+        this.transform.parent.transform.parent.gameObject.SetActive(false);
+        tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         message.SetActive(false);
-        tutorial.gameObject.SetActive(true);
-        this.transform.parent.transform.parent.gameObject.SetActive(false);
     }
     public void no()
     {

@@ -27,6 +27,10 @@ public class Level1 : MonoBehaviour
         {
 
             transform.GetChild(0).gameObject.SetActive(true);
+            for (int i = 0; i < transform.GetChild(0).childCount; i++)
+            {
+                transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+            }
             exit = "Exit";
         }
         else

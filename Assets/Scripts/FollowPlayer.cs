@@ -31,8 +31,14 @@ public class FollowPlayer : MonoBehaviour
             // update position
             var CamRect = this.GetComponent<Camera>().rect;
             Vector3 targetPosition = Target.position + Offset;
-            Vector3 targetBoundsMax = Target.position + new Vector3(8.6f, 4.5f, 0);
-            Vector3 targetBoundsMin = Target.position - new Vector3(8.6f, 4.5f, 0);
+            //source; https://forum.unity.com/threads/convert-screen-width-to-distance-in-world-space.1072694/
+            float aspect = (float)Screen.width / Screen.height;
+
+            float worldHeight = Camera.main.orthographicSize * 2;
+
+            float worldWidth = (worldHeight * aspect) /2;
+            Vector3 targetBoundsMax = Target.position + new Vector3(worldWidth, worldHeight/2, 0);
+            Vector3 targetBoundsMin = Target.position - new Vector3(worldWidth, worldHeight/2, 0);
             if (targetBoundsMax.x < grid.grid[grid.getGridSizeX() - 1, 0].worldPosition.x && targetBoundsMin.y > grid.grid[grid.getGridSizeX() - 1, 0].worldPosition.y &&
                 targetBoundsMax.y < grid.grid[0, grid.getGridSizeY() - 1].worldPosition.y && targetBoundsMin.x > grid.grid[0, grid.getGridSizeY() - 1].worldPosition.x)
             {

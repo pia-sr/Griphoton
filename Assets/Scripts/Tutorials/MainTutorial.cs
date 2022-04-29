@@ -106,7 +106,6 @@ public class MainTutorial : MonoBehaviour
                 griphoton.SetActive(true);
                 options.SetActive(true);
                 player.SetActive(true);
-                player.transform.position = grid.grid[data.xPos, data.yPos].worldPosition;
                 player.GetComponent<Player>().pause();
                 player.GetComponent<Player>().unpause();
                 running = true;
@@ -169,15 +168,21 @@ public class MainTutorial : MonoBehaviour
                 case 11:
                     movement.SetActive(false);
                     griphoton.SetActive(true);
-                    sentence = "This here is my house.| You can recognise it by its black roof.| \nIf you tap on my house, you can enter the dungeon.| I will explain more about the dungeon once you drop by.| But for now, I will let you explore Griphoton a bit. ";
+                    sentence = "This here is my house.| You can recognise it by its black roof.| You can always return to my house if you press the house button underneath the settings button.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 12:
+                    movement.SetActive(false);
+                    griphoton.SetActive(true);
+                    sentence = "If you tap on my house, you can enter the dungeon.| I will explain more about the dungeon once you drop by.| But for now, I will let you explore Griphoton a bit. ";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 13:
                     options.SetActive(true);
                     sentence = "If you have any questions, there is a help button in the settings| \nYou can also access the setting or leave the game by tapping the setting icon.| \nGood luck, " + playerName + "!";
                     StartCoroutine(WordbyWord(sentence));
                     break;
-                case 13:
+                case 14:
                     player.SetActive(true);
                     player.GetComponent<Player>().pause();
                     player.GetComponent<Player>().unpause();
@@ -202,11 +207,12 @@ public class MainTutorial : MonoBehaviour
             string[] words = sentences[i].Split(' ');
             typewriter.Play();
             mainDialog.text += words[0];
+            yield return new WaitForSeconds(0.33f);
             for (int j = 1; j < words.Length; ++j)
             {
-                yield return new WaitForSeconds(0.2f);
                 typewriter.Play();
                 mainDialog.text += " " + words[j];
+                yield return new WaitForSeconds(0.33f);
             }
             yield return new WaitForSeconds(0.4f);
         }
@@ -271,7 +277,7 @@ public class MainTutorial : MonoBehaviour
         Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
         question.text = "Where do I find the dungeon?";
         Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
-        answer.text = "The entrance to the dungeon is in Spencer's house. Just find the house with Spencer's name on it.";
+        answer.text = "The entrance to the dungeon is in Spencer's house. Just find the house with the black roof or simply press the house button on the right side of your screen.";
     }
     public void Question4()
     {
@@ -364,7 +370,7 @@ public class MainTutorial : MonoBehaviour
         else
         {
             data.tutorial = true;
-            data.namePlayer = "";
+            data.namePlayer = null;
             data.SaveGame();
             Application.Quit();
 
@@ -408,4 +414,15 @@ public class MainTutorial : MonoBehaviour
             }
         }
     }
+
+    public void Dungeon()
+    {
+
+        player.GetComponent<Player>().pause();
+        Node dungeon = grid.tagToNode("Dungeon");
+        player.transform.position = grid.grid[dungeon.gridX, dungeon.gridY - 2].worldPosition;
+        player.GetComponent<Player>().unpause();
+    }
+
+
 }

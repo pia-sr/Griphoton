@@ -139,11 +139,14 @@ public class DungeonTutorial : MonoBehaviour
         for (int i = 0; i < sentences.Length; i++)
         {
             string[] words = sentences[i].Split(' ');
+            typewriter.Play();
             mainDialog.text += words[0];
+            yield return new WaitForSeconds(0.33f);
             for (int j = 1; j < words.Length; ++j)
             {
-                yield return new WaitForSeconds(0.2f);
+                typewriter.Play();
                 mainDialog.text += " " + words[j];
+                yield return new WaitForSeconds(0.33f);
             }
             yield return new WaitForSeconds(0.4f);
         }

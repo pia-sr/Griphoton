@@ -54,11 +54,27 @@ public class Skeleton2 : MonoBehaviour
         coroutineStart = false;
         healthBar = this.transform.GetChild(0).GetChild(0).GetComponent<HealthBar>();
         healthBar.SetHealthBarValue(1);
+        xInput = 0;
+        yInput = -1;
+
+
+        animator.SetFloat("XInput", xInput);
+        animator.SetFloat("YInput", yInput);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (xInput == 0 && yInput == 0)
+        {
+
+            xInput = 0;
+            yInput = -1;
+
+
+            animator.SetFloat("XInput", xInput);
+            animator.SetFloat("YInput", yInput);
+        }
         if (player.GetComponent<Player>().leaveLevel)
         {
             begin();
