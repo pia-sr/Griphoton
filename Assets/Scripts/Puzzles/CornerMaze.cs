@@ -6,48 +6,39 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridField))]
 public class CornerMaze : MonoBehaviour
 {
+    //public field objects
     public GridField grid;
     public GameObject tile;
     public GameObject tilemanager;
     public GameObject path;
     public GameObject line;
-    public Text numbers;
-    public GameObject griphoton;
-    public GameObject player;
-    private List<Node> selectedTiles;
-    private Node startTile;
-    private List<Vector3> linePath;
-    private List<Node> corners;
-    public Canvas canvas;
 
-    public CornerTutorial tutorial;
+    //UI
+    public Text numbers;
+    public Canvas canvas;
     public GameObject message;
 
-    private LineRenderer pathRend;
+    //public variables to communicate with other scripts
+    public GameObject griphoton;
+    public GameObject player;
+    public CornerTutorial tutorial;
 
-    void Awake()
-    {
-        grid = GetComponent<GridField>();
-    }
-    // Start is called before the first frame update
-
-    private void setUp()
-    {
-        for (int i = 0; i < path.transform.childCount; i++)
-        {
-            Destroy(path.transform.GetChild(i).gameObject);
-        }
-        selectedTiles.Clear();
-        selectedTiles.Add(startTile);
-    }
-
+    //private variables
+    private List<Node> _selectedTiles;
+    private Node _startTile;
+    private List<Vector3> _linePath;
+    private List<Node> _corners;
+    private LineRenderer _pathRend;
+    
+    //Start is called before the first frame update
+    //Sets up the tiles and numbers, since they do not change during the game
     void Start()
     {
         float size = (grid.nodeRadius * 2) - 0.015f;
-        startTile = grid.grid[0, 0];
-        selectedTiles = new List<Node>()
+        _startTile = grid.grid[0, 0];
+        _selectedTiles = new List<Node>()
         {
-            startTile
+            _startTile
         };
         foreach (Node node in grid.grid)
         {
@@ -58,7 +49,7 @@ public class CornerMaze : MonoBehaviour
 
         }
 
-        corners = new List<Node>()
+        _corners = new List<Node>()
         {
             grid.grid[0,1],
             grid.grid[0,2],
@@ -69,11 +60,11 @@ public class CornerMaze : MonoBehaviour
             grid.grid[4,1],
             grid.grid[4,3]
         };
-        for (int i = 0; i < corners.Count; i++)
+        for (int i = 0; i < _corners.Count; i++)
         {
             numbers.fontSize = 150;
             numbers.GetComponent<RectTransform>().sizeDelta = new Vector3(160, 160, 0);
-            Instantiate(numbers, corners[i].worldPosition, Quaternion.identity, canvas.transform);
+            Instantiate(numbers, _corners[i].worldPosition, Quaternion.identity, canvas.transform);
         }
         canvas.transform.GetChild(0).GetComponent<Text>().text = "3";
         canvas.transform.GetChild(1).GetComponent<Text>().text = "3";
@@ -83,20 +74,24 @@ public class CornerMaze : MonoBehaviour
         canvas.transform.GetChild(5).GetComponent<Text>().text = "2";
         canvas.transform.GetChild(6).GetComponent<Text>().text = "1";
         canvas.transform.GetChild(7).GetComponent<Text>().text = "2";
-        setUp();
+        SetUp();
     }
 
-
-    private Rect tile2Rect(Transform tile)
+    //Sets up the path to the start state
+    private void SetUp()
     {
-
-        Rect rect = new Rect(tile.transform.position.x - grid.nodeRadius, tile.transform.position.y - grid.nodeRadius, grid.nodeRadius * 2, grid.nodeRadius * 2);
-        return rect;
+        for (int i = 0; i < path.transform.childCount; i++)
+        {
+            Destroy(path.transform.GetChild(i).gameObject);
+        }
+        _selectedTiles.Clear();
+        _selectedTiles.Add(_startTile);
     }
 
     // Update is called once per frame
     void Update()
     {
+        //waits for user's touch to place a path
         if (Input.touchCount > 0 && !tutorial.inactive)
         {
             for (int i = 0; i < tilemanager.transform.childCount; i++)
@@ -104,21 +99,23 @@ public class CornerMaze : MonoBehaviour
 
                 Touch touch = Input.GetTouch(0);
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-                Rect rect = tile2Rect(tilemanager.transform.GetChild(i));
+                Rect rect = Object2Rect(tilemanager.transform.GetChild(i));
                 if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                 {
                     Node currentNode = grid.GetNodeFromWorldPos(rect.center);
                     Node neighbour = null;
                     foreach (Node node in grid.GetNodeNeighbours(currentNode))
                     {
-                        if(selectedTiles[selectedTiles.Count-1] == currentNode && currentNode != startTile)
+                        //if the user touches the last bit of path it will be removed
+                        if(_selectedTiles[_selectedTiles.Count-1] == currentNode && currentNode != _startTile)
                         {
                             GameObject line = path.transform.GetChild(path.transform.childCount - 1).gameObject;
                             Destroy(line);
-                            selectedTiles.Remove(currentNode);
+                            _selectedTiles.Remove(currentNode);
                             break;
                         }
-                        else if (selectedTiles[selectedTiles.Count-1] == node && !selectedTiles.Contains(currentNode))
+                        //If the tile is empty and next to the last bit of path, a new bit of path is added
+                        else if (_selectedTiles[_selectedTiles.Count-1] == node && !_selectedTiles.Contains(currentNode))
                         {
                             neighbour = node;
                         }
@@ -126,54 +123,62 @@ public class CornerMaze : MonoBehaviour
                     if(neighbour != null)
                     {
                         DrawLine(currentNode.worldPosition, neighbour.worldPosition);
-                        selectedTiles.Add(currentNode);
+                        _selectedTiles.Add(currentNode);
                     }
 
 
                 }
 
             }
-            if (checkWin())
+
+            //if the player has won the game, they will leave the house and the puzzle will be set as solved
+            if (CheckWin())
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
                 this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
 
         }
     }
 
+    //Function to create a rectagle on top of a given object to set rectangular boundaries for that object
+    private Rect Object2Rect(Transform tile)
+    {
+        Rect rect = new Rect(tile.transform.position.x - grid.nodeRadius, tile.transform.position.y - grid.nodeRadius, grid.nodeRadius * 2, grid.nodeRadius * 2);
+        return rect;
+    }
+
+    //Function to create a line between the two given vectors
     private void DrawLine(Vector3 start, Vector3 end)
     {
-
         start += new Vector3(0, 0, -0.1f);
         end += new Vector3(0, 0, -0.1f);
         GameObject currentLine = Instantiate(line, start, Quaternion.identity, path.transform);
-        linePath = new List<Vector3>()
+        _linePath = new List<Vector3>()
         {
             start,
             end
         };
-        pathRend = currentLine.GetComponent<LineRenderer>();
-        pathRend.material.color = Color.black;
-        pathRend.positionCount = linePath.Count;
-        pathRend.SetPositions(linePath.ToArray());
-
-
-
+        _pathRend = currentLine.GetComponent<LineRenderer>();
+        _pathRend.material.color = Color.black;
+        _pathRend.positionCount = _linePath.Count;
+        _pathRend.SetPositions(_linePath.ToArray());
     }
-    private bool corner(Node node)
+
+    //Function to check if the node has a corner on top of it
+    private bool IsCorner(Node node)
     {
         if(path.transform.childCount > 1)
         {
             List<float> differences = new List<float>();
             for (int i = 0; i < path.transform.childCount; i++)
             {
-                pathRend = path.transform.GetChild(i).gameObject.GetComponent<LineRenderer>();
-                if (pathRend.GetPosition(0) + new Vector3(0, 0, 0.1f) == node.worldPosition || pathRend.GetPosition(pathRend.positionCount - 1) + new Vector3(0, 0, 0.1f) == node.worldPosition)
+                _pathRend = path.transform.GetChild(i).gameObject.GetComponent<LineRenderer>();
+                if (_pathRend.GetPosition(0) + new Vector3(0, 0, 0.1f) == node.worldPosition || _pathRend.GetPosition(_pathRend.positionCount - 1) + new Vector3(0, 0, 0.1f) == node.worldPosition)
                 {
-                    float dif = pathRend.GetPosition(0).x - pathRend.GetPosition(pathRend.positionCount - 1).x;
+                    float dif = _pathRend.GetPosition(0).x - _pathRend.GetPosition(_pathRend.positionCount - 1).x;
                     differences.Add(dif);
                 }
             }
@@ -184,14 +189,15 @@ public class CornerMaze : MonoBehaviour
             return true;
         }
         return false;
-        
+     
     }
 
-    private bool checkWin()
+    //Function to check if the player has solved the puzzle
+    private bool CheckWin()
     {
         foreach(Node node in grid.grid)
         {
-            if (selectedTiles[selectedTiles.Count - 1] != grid.grid[4, 4])
+            if (_selectedTiles[_selectedTiles.Count - 1] != grid.grid[4, 4])
             {
                 return false;
             }
@@ -201,13 +207,13 @@ public class CornerMaze : MonoBehaviour
                 if(text.transform.position == node.worldPosition)
                 {
                     int counter = int.Parse(text.GetComponent<Text>().text);
-                    if (corner(node))
+                    if (IsCorner(node))
                     {
                         counter--;
                     }
                     foreach(Node neighbour in grid.GetNodeNeighbours(node))
                     {
-                        if (corner(neighbour)){
+                        if (IsCorner(neighbour)){
                             counter--;
                         }
                     }
@@ -221,13 +227,18 @@ public class CornerMaze : MonoBehaviour
         }
         return true;
     }
+
+    //Function for the restart button
     public void restart()
     {
         if (!tutorial.inactive)
         {
-            setUp();
+            SetUp();
         }
     }
+
+    //Function for the leave button
+    //Open up a panel to check if the user really wants to leave
     public void leave()
     {
         if (!tutorial.inactive)
@@ -238,15 +249,18 @@ public class CornerMaze : MonoBehaviour
 
     }
 
+    //Function for the yes button, if the user really wants to leave
     public void yes()
     {
-        setUp();
+        SetUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         message.SetActive(false);
     }
+
+    //Function for the no button, if the user does not want to leave
     public void no()
     {
         tutorial.inactive = false;

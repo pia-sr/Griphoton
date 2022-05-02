@@ -2,34 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//[RequireComponent(typeof(GridField))]
+//Code is based on the code given by our lecturer in a module last year
 public class Pathfinder : MonoBehaviour
 {
-    public GridField _grid;
+    public GridField grid;
     public List<Node> path;
     
-    /*
-    void Awake()
-    {
-        _grid = GetComponent<GridField>();
-    }*/
 
     //With the use of the heap, FindPath finds a path between startPos and targetPos
+    //This function is used to find a path between houses
     public List<Node> FindPath(Vector3 startPos, Vector3 targetPos)
     {
-        Node startNode = _grid.GetNodeFromWorldPos(startPos);
-        Node targetNode = _grid.GetNodeFromWorldPos(targetPos);
+        Node startNode = grid.GetNodeFromWorldPos(startPos);
+        Node targetNode = grid.GetNodeFromWorldPos(targetPos);
 
-        Heap<Node> openList = new Heap<Node>(_grid.GetMaxGridSize);
+        Heap<Node> openList = new Heap<Node>(grid.GetMaxGridSize);
         HashSet<Node> closedList = new HashSet<Node>();
         List<Node> path = new List<Node>();
         while (!targetNode.isWalkable)
         {
-            targetNode = _grid.grid[targetNode.gridX, targetNode.gridY-1];
+            targetNode = grid.grid[targetNode.gridX, targetNode.gridY-1];
         }
         while(!startNode.isWalkable)
         {
-            startNode = _grid.grid[startNode.gridX, startNode.gridY-1];
+            startNode = grid.grid[startNode.gridX, startNode.gridY-1];
         }
 
         openList.insert(startNode);
@@ -43,10 +39,8 @@ public class Pathfinder : MonoBehaviour
                 return path;
             }
 
-            //Since only the ghosts use pathfinding it only accesses the neighbours the ghosts can walk on
-            foreach (Node neighbour in _grid.GetNodeNeighbours(currentNode))
+            foreach (Node neighbour in grid.GetNodeNeighbours(currentNode))
             {
-                // For Pac Man neighbour.isGhostHouse must be added!
                 if (!neighbour.isWalkable || closedList.Contains(neighbour))
                 {
                     continue;
@@ -66,22 +60,25 @@ public class Pathfinder : MonoBehaviour
         }
         return path;
 
-    }//With the use of the heap, FindPath finds a path between startPos and targetPos
+    }
+
+    //With the use of the heap, FindPath finds a path between startPos and targetPos
+    //This function is only used to find a path to walk by the monsters in the dungeon
     public List<Node> FindPathEnemies(Vector3 startPos, Vector3 targetPos)
     {
-        Node startNode = _grid.GetNodeFromWorldPos(startPos);
-        Node targetNode = _grid.GetNodeFromWorldPos(targetPos);
+        Node startNode = grid.GetNodeFromWorldPos(startPos);
+        Node targetNode = grid.GetNodeFromWorldPos(targetPos);
 
-        Heap<Node> openList = new Heap<Node>(_grid.GetMaxGridSize);
+        Heap<Node> openList = new Heap<Node>(grid.GetMaxGridSize);
         HashSet<Node> closedList = new HashSet<Node>();
         List<Node> path = new List<Node>();
-        List<Node> neighboursTarget = _grid.GetNodeNeighboursDiagonal(targetNode);
-        List<Node> neighboursStart = _grid.GetNodeNeighboursDiagonal(startNode);
+        List<Node> neighboursTarget = grid.GetNodeNeighboursDiagonal(targetNode);
+        List<Node> neighboursStart = grid.GetNodeNeighboursDiagonal(startNode);
         int counterTarget = 0;
         int counterStart = 0;
         if(targetNode == PlayerNode())
         {
-            targetNode = closesNode(startNode);
+            targetNode = ClosesNode(startNode);
         }
         else if (!targetNode.isWalkable)
         {
@@ -105,10 +102,8 @@ public class Pathfinder : MonoBehaviour
                 return path;
             }
 
-            //Since only the ghosts use pathfinding it only accesses the neighbours the ghosts can walk on
-            foreach (Node neighbour in _grid.GetNodeNeighbours(currentNode))
+            foreach (Node neighbour in grid.GetNodeNeighbours(currentNode))
             {
-                // For Pac Man neighbour.isGhostHouse must be added!
                 if (!neighbour.isWalkable || closedList.Contains(neighbour) || neighbour == PlayerNode())
                 {
                     continue;
@@ -129,37 +124,39 @@ public class Pathfinder : MonoBehaviour
         return path;
 
     }
-    
-    
+
+
+    //With the use of the heap, FindPath finds a path between startPos and targetPos
+    //This function is only used to find a path to walk by the player
     public List<Node> FindPathPlayer(Vector3 startPos, Vector3 targetPos)
     {
-        Node startNode = _grid.GetNodeFromWorldPos(startPos);
-        Node targetNode = _grid.GetNodeFromWorldPos(targetPos);
+        Node startNode = grid.GetNodeFromWorldPos(startPos);
+        Node targetNode = grid.GetNodeFromWorldPos(targetPos);
 
-        Heap<Node> openList = new Heap<Node>(_grid.GetMaxGridSize);
+        Heap<Node> openList = new Heap<Node>(grid.GetMaxGridSize);
         HashSet<Node> closedList = new HashSet<Node>();
         List<Node> path = new List<Node>();
-        List<Node> neighboursTarget = _grid.GetNodeNeighboursDiagonal(targetNode);
-        List<Node> neighboursStart = _grid.GetNodeNeighboursDiagonal(startNode);
+        List<Node> neighboursTarget = grid.GetNodeNeighboursDiagonal(targetNode);
+        List<Node> neighboursStart = grid.GetNodeNeighboursDiagonal(startNode);
         int counterTarget = 0;
         int counterStart = 0;
         if(targetNode.onTop == "House")
         {
-            Node houseCenter = _grid.tagToNode(targetNode.owner);
-            targetNode = _grid.grid[houseCenter.gridX, houseCenter.gridY - 2];
+            Node houseCenter = grid.TagToNode(targetNode.owner);
+            targetNode = grid.grid[houseCenter.gridX, houseCenter.gridY - 2];
         }
-        else if (_grid.ghostNames().Contains(targetNode.onTop) || targetNode.onTop == "Dungeon")
+        else if (grid.ghostNames().Contains(targetNode.onTop) || targetNode.onTop == "Dungeon")
         {
-            targetNode = _grid.grid[targetNode.gridX, targetNode.gridY - 2];
+            targetNode = grid.grid[targetNode.gridX, targetNode.gridY - 2];
         }
         else
         {
-            while (!targetNode.isWalkable || _grid.getEnemiesPos().Contains(targetNode))
+            while (!targetNode.isWalkable || grid.GetEnemiesPos().Contains(targetNode))
             {
                 targetNode = neighboursTarget[counterTarget];
                 counterTarget++;
             }
-            while (!startNode.isWalkable || _grid.getEnemiesPos().Contains(startNode))
+            while (!startNode.isWalkable || grid.GetEnemiesPos().Contains(startNode))
             {
                 startNode = neighboursStart[counterStart];
                 counterStart++;
@@ -179,11 +176,9 @@ public class Pathfinder : MonoBehaviour
                 return path;
             }
 
-            //Since only the ghosts use pathfinding it only accesses the neighbours the ghosts can walk on
-            foreach (Node neighbour in _grid.GetNodeNeighbours(currentNode))
+            foreach (Node neighbour in grid.GetNodeNeighbours(currentNode))
             {
-                // For Pac Man neighbour.isGhostHouse must be added!
-                if (!neighbour.isWalkable || closedList.Contains(neighbour) || _grid.getEnemiesPos().Contains(neighbour))
+                if (!neighbour.isWalkable || closedList.Contains(neighbour) || grid.GetEnemiesPos().Contains(neighbour))
                 {
                     continue;
                 }
@@ -204,7 +199,7 @@ public class Pathfinder : MonoBehaviour
 
     }
 
-    //Returns a path to the script of the ghost who is named
+    //Returns the calculated path
     public List<Node> TraceRoute(Node from, Node to)
     {
         bool done = false;
@@ -237,16 +232,19 @@ public class Pathfinder : MonoBehaviour
         return distanceX > distanceY ? 13*distanceY + 12 * distanceX : 13* distanceX + 12 * distanceY;
     }
 
+    //finds the node on which the player is currently standing on
     private Node PlayerNode()
     {
         GameObject player = GameObject.Find("Player");
-        return _grid.GetNodeFromWorldPos(player.transform.position);
+        return grid.GetNodeFromWorldPos(player.transform.position);
     }
-    private Node closesNode(Node start)
+
+    //finds the node next to the player which is closer to the given node
+    private Node ClosesNode(Node start)
     {
         float initialDistance = 0;
         Node closesTarget = null;
-        foreach(Node neighbour in _grid.GetNodeNeighbours(PlayerNode()))
+        foreach(Node neighbour in grid.GetNodeNeighbours(PlayerNode()))
         {
             float distance = Vector2.Distance(start.worldPosition, neighbour.worldPosition);
             if(distance < 0)
@@ -262,6 +260,7 @@ public class Pathfinder : MonoBehaviour
         return closesTarget;
     }
 
+    //returns the added distance for the paths
     public int GetDistancePath(Node from, Node to)
     {
         int distanceX = Mathf.Abs(to.gridX - from.gridX);
@@ -283,7 +282,7 @@ public class Pathfinder : MonoBehaviour
         return distanceX * value + distanceY * value;
     }
 
-    //Returns a path to the script of the ghost who is named
+    //Returns the calculated path and sets the tags for all the path nodes
     public List<Node> TraceRoutePath(Node from, Node to)
     {
         bool done = false;

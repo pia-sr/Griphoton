@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//Code is based on the code given by our lecturer in a module last year
 public class Node : IHeapItem<Node>
 {
     //The position of the node
@@ -9,17 +11,18 @@ public class Node : IHeapItem<Node>
 
     public string owner;
 
-    //Bool to determine if a wall is on the node
+    //Bool to determine if a node is walkable
     public bool isWalkable = true;
 
+    //tag of the node
     public string onTop;
 
+    //value of a tile on that node
     public int tileValue;
 
     private int indexHeap;
 
-    public bool button;
-
+    //List of all the unwalkable tags
     private List<string> unwalkable = new List<string>()
     {
         "House",
@@ -52,7 +55,8 @@ public class Node : IHeapItem<Node>
 
     }
 
-    public void setItemOnTop(string itemOnTop)
+    //Function to set a tag and if the node is walkable
+    public void SetItemOnTop(string itemOnTop)
     {
         onTop = itemOnTop;
         if(unwalkable.Contains(itemOnTop))
@@ -96,8 +100,8 @@ public class Node : IHeapItem<Node>
         return -compare;
     }
 
-
-    public void increaseTileValue(int value)
+    //Function to increase the tile value
+    public void IncreaseTileValue(int value)
     {
         tileValue += value;
     }

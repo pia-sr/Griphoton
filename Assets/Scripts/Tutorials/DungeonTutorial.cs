@@ -7,66 +7,78 @@ using UnityEngine.UI;
 
 public class DungeonTutorial : MonoBehaviour
 {
+    //UI
     public Text mainDialog;
-    private Game data;
-    private int counter;
-    public GameObject player;
-    public GameObject dungeon;
     public GameObject skipButton;
     public GameObject touchAni;
-    private bool running;
-    private bool start;
     public GameObject lexicon;
     public GameObject questions;
     public GameObject options;
     public GameObject message;
-    private int clickIndex;
     public GameObject ghost;
+
+    //sounds
     public AudioSource typewriter;
 
+
+    //public variables to communicate with other scripts
+    public GameObject player;
+    public GameObject dungeon;
+
+    //private variables
+    private bool _running;
+    private bool _start;
+    private int _clickIndex;
+    private int _counter;
+    private Game _data;
+
+    //on awake it will look for the game data and load the game
     private void Awake()
     {
-        data = GameObject.Find("GameData").GetComponent<Game>();
-        data.loadGame();
+        _data = GameObject.Find("GameData").GetComponent<Game>();
+        _data.loadGame();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        if (data.tutorial)
+        //If the user is for the first time in the dungeon, it will go through the dungeon
+        if (_data.tutorial)
         {
             ghost.SetActive(true);
-            data.tutorial = false;
-            running = false;
-            counter = 0;
-            string firstSentence = "You came, " + data.namePlayer + "!";
+            _data.tutorial = false;
+            _running = false;
+            _counter = 0;
+            string firstSentence = "You came, " + _data.namePlayer + "!";
             StartCoroutine(WordbyWord(firstSentence));
 
         }
+        //if not no tutorial will start
         else
         {
             options.SetActive(true);
-            this.transform.parent.transform.parent.gameObject.SetActive(false);
+            this.transform.parent.parent.gameObject.SetActive(false);
             player.SetActive(true);
-            player.GetComponent<Player>().pause();
-            player.GetComponent<Player>().unpause();
-            running = true;
-            start = false;
+            player.GetComponent<Player>().Pause();
+            player.GetComponent<Player>().Unpause();
+            _running = true;
+            _start = false;
             dungeon.SetActive(true);
-            this.transform.parent.transform.parent.gameObject.SetActive(false);
+            this.transform.parent.parent.gameObject.SetActive(false);
 
         }
-        if (!data.sound)
+        //if the sound is supposed to be off, the sound will be muted
+        if (!_data.sound)
         {
             muteSound();
         }
-        //else enable script and gameobjects;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.touchCount > 0 && !running && EventSystem.current != GameObject.Find("Skip"))
+        //Code waits for the user's touch to go to the next text bit
+        if (Input.touchCount > 0 && !_running && EventSystem.current != GameObject.Find("Skip"))
         {
 
             touchAni.GetComponent<TouchAnimation>().running = false;
@@ -80,12 +92,15 @@ public class DungeonTutorial : MonoBehaviour
 
             }
             touchAni.SetActive(false);
-            start = true;
+            _start = true;
         }
-        else if (start)
+
+
+        //Text sequences
+        else if (_start)
         {
-            start = false;
-            switch (counter)
+            _start = false;
+            switch (_counter)
             {
                 case 1:
                     ghost.SetActive(false);
@@ -117,12 +132,12 @@ public class DungeonTutorial : MonoBehaviour
                     break;
                 case 7:
                     player.SetActive(true);
-                    player.GetComponent<Player>().pause();
-                    player.GetComponent<Player>().unpause();
-                    this.transform.parent.transform.parent.gameObject.SetActive(false);
-                    running = true;
-                    start = false;
-                    data.tutorial = false;
+                    player.GetComponent<Player>().Pause();
+                    player.GetComponent<Player>().Unpause();
+                    this.transform.parent.parent.gameObject.SetActive(false);
+                    _running = true;
+                    _start = false;
+                    _data.tutorial = false;
                     break;
             }
         }
@@ -130,10 +145,11 @@ public class DungeonTutorial : MonoBehaviour
     }
 
 
+    //Function to type every sentences one word at a time
     //Source: https://answers.unity.com/questions/1424042/animated-text-word-by-word-not-letter-by-letter-co.html
     IEnumerator WordbyWord(string sentence)
     {
-        running = true;
+        _running = true;
         string[] sentences = sentence.Split('|');
         mainDialog.text = "";
         for (int i = 0; i < sentences.Length; i++)
@@ -150,142 +166,153 @@ public class DungeonTutorial : MonoBehaviour
             }
             yield return new WaitForSeconds(0.4f);
         }
-        ++counter;
-        running = false;
+        ++_counter;
+        _running = false;
         touchAni.SetActive(true);
     }
+
+    //Function to skip the tutorial
     public void skipTutorial()
     {
         options.SetActive(true);
-        this.transform.parent.transform.parent.gameObject.SetActive(false);
+        this.transform.parent.parent.gameObject.SetActive(false);
         player.SetActive(true);
-        player.GetComponent<Player>().pause();
-        player.GetComponent<Player>().unpause();
-        running = true;
-        start = false;
+        player.GetComponent<Player>().Pause();
+        player.GetComponent<Player>().Unpause();
+        _running = true;
+        _start = false;
 
     }
 
+    //Questions and Answers for the help section
     public void Question1()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "How do I walk again?";
-        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Just tap on the screen and you will walk over to the place you tapped on.";
     }
     public void Question2()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "What am I supposed to do?";
-        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "You need to fight the monsters to reach the end of the dungeon with the portal back to your world. ";
     }
     public void Question3()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "How can I get stronger?";
-        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Your sword can get stronger by solving the puzzles of Griphoton's residents. you can leave the dungeon at any time to solve a puzzle.";
     }
     public void Question4()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "How do I fight again?";
-        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "You need to get close to the monster you want to fight and then press the button in the right corner of your screen to attack them. The button only works if you are standing next to a monster.";
     }
     public void Question5()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "Can I block the monster's attack?";
-        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Yes, you can try blocking them by pressing the button in the left corner of the screen. The button only works if you are standing next to a monster.";
     }
     public void Question6()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "How do I leave the dungeon?";
-        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "When you close the question overview, by tapping on the X in the right corner, you will go back to the game. There you will see on the right of your screen the exit icon. Just tap on it to leave the dungeon.";
     }
     public void Question7()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "How can I leave the game?";
-        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "You will find a button in the settings when you are back in Griphoton to leave the game.";
     }
     public void Question8()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "Where can I find the settings?";
-        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "When you close the question overview, by tapping on the X in the right corner, you will go back to the game. There you will see on the right of your screen the home icon. When you click that you are back in griphoton and can access the setting by pressing the settings button in the right corner of your screen.";
     }
 
+    //close function for either closing a specific question or the question overview
     public void CloseHelp()
     {
-        if (questions.transform.GetChild(0).transform.GetChild(0).gameObject.activeSelf)
+        if (questions.transform.GetChild(0).GetChild(0).gameObject.activeSelf)
         {
             questions.transform.GetChild(1).gameObject.SetActive(true);
-            questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+            questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
         }
         else
         {
             options.SetActive(true);
             Time.timeScale = 1;
-            player.GetComponent<Player>().unpause();
+            player.GetComponent<Player>().Unpause();
             questions.SetActive(false);
         }
 
     }
+
+    //Function to open the question overview
     public void Help()
     {
         options.SetActive(false);
-        player.GetComponent<Player>().pause();
+        player.GetComponent<Player>().Pause();
         Time.timeScale = 0;
         questions.SetActive(true);
     }
 
 
+    //Function for the exit button
+    //Open up a panel to check if the user really wants to leave
     public void Exit()
     {
         message.SetActive(true);
 
     }
 
-
+    //Function for the yes button
+    //The game will be saved and the app will be closed
     public void Yes()
     {
         Time.timeScale = 1;
-        data.yPos = 150;
-        data.xPos = 150;
-        data.SaveGame();
+        _data.SaveGame();
         SceneManager.LoadScene("Upperworld");
 
     }
+
+    //Function to open the monster overview
     public void OpenLexicon()
     {
-        clickIndex = 0;
+        questions.SetActive(false);
+        _clickIndex = 0;
         lexicon.SetActive(true);
     }
 
+    //Function to close the monster overview
     public void CloseLexicon()
     {
         for (int i = 1; i < lexicon.transform.GetChild(0).transform.GetChild(0).transform.childCount; i++)
@@ -294,25 +321,32 @@ public class DungeonTutorial : MonoBehaviour
         }
         lexicon.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
         lexicon.SetActive(false);
+        questions.SetActive(true);
     }
 
+    //Function for the no button
     public void No()
     {
         message.SetActive(false);
     }
+
+    //Function of the next button in the monster overview to go to the next monster
     public void next()
     {
-        lexicon.transform.GetChild(0).transform.GetChild(0).transform.GetChild(clickIndex).gameObject.SetActive(false);
-        clickIndex++;
-        lexicon.transform.GetChild(0).transform.GetChild(0).transform.GetChild(clickIndex).gameObject.SetActive(true);
-    }
-    public void previous()
-    {
-        lexicon.transform.GetChild(0).transform.GetChild(0).transform.GetChild(clickIndex).gameObject.SetActive(false);
-        clickIndex--;
-        lexicon.transform.GetChild(0).transform.GetChild(0).transform.GetChild(clickIndex).gameObject.SetActive(true);
+        lexicon.transform.GetChild(0).transform.GetChild(0).transform.GetChild(_clickIndex).gameObject.SetActive(false);
+        _clickIndex++;
+        lexicon.transform.GetChild(0).transform.GetChild(0).transform.GetChild(_clickIndex).gameObject.SetActive(true);
     }
 
+    //Function of the previous button in the monster overview to go to the previous monster
+    public void previous()
+    {
+        lexicon.transform.GetChild(0).transform.GetChild(0).transform.GetChild(_clickIndex).gameObject.SetActive(false);
+        _clickIndex--;
+        lexicon.transform.GetChild(0).transform.GetChild(0).transform.GetChild(_clickIndex).gameObject.SetActive(true);
+    }
+
+    //Function to mute all the sounds
     private void muteSound()
     {
         GameObject sound = GameObject.Find("Sounds");

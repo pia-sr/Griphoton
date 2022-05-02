@@ -6,56 +6,60 @@ using UnityEngine.UI;
 
 public class MirrorTutorial : MonoBehaviour
 {
+    //UI
     public Text mainDialog;
-    public Game data;
-    private int counter;
     public GameObject skipButton;
     public GameObject touchAni;
     public GameObject options;
-    private bool running;
-    private bool start;
-    public bool inactive;
     public GameObject questions;
     public GameObject ghost;
+
+    //Sounds
     public AudioSource typewriter;
     public AudioSource puzzleSound;
-    public Player player;
 
-    public void setUp()
+    //public variables to communicate with other scripts
+    public Player player;
+    public Game data;
+    public bool inactive;
+
+    //private variables for the tutorial flow
+    private int _counter;
+    private bool _running;
+    private bool _start;
+
+
+    //Function to set up the tutorial to its start state
+    private void SetUp()
     {
-        this.transform.parent.transform.GetChild(0).gameObject.SetActive(false);
-        this.transform.parent.transform.GetChild(1).gameObject.SetActive(false);
+        this.transform.parent.GetChild(0).gameObject.SetActive(false);
+        this.transform.parent.GetChild(1).gameObject.SetActive(false);
         options.SetActive(false);
         ghost.transform.localPosition = Vector3.zero;
         inactive = true;
-        running = false;
-        counter = 0;
+        _running = false;
+        _counter = 0;
         skipButton.SetActive(true);
         string firstSentence = "Hello " + data.namePlayer + ",| \nWelcome to my home.";
         StartCoroutine(WordbyWord(firstSentence));
-
-
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        //The tutorial sets itself to its intial state when the player sets its bool to true
         if (this.gameObject.activeSelf && player.activateTutorial)
         {
             player.activateTutorial = false;
-            setUp();
+            SetUp();
         }
+        //As soon as the puzzle is closed, the sound stops
         if (player.gameObject.activeSelf)
         {
             puzzleSound.Pause();
         }
-        if (Input.touchCount > 0 && !running && EventSystem.current != GameObject.Find("Skip"))
+        //Code waits for the user's touch to go to the next text bit
+        if (Input.touchCount > 0 && !_running && EventSystem.current != GameObject.Find("Skip"))
         {
 
             touchAni.GetComponent<TouchAnimation>().running = false;
@@ -68,16 +72,18 @@ public class MirrorTutorial : MonoBehaviour
 
             }
             touchAni.SetActive(false);
-            start = true;
+            _start = true;
         }
-        if (start)
+
+        //Text sequences
+        if (_start)
         {
-            start = false;
-            switch (counter)
+            _start = false;
+            switch (_counter)
             {
                 case 1:
                     ghost.transform.localPosition = new Vector3(-5, 0, 0);
-                    this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
+                    this.transform.parent.GetChild(0).gameObject.SetActive(true);
                     string sentence = "I want to build a room full of mirrors as an attraction.| Other ghosts and maybe even you who visit my room, wait no| let's call it my hall of mirrors, need to find the way out of the room without running into mirrors.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
@@ -107,7 +113,7 @@ public class MirrorTutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 8:
-                    this.transform.parent.transform.GetChild(1).gameObject.SetActive(true);
+                    this.transform.parent.GetChild(1).gameObject.SetActive(true);
                     inactive = false;
                     this.gameObject.SetActive(false);
                     puzzleSound.Play();
@@ -118,10 +124,11 @@ public class MirrorTutorial : MonoBehaviour
     }
 
 
+    //Function to type every sentences one word at a time
     //Source: https://answers.unity.com/questions/1424042/animated-text-word-by-word-not-letter-by-letter-co.html
     IEnumerator WordbyWord(string sentence)
     {
-        running = true;
+        _running = true;
         string[] sentences = sentence.Split('|');
         mainDialog.text = "";
         for (int i = 0; i < sentences.Length; i++)
@@ -138,73 +145,77 @@ public class MirrorTutorial : MonoBehaviour
             }
             yield return new WaitForSeconds(0.4f);
         }
-        counter++;
-        running = false;
+        _counter++;
+        _running = false;
         touchAni.SetActive(true);
     }
 
+
+    //Function to skip the tutorial
     public void skipTutorial()
     {
-        this.transform.parent.transform.GetChild(0).gameObject.SetActive(true);
-        this.transform.parent.transform.GetChild(1).gameObject.SetActive(true);
+        this.transform.parent.GetChild(0).gameObject.SetActive(true);
+        this.transform.parent.GetChild(1).gameObject.SetActive(true);
         options.SetActive(true);
         inactive = false;
         this.gameObject.SetActive(false);
         puzzleSound.Play();
     }
 
+    //Questions and Answers for the help section
     public void Question1()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "How can I put a ghost on a square?";
-        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Tap on the square on which you would like a ghost to be and a ghost will appear.";
     }
     public void Question2()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "How can I put a diagonal mirror on a square?";
-        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "There are two types of diagonal mirrors. If you tap on an empty square two times one of them will appear. If you tap another time, the other mirror will appear.";
     }
     public void Question3()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "How can I remove a ghost or mirror on top of a square?";
-        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Just tap on that square until it is empty. If you want to remove all the ghosts and mirrors, you can press the reset button.";
     }
     public void Question4()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "How can I leave the puzzle?";
-        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The lowest button is the exit button with which you can leave the puzzle.";
     }
     public void Question5()
     {
         questions.transform.GetChild(1).gameObject.SetActive(false);
-        questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(true);
-        Text question = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Text>();
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "How can I reset the puzzle?";
-        Text answer = questions.transform.GetChild(0).transform.GetChild(0).transform.GetChild(1).GetComponent<Text>();
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The highst button is the reset button with which you can reset the whole puzzle.";
     }
 
+    //close function for either closing a specific question or the question overview
     public void close()
     {
-        if (questions.transform.GetChild(0).transform.GetChild(0).gameObject.activeSelf)
+        if (questions.transform.GetChild(0).GetChild(0).gameObject.activeSelf)
         {
             questions.transform.GetChild(1).gameObject.SetActive(true);
-            questions.transform.GetChild(0).transform.GetChild(0).gameObject.SetActive(false);
+            questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
         }
         else
         {
@@ -214,6 +225,8 @@ public class MirrorTutorial : MonoBehaviour
         }
 
     }
+
+    //Function to open the question overview
     public void questionOverview()
     {
         options.SetActive(false);

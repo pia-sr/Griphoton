@@ -7,48 +7,55 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridField))]
 public class RegionDivision : MonoBehaviour
 {
+    //public field objects
     public GridField grid;
-
     public GameObject tile;
     public GameObject tilemanager;
     public GameObject colourTile;
-    private List<Node> notThere;
-    private List<GameObject> neighbours;
-    public RegionDivisionTutorial tutorial;
     public GameObject message;
 
-    private List<GameObject> red;
-    private List<GameObject> blue;
-    private List<GameObject> yellow;
-    private List<GameObject> green;
-    private bool select;
-    private bool unselect;
+    //public variables to communicate with other scripts
     public GameObject griphoton;
     public GameObject player;
-    private Color colourEmpty;
-    
+    public RegionDivisionTutorial tutorial;
 
+    //private variables
+    private List<Node> _notThere;
+    private List<GameObject> _neighbours;
+    private List<GameObject> _red;
+    private List<GameObject> _blue;
+    private List<GameObject> _yellow;
+    private List<GameObject> _green;
+    private bool _select;
+    private bool _unselect;
+    private Color _colourEmpty;
+    private float _size;
 
-    private float size;
+    // Start is called before the first frame update
+    void Start()
+    {
+        _colourEmpty = new Color(1, 0.8f, 0.65f);
+        SetUp();
 
-    //compare bounds instead of list size
+    }
 
-    private void setUp()
+    //Function to set the field to its original state
+    private void SetUp()
     {
 
         for (int i = 0; i < tilemanager.transform.childCount; i++)
         {
             Destroy(tilemanager.transform.GetChild(i).gameObject);
         }
-        select = false;
-        unselect = false;
+        _select = false;
+        _unselect = false;
         colourTile.GetComponent<SpriteRenderer>().color = Color.red;
-        size = grid.nodeRadius;
-        red = new List<GameObject>();
-        blue = new List<GameObject>();
-        yellow = new List<GameObject>();
-        green = new List<GameObject>();
-        notThere = new List<Node>()
+        _size = grid.nodeRadius;
+        _red = new List<GameObject>();
+        _blue = new List<GameObject>();
+        _yellow = new List<GameObject>();
+        _green = new List<GameObject>();
+        _notThere = new List<Node>()
         {
             grid.grid[0,0],
             grid.grid[0,2],
@@ -59,7 +66,7 @@ public class RegionDivision : MonoBehaviour
         };
         foreach (Node node in grid.grid)
         {
-            if (!notThere.Contains(node))
+            if (!_notThere.Contains(node))
             {
                 for(int i =-1; i < 2; i++)
                 {
@@ -69,10 +76,10 @@ public class RegionDivision : MonoBehaviour
                         {
                             continue;
                         }
-                        float x = (size / 2) * i;
-                        float y = (size / 2) * j;
-                        tile.transform.localScale = new Vector3(size, size, 0); 
-                        tile.GetComponent<SpriteRenderer>().color = colourEmpty;
+                        float x = (_size / 2) * i;
+                        float y = (_size / 2) * j;
+                        tile.transform.localScale = new Vector3(_size, _size, 0); 
+                        tile.GetComponent<SpriteRenderer>().color = _colourEmpty;
                         Instantiate(tile, node.worldPosition + new Vector3(x, y, 0), Quaternion.identity, tilemanager.transform);
                     }
                 }
@@ -82,24 +89,6 @@ public class RegionDivision : MonoBehaviour
 
     }
 
-    void Awake()
-    {
-        grid = GetComponent<GridField>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        colourEmpty = new Color(1, 0.8f, 0.65f);
-        setUp();
-
-    }
-    private Rect tile2Rect(Transform tile)
-    {
-
-        Rect rect = new Rect(tile.transform.position.x - size/2, tile.transform.position.y - size/2, size, size);
-        return rect;
-    }
 
     // Update is called once per frame
     void Update()
@@ -110,47 +99,47 @@ public class RegionDivision : MonoBehaviour
         {
 
             Color colour = colourTile.GetComponent<SpriteRenderer>().color;
-            Rect rectColour = tile2Rect(colourTile.transform);
+            Rect rectColour = Object2Rect(colourTile.transform);
             Touch touch = Input.GetTouch(0);
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             for (int i = 0; i < tilemanager.transform.childCount; i++)
             {
-                Rect rect = tile2Rect(tilemanager.transform.GetChild(i));
+                Rect rect = Object2Rect(tilemanager.transform.GetChild(i));
                 
-
-
+                //Depending if the touch just a tap or hold and depending if the tile is already coloured-in
+                //it will either colour in one or more tiles or set them as empty
                 if (rect.Contains(touchPosition))
                 {
                     var rend = tilemanager.transform.GetChild(i).GetComponent<SpriteRenderer>();
                     GameObject child = tilemanager.transform.GetChild(i).gameObject;
-                    if (rend.color == colourEmpty && !unselect)
+                    if (rend.color == _colourEmpty && !_unselect)
                     {
                         if (touch.phase == TouchPhase.Began)
                         {
-                            select = true;
+                            _select = true;
                         }
-                        if (colourAlreadyExists())
+                        if (ColourAlreadyExists())
                         {
-                            foreach (GameObject neighbour in neighbourTiles(child))
+                            foreach (GameObject neighbour in NeighbourTiles(child))
                             {
                                 if(neighbour.GetComponent<SpriteRenderer>().color == colour)
                                 {
                                     rend.color = colour;
-                                    if (colour == Color.red && !red.Contains(child))
+                                    if (colour == Color.red && !_red.Contains(child))
                                     {
-                                        red.Add(child);
+                                        _red.Add(child);
                                     }
-                                    else if (colour == Color.blue && !blue.Contains(child))
+                                    else if (colour == Color.blue && !_blue.Contains(child))
                                     {
-                                        blue.Add(child);
+                                        _blue.Add(child);
                                     }
-                                    else if (colour == Color.yellow && !yellow.Contains(child))
+                                    else if (colour == Color.yellow && !_yellow.Contains(child))
                                     {
-                                        yellow.Add(child);
+                                        _yellow.Add(child);
                                     }
-                                    else if (colour == Color.green && !green.Contains(child))
+                                    else if (colour == Color.green && !_green.Contains(child))
                                     {
-                                        green.Add(child);
+                                        _green.Add(child);
                                     }
 
                                 }
@@ -159,49 +148,49 @@ public class RegionDivision : MonoBehaviour
                         else
                         {
                             rend.color = colour;
-                            if (colour == Color.red && !red.Contains(child))
+                            if (colour == Color.red && !_red.Contains(child))
                             {
-                                red.Add(child);
+                                _red.Add(child);
                             }
-                            else if (colour == Color.blue && !blue.Contains(child))
+                            else if (colour == Color.blue && !_blue.Contains(child))
                             {
-                                blue.Add(child);
+                                _blue.Add(child);
                             }
-                            else if (colour == Color.yellow && !yellow.Contains(child))
+                            else if (colour == Color.yellow && !_yellow.Contains(child))
                             {
-                                yellow.Add(child);
+                                _yellow.Add(child);
                             }
-                            else if (colour == Color.green && !green.Contains(child))
+                            else if (colour == Color.green && !_green.Contains(child))
                             {
-                                green.Add(child);
+                                _green.Add(child);
                             }
                         }
                     }
                         
-                    else if (!select)
+                    else if (!_select)
                     {
                         if (touch.phase == TouchPhase.Began)
                         {
-                            unselect = true;
+                            _unselect = true;
                         }
 
                         if (rend.color == Color.red)
                         {
-                            red.Remove(child);
+                            _red.Remove(child);
                         }
                         else if (rend.color == Color.blue)
                         {
-                            blue.Remove(child);
+                            _blue.Remove(child);
                         }
                         else if (rend.color == Color.yellow)
                         {
-                            yellow.Remove(child);
+                            _yellow.Remove(child);
                         }
                         else if (rend.color == Color.green)
                         {
-                            green.Remove(child);
+                            _green.Remove(child);
                         }
-                        rend.color = colourEmpty;
+                        rend.color = _colourEmpty;
                     }
                 }
 
@@ -234,22 +223,33 @@ public class RegionDivision : MonoBehaviour
             }
             else if (touch.phase == TouchPhase.Ended)
                 {
-                    select = false;
-                    unselect = false;
+                    _select = false;
+                    _unselect = false;
                 }
-            if (checkWin())
+            if (CheckWin())
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
                 this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
 
         }
     }
-    private List<GameObject> neighbourTiles(GameObject tile)
+
+    //Function to create a rectagle on top of a given object to set rectangular boundaries for that object
+    private Rect Object2Rect(Transform tile)
     {
-        neighbours = new List<GameObject>();
+
+        Rect rect = new Rect(tile.transform.position.x - _size/2, tile.transform.position.y - _size/2, _size, _size);
+        return rect;
+    }
+
+
+    //Function to create a list of all the neighbouring tiles of the given tile
+    private List<GameObject> NeighbourTiles(GameObject tile)
+    {
+        _neighbours = new List<GameObject>();
         for (int i = -1; i < 2; i++)
         {
             for (int j = -1; j < 2; j++)
@@ -263,19 +263,21 @@ public class RegionDivision : MonoBehaviour
                     for(int k = 0; k < tilemanager.transform.childCount; k++)
                     {
                         Bounds bounds = new Bounds(grid.transform.position, grid.gridWorldSize);
-                        if (bounds.Contains(tile.transform.position + new Vector3(size * i, size * j, 0)) && tile.transform.position + new Vector3(size * i, size * j, 0) == tilemanager.transform.GetChild(k).transform.position)
+                        if (bounds.Contains(tile.transform.position + new Vector3(_size * i, _size * j, 0)) && tile.transform.position + new Vector3(_size * i, _size * j, 0) == tilemanager.transform.GetChild(k).transform.position)
                         {
-                            neighbours.Add(tilemanager.transform.GetChild(k).gameObject);
+                            _neighbours.Add(tilemanager.transform.GetChild(k).gameObject);
                         }
                     }
                 }
                 
             }
         }
-        return neighbours;
+        return _neighbours;
 
     }
-    private bool colourAlreadyExists()
+
+    //Function to check if a colour already exists on the field
+    private bool ColourAlreadyExists()
     {
         for (int i = 0; i < tilemanager.transform.childCount; i++)
         {
@@ -286,38 +288,40 @@ public class RegionDivision : MonoBehaviour
         }
         return false;
     }
-    private bool checkWin()
+
+    //Function to check if the player has solved the puzzle
+    private bool CheckWin()
     {
         for(int i = 0; i < tilemanager.transform.childCount; i++)
         {
             var rend = tilemanager.transform.GetChild(i).GetComponent<SpriteRenderer>();
-            if (rend.color == colourEmpty)
+            if (rend.color == _colourEmpty)
             {
                 return false;
             }
         }
-        if(!(red.Count == blue.Count && green.Count == yellow.Count && yellow.Count == red.Count))
+        if(!(_red.Count == _blue.Count && _green.Count == _yellow.Count && _yellow.Count == _red.Count))
         {
             return false;
         }
         else
         {
 
-            if (red.Count > 1)
+            if (_red.Count > 1)
             {
-                Bounds redBounds = new Bounds(red[0].transform.position, new Vector3(size, size, 0));
-                Bounds blueBounds = new Bounds(blue[0].transform.position, new Vector3(size, size, 0));
-                Bounds yellowBounds = new Bounds(yellow[0].transform.position, new Vector3(size, size, 0));
-                Bounds greenBounds = new Bounds(green[0].transform.position, new Vector3(size, size, 0));
-                for (int i = 1; i < red.Count; i++)
+                Bounds redBounds = new Bounds(_red[0].transform.position, new Vector3(_size, _size, 0));
+                Bounds blueBounds = new Bounds(_blue[0].transform.position, new Vector3(_size, _size, 0));
+                Bounds yellowBounds = new Bounds(_yellow[0].transform.position, new Vector3(_size, _size, 0));
+                Bounds greenBounds = new Bounds(_green[0].transform.position, new Vector3(_size, _size, 0));
+                for (int i = 1; i < _red.Count; i++)
                 {
-                    Bounds newBoundsR = new Bounds(red[i].transform.position, new Vector3(size, size, 0));
+                    Bounds newBoundsR = new Bounds(_red[i].transform.position, new Vector3(_size, _size, 0));
                     redBounds.Encapsulate(newBoundsR);
-                    Bounds newBoundsB = new Bounds(blue[i].transform.position, new Vector3(size, size, 0));
+                    Bounds newBoundsB = new Bounds(_blue[i].transform.position, new Vector3(_size, _size, 0));
                     blueBounds.Encapsulate(newBoundsB);
-                    Bounds newBoundsY = new Bounds(yellow[i].transform.position, new Vector3(size, size, 0));
+                    Bounds newBoundsY = new Bounds(_yellow[i].transform.position, new Vector3(_size, _size, 0));
                     yellowBounds.Encapsulate(newBoundsY);
-                    Bounds newBoundsG = new Bounds(green[i].transform.position, new Vector3(size, size, 0));
+                    Bounds newBoundsG = new Bounds(_green[i].transform.position, new Vector3(_size, _size, 0));
                     greenBounds.Encapsulate(newBoundsG);
                 }
                 float shapeR = (float)Math.Round(redBounds.size.x * redBounds.size.y,2);
@@ -334,14 +338,19 @@ public class RegionDivision : MonoBehaviour
         return true;
     }
 
+
+    //Function for the restart button
     public void restart()
     {
         if (!tutorial.inactive)
         {
-            setUp();
+            SetUp();
 
         }
     }
+
+    //Function for the leave button
+    //Open up a panel to check if the user really wants to leave
     public void leave()
     {
         if (!tutorial.inactive)
@@ -352,15 +361,18 @@ public class RegionDivision : MonoBehaviour
         
     }
 
+    //Function for the yes button, if the user really wants to leave
     public void yes()
     {
-        setUp();
+        SetUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         message.SetActive(false);
     }
+
+    //Function for the no button, if the user does not want to leave
     public void no()
     {
         tutorial.inactive = false;

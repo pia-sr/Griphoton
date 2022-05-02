@@ -5,59 +5,60 @@ using UnityEngine;
 public class Spikes : MonoBehaviour
 {
 
-    private GridField grid;
-    private Player player;
-    private bool active;
-    private bool corountineStart;
-    private bool attackBool;
+    private GridField _grid;
+    private Player _player;
+    private bool _active;
+    private bool _corountineStart;
+    private bool _attackBool;
     public Animator animator;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        active = false;
-        corountineStart = false;
-        grid = GameObject.Find("Background").GetComponent<GridField>();
-        player = GameObject.Find("Player").GetComponent<Player>();
+        _active = false;
+        _corountineStart = false;
+        _grid = GameObject.Find("Background").GetComponent<GridField>();
+        _player = GameObject.Find("Player").GetComponent<Player>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!corountineStart)
+        if (!_corountineStart)
         {
-            corountineStart = true;
-            StartCoroutine(activateSpikes());
+            _corountineStart = true;
+            StartCoroutine(ActivateSpikes());
         }
 
-        if (!attackBool) 
+        if (!_attackBool) 
         {
-            attackBool = true;
-            StartCoroutine(attack());
+            _attackBool = true;
+            StartCoroutine(Attack());
         }
     }
-
-    IEnumerator activateSpikes()
+    //Function to active the spikes after a specific amount of time
+    IEnumerator ActivateSpikes()
     {
-        active = true;
-        animator.SetBool("active", active);
+        _active = true;
+        animator.SetBool("active", _active);
         yield return new WaitForSeconds(4);
-        active = false;
-        animator.SetBool("active", active);
+        _active = false;
+        animator.SetBool("active", _active);
         yield return new WaitForSeconds(4);
-        corountineStart = false;
+        _corountineStart = false;
     }
-    IEnumerator attack()
+    //Function to attack the player if they are on top of an active spike
+    IEnumerator Attack()
     {
-        if (grid.GetNodeFromWorldPos(player.gameObject.transform.position) == grid.GetNodeFromWorldPos(this.transform.localPosition) && active)
+        if (_grid.GetNodeFromWorldPos(_player.gameObject.transform.position) == _grid.GetNodeFromWorldPos(this.transform.localPosition) && _active)
         {
 
-            player.GetComponent<Player>().reduceStrength(10);
+            _player.GetComponent<Player>().ReduceStrength(10);
             yield return new WaitForSeconds(0.75f);
         }
         
         yield return null;
-        attackBool = false;
+        _attackBool = false;
     }
 }

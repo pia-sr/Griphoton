@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Class for all the variables that need to be saved
+//source:https://www.youtube.com/watch?v=XOjd_qU2Ido
 public class Game : MonoBehaviour
 {
     public bool tutorial;
@@ -33,6 +35,8 @@ public class Game : MonoBehaviour
     {
         SaveSystem.saveGame(this);
     }
+
+    //Function to create an array of all the tags in the grid in Griphoton
     public string[] getGrid()
     {
         string[] tags;
@@ -57,6 +61,7 @@ public class Game : MonoBehaviour
         return tags;
     }
 
+    //Function to get the read variables
     public void loadGame()
     {
         GameData data = SaveSystem.loadGame();

@@ -5,58 +5,52 @@ using UnityEngine;
 [RequireComponent(typeof(GridField))]
 public class GapPuzzle : MonoBehaviour
 {
+    //public field objects
     public GridField grid;
     public GameObject tile;
     public GameObject tilemanager;
+    public GameObject message;
+
+    //public variables to communicate with other scripts
     public GameObject griphoton;
     public GameObject player;
-    private List<int> tilesBlack;
     public GapPuzzleTutorial tutorial;
-    public GameObject message;
-    private Color colourEmpty;
-    private Color colourFull;
+
+    //private variables
+    private Color _colourEmpty;
+    private Color _colourFull;
+    private List<int> _tilesBlack;
 
 
-    void Awake()
+    //Start is called before the first frame update
+    //Sets up the colour variables
+    void Start()
     {
-
-        grid = GetComponent<GridField>();
-
-        
+        _colourEmpty = new Color(1, 0.8f, 0.65f);
+        _colourFull = new Color(0.36f, 0.22f, 0.26f);
+        SetUp();
     }
-    
-    private void setUp()
-    {
 
+
+    //Sets up the tiles to the start state
+    private void SetUp()
+    {
         for (int i = 0; i < tilemanager.transform.childCount; i++)
         {
             Destroy(tilemanager.transform.GetChild(i).gameObject);
         }
-        tilesBlack = new List<int>();
+        _tilesBlack = new List<int>();
         float size = (grid.nodeRadius * 2) - 0.005f;
 
         foreach (Node node in grid.grid)
         {
             tile.transform.localScale = new Vector3(size, size, 0);
-            tile.GetComponent<SpriteRenderer>().color = colourEmpty;
+            tile.GetComponent<SpriteRenderer>().color = _colourEmpty;
             Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
 
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        colourEmpty = new Color(1, 0.8f, 0.65f);
-        colourFull = new Color(0.36f, 0.22f, 0.26f);
-        setUp();
-    }
-    private Rect tile2Rect(Transform tile)
-    {
-
-        Rect rect = new Rect(tile.transform.position.x - grid.nodeRadius, tile.transform.position.y - grid.nodeRadius, grid.nodeRadius * 2, grid.nodeRadius * 2);
-        return rect;
-    }
 
     // Update is called once per frame
     void Update()
@@ -67,7 +61,7 @@ public class GapPuzzle : MonoBehaviour
             {
                 Touch touch = Input.GetTouch(0);
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-                Rect rect = tile2Rect(tilemanager.transform.GetChild(i));
+                Rect rect = Object2Rect(tilemanager.transform.GetChild(i));
                 
                 
                 if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
@@ -75,33 +69,44 @@ public class GapPuzzle : MonoBehaviour
 
                     Node node = grid.GetNodeFromWorldPos(rect.center);
                     var rend = tilemanager.transform.GetChild(i).GetComponent<SpriteRenderer>();
-                    if (rend.color == colourEmpty)
+                    if (rend.color == _colourEmpty)
                     {
-                        rend.color = colourFull;
+                        rend.color = _colourFull;
 
                         node.selected = true;
-                        tilesBlack.Add(i);
+                        _tilesBlack.Add(i);
                     }
                     else
                     {
-                        rend.color = colourEmpty;
-                        tilesBlack.Remove(i);
+                        rend.color = _colourEmpty;
+                        _tilesBlack.Remove(i);
                         node.selected = false;
                     }
                 }
 
             }
-            if (checkWin())
+            if (CheckWin())
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
                 this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
 
         }
     }
-    private bool checkWin()
+
+    //Function to create a rectagle on top of a given object to set rectangular boundaries for that object
+    private Rect Object2Rect(Transform tile)
+    {
+
+        Rect rect = new Rect(tile.transform.position.x - grid.nodeRadius, tile.transform.position.y - grid.nodeRadius, grid.nodeRadius * 2, grid.nodeRadius * 2);
+        return rect;
+    }
+
+
+    //Function to check if the player has solved the puzzle
+    private bool CheckWin()
     {
         for(int i = 0; i < 9; i++)
         {
@@ -127,11 +132,11 @@ public class GapPuzzle : MonoBehaviour
                 return false;
             }
         }
-        for(int i = 0; i < grid.getGridSizeX(); i++)
+        for(int i = 0; i < grid.GetGridSizeX(); i++)
         {
             int counter = 0;
             List<Node> selected = new List<Node>();
-            for (int j = 0; j< grid.getGridSizeX(); j++)
+            for (int j = 0; j< grid.GetGridSizeX(); j++)
             {
                 if (grid.grid[j, i].selected)
                 {
@@ -153,13 +158,20 @@ public class GapPuzzle : MonoBehaviour
         }
         return true;
     }
+
+
+    //Function for the restart button
     public void restart()
     {
         if (!tutorial.inactive)
         {
-            setUp();
+            SetUp();
         }
     }
+
+
+    //Function for the leave button
+    //Open up a panel to check if the user really wants to leave
     public void leave()
     {
         if (!tutorial.inactive)
@@ -170,15 +182,18 @@ public class GapPuzzle : MonoBehaviour
 
     }
 
+    //Function for the yes button, if the user really wants to leave
     public void yes()
     {
-        setUp();
+        SetUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         message.SetActive(false);
     }
+
+    //Function for the no button, if the user does not want to leave
     public void no()
     {
         tutorial.inactive = false;

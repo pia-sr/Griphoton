@@ -2,6 +2,8 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+//Class to read or write a file to save the game data
+//source: https://www.youtube.com/watch?v=XOjd_qU2Ido
 public static class SaveSystem 
 {
     public static void saveGame(Game game)

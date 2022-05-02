@@ -4,36 +4,40 @@ using UnityEngine;
 
 public class Skeleton1 : MonoBehaviour
 {
+    //public variables
     public int[] start = new int[2];
     public int[] end = new int[2];
     public GridField grid;
     public GameObject player;
-    private Node startNode;
-    private Node endNode;
     public Pathfinder pathFinder;
-    private List<Node> path2Player;
+    public Animator animator;
     public float hitValue = 25;
+
+    //private variables
+    private List<Node> path2Player;
     private float healthValue;
     private bool hitPlayer = false;
     private Node existingTarget;
     private Node targetNode;
     private bool coroutineStart;
     private HealthBar healthBar;
-    private bool goBack;
-    public Animator animator;
     private int xInput;
     private int yInput;
     private Node aim;
+    private Node startNode;
+    private Node endNode;
 
     // Start is called before the first frame update
     void Start()
     {
-        begin();
+        SetUp();
     }
-    private void begin()
+
+
+    //Function to bring the skeleton to their start position
+    private void SetUp()
     {
         StopAllCoroutines();
-        goBack = false;
         hitPlayer = false;
         healthValue = 100;
         startNode = grid.grid[start[0], start[1]];
@@ -72,16 +76,16 @@ public class Skeleton1 : MonoBehaviour
         }
         if (player.GetComponent<Player>().leaveLevel)
         {
-            begin();
+            SetUp();
         }
-        setPositionGhost(grid.GetNodeFromWorldPos(transform.position));
+        SetPositionGhost(grid.GetNodeFromWorldPos(transform.position));
         path2Player = pathFinder.FindPathEnemies(transform.position, player.transform.position);
-        if (next2Player())
+        if (Next2Player())
         {
             if (!hitPlayer && !player.GetComponent<Player>().blockEnemy)
             {
                 hitPlayer = true;
-                StartCoroutine(hit());
+                StartCoroutine(Attack());
             }
             if (player.GetComponent<Player>().enemyHit)
             {
@@ -97,6 +101,7 @@ public class Skeleton1 : MonoBehaviour
                 }
             }
         }
+        //if the player is 5 nodes away, they will follow the player
         else if (path2Player.Count < 6 && path2Player.Count > 1)
         {
             animator.SetBool("isWalking", true);
@@ -105,7 +110,7 @@ public class Skeleton1 : MonoBehaviour
                 if (!coroutineStart)
                 {
                     coroutineStart = true;
-                    StartCoroutine(move(path2Player));
+                    StartCoroutine(Move(path2Player));
                 }
 
             }
@@ -114,6 +119,7 @@ public class Skeleton1 : MonoBehaviour
                 existingTarget = targetNode;
             }
         }
+        //If not they will walk between two given points
         else
         {
             animator.SetBool("isWalking", true);
@@ -135,7 +141,7 @@ public class Skeleton1 : MonoBehaviour
                     if (!coroutineStart)
                     {
                         coroutineStart = true;
-                        StartCoroutine(move(back2Pos));
+                        StartCoroutine(Move(back2Pos));
                     }
 
                 }
@@ -148,9 +154,11 @@ public class Skeleton1 : MonoBehaviour
         }
     }
 
-    private IEnumerator move(List<Node> path)
+
+    //Monster movement
+    //source: https://forum.unity.com/threads/transform-position-speed.744293/
+    private IEnumerator Move(List<Node> path)
     {
-        //source: https://forum.unity.com/threads/transform-position-speed.744293/
         if (existingTarget == null)
         {
             existingTarget = targetNode;
@@ -169,7 +177,7 @@ public class Skeleton1 : MonoBehaviour
             goal = path[1].worldPosition.y;
             while (pos.y != goal)
             {
-                pos.y = Mathf.MoveTowards(pos.y, goal, 1 * Time.deltaTime);
+                pos.y = Mathf.MoveTowards(pos.y, goal, 1.5f * Time.deltaTime);
                 transform.localPosition = pos;
                 yield return null;
             }
@@ -180,7 +188,7 @@ public class Skeleton1 : MonoBehaviour
 
             while (pos.x != goal)
             {
-                pos.x = Mathf.MoveTowards(pos.x, goal, 1 * Time.deltaTime);
+                pos.x = Mathf.MoveTowards(pos.x, goal, 1.5f * Time.deltaTime);
                 transform.localPosition = pos;
                 yield return null;
             }
@@ -191,7 +199,9 @@ public class Skeleton1 : MonoBehaviour
 
     }
 
-    private bool next2Player()
+
+    //Checks if they are next to the player
+    private bool Next2Player()
     {
         foreach (Node neighbour in grid.GetNodeNeighbours(grid.GetNodeFromWorldPos(transform.position)))
         {
@@ -208,25 +218,30 @@ public class Skeleton1 : MonoBehaviour
         }
         return false;
     }
-    IEnumerator hit()
+
+
+    //Function to attack the player
+    IEnumerator Attack()
     {
         animator.SetBool("isWalking", false);
         yield return new WaitForSeconds(0.1f);
         animator.SetTrigger("attack");
-        player.GetComponent<Player>().reduceStrength(hitValue);
+        player.GetComponent<Player>().ReduceStrength(hitValue);
         yield return new WaitForSeconds(2);
 
         hitPlayer = false;
     }
-    private void setPositionGhost(Node currentNode)
+
+    //Sets the tag on the given node as enemy
+    private void SetPositionGhost(Node currentNode)
     {
         foreach(Node node in grid.grid)
         {
             if(node.onTop == "Enemy")
             {
-                node.setItemOnTop(null);
+                node.SetItemOnTop(null);
             }
         }
-        currentNode.setItemOnTop("Enemy");
+        currentNode.SetItemOnTop("Enemy");
     }
 }

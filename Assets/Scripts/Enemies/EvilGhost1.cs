@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class EvilGhost1 : MonoBehaviour
 {
+    //public variables
     public int[] startPos = new int[2];
     public GridField grid;
     public GameObject player;
     public Pathfinder pathFinder;
-    private List<Node> path2Player;
     public float hitValue;
+    public Animator animator;
+
+    //private variables
+    private List<Node> path2Player;
     private float healthValue;
     private float hitSpeed;
     private Node targetNode;
-    private Vector2 diff;
     private bool moveAway = false;
     private bool stay = false;
     private bool attackPlayer = false;
@@ -21,7 +24,6 @@ public class EvilGhost1 : MonoBehaviour
     private Node existingTarget;
     private bool coroutineStart;
     private HealthBar healthBar;
-    public Animator animator;
     private int xInput;
     private int yInput;
 
@@ -30,10 +32,11 @@ public class EvilGhost1 : MonoBehaviour
     void Start()
     {
 
-        begin();
+        SetUp();
     }
 
-    private void begin()
+    //Function to bring the ghost to their start position
+    private void SetUp()
     {
         moveAway = false;
         stay = false;
@@ -73,7 +76,7 @@ public class EvilGhost1 : MonoBehaviour
             animator.SetBool("isWalking", false);
         }
         path2Player = pathFinder.FindPathEnemies(transform.position, player.transform.position);
-        if (next2Player() && !moveAway)
+        if (Next2Player() && !moveAway)
         {
             attackPlayer = false;
             if (!stay)
@@ -83,13 +86,13 @@ public class EvilGhost1 : MonoBehaviour
 
                 if (player.GetComponent<Player>().blockEnemy)
                 {
-                    player.GetComponent<Player>().reduceStrength(hitValue / 2);
+                    player.GetComponent<Player>().ReduceStrength(hitValue / 2);
                 }
                 else
                 {
-                    player.GetComponent<Player>().reduceStrength(hitValue);
+                    player.GetComponent<Player>().ReduceStrength(hitValue);
                 }
-                StartCoroutine(fight());
+                StartCoroutine(Attack());
             }
             if (player.GetComponent<Player>().enemyHit)
             {
@@ -105,6 +108,7 @@ public class EvilGhost1 : MonoBehaviour
             }
 
         }
+        //if the player is less than 9 nodes away, the ghost will chase them
         else if (path2Player.Count < 9 && path2Player.Count > 1 && !moveAway)
         {
             attackPlayer = true;
@@ -118,10 +122,10 @@ public class EvilGhost1 : MonoBehaviour
                 moveAway = false;
                 hitSpeed = 0;
                 visitedNodes.Clear();
-                targetNode = grid.grid[Random.Range(0, grid.getGridSizeX() - 1), Random.Range(0, grid.getGridSizeY() - 1)];
+                targetNode = grid.grid[Random.Range(0, grid.GetGridSizeX() - 1), Random.Range(0, grid.GetGridSizeY() - 1)];
                 while (!(targetNode.onTop == "Floor" || targetNode.onTop == "Spikes"))
                 {
-                    targetNode = grid.grid[Random.Range(0, grid.getGridSizeX() - 1), Random.Range(0, grid.getGridSizeY() - 1)];
+                    targetNode = grid.grid[Random.Range(0, grid.GetGridSizeX() - 1), Random.Range(0, grid.GetGridSizeY() - 1)];
                 }
             }
 
@@ -141,7 +145,7 @@ public class EvilGhost1 : MonoBehaviour
                 if (!coroutineStart)
                 {
                     coroutineStart = true;
-                    StartCoroutine(move(back2Pos));
+                    StartCoroutine(Move(back2Pos));
                 }
 
             }
@@ -156,9 +160,10 @@ public class EvilGhost1 : MonoBehaviour
             animator.SetBool("isWalking", false);
         }
     }
-    private IEnumerator move(List<Node> path)
+    //Monster movement
+    //source: https://forum.unity.com/threads/transform-position-speed.744293/
+    private IEnumerator Move(List<Node> path)
     {
-        //source: https://forum.unity.com/threads/transform-position-speed.744293/
         if (existingTarget == null)
         {
             existingTarget = targetNode;
@@ -207,10 +212,12 @@ public class EvilGhost1 : MonoBehaviour
 
         }
         coroutineStart = false;
-        setPositionGhost(path[1]);
+        SetPositionGhost(path[1]);
 
     }
-    private bool next2Player()
+
+    //Checks if they are next to the player
+    private bool Next2Player()
     {
         foreach (Node neightbour in grid.GetNodeNeighbours(grid.GetNodeFromWorldPos(transform.position)))
         {
@@ -222,19 +229,21 @@ public class EvilGhost1 : MonoBehaviour
         return false;
     }
 
-    private void setPositionGhost(Node currentNode)
+    //Sets the tag on the given node as enemy
+    private void SetPositionGhost(Node currentNode)
     {
         foreach (Node node in grid.grid)
         {
             if (node.onTop == "Enemy")
             {
-                node.setItemOnTop(null);
+                node.SetItemOnTop(null);
             }
         }
-        currentNode.setItemOnTop("Enemy");
+        currentNode.SetItemOnTop("Enemy");
     }
 
-    IEnumerator fight()
+    //Function to attack the player
+    IEnumerator Attack()
     {
 
         animator.SetBool("isWalking", false);
@@ -242,10 +251,10 @@ public class EvilGhost1 : MonoBehaviour
         moveAway = true;
         hitSpeed = 0;
         visitedNodes.Clear();
-        targetNode = grid.grid[Random.Range(0, grid.getGridSizeX() - 1), Random.Range(0, grid.getGridSizeY() - 1)];
+        targetNode = grid.grid[Random.Range(0, grid.GetGridSizeX() - 1), Random.Range(0, grid.GetGridSizeY() - 1)];
         while (!(targetNode.onTop == "Floor" || targetNode.onTop == "Spikes"))
         {
-            targetNode = grid.grid[Random.Range(0, grid.getGridSizeX() - 1), Random.Range(0, grid.getGridSizeY() - 1)];
+            targetNode = grid.grid[Random.Range(0, grid.GetGridSizeX() - 1), Random.Range(0, grid.GetGridSizeY() - 1)];
         }
         stay = false;
     }

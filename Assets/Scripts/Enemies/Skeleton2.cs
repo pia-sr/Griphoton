@@ -4,34 +4,38 @@ using UnityEngine;
 
 public class Skeleton2 : MonoBehaviour
 {
+    //public variables
     public int[] xPos;
     public int[] yPos;
     public List<int[]> pos;
     public GridField grid;
     public GameObject player;
     public Pathfinder pathFinder;
-    private List<Node> path2Player;
     public float hitValue;
+    public Animator animator;
+
+    //private variables
     private float healthValue;
     private bool blockPlayer = false;
-    private Vector2 diff;
     private bool hitPlayer = false;
     private int posCounter;
     private Node existingTarget;
     private Node targetNode;
     private bool coroutineStart;
     private HealthBar healthBar;
-    public Animator animator;
     private int xInput;
     private int yInput;
+    private List<Node> path2Player;
 
     // Start is called before the first frame update
     void Start()
     {
-        begin();
+        SetUp();
 
     }
-    private void begin()
+
+    //Function to bring the skeleton to their start position
+    private void SetUp()
     {
         if (targetNode == null)
         {
@@ -77,16 +81,16 @@ public class Skeleton2 : MonoBehaviour
         }
         if (player.GetComponent<Player>().leaveLevel)
         {
-            begin();
+            SetUp();
         }
         path2Player = pathFinder.FindPathEnemies(transform.position, player.transform.position);
-        if (next2Player())
+        if (Next2Player())
         {
             if (!hitPlayer && !player.GetComponent<Player>().blockEnemy)
             {
                 hitPlayer = true;
-                StartCoroutine(hit());
-                StartCoroutine(block());
+                StartCoroutine(Attack());
+                StartCoroutine(Block());
             }
             if (player.GetComponent<Player>().enemyHit)
             {
@@ -105,7 +109,8 @@ public class Skeleton2 : MonoBehaviour
                 }
             }
         }
-        else if(path2Player.Count < 9 && path2Player.Count > 1)
+        //if the player is 8 nodes away, they will follow the player
+        else if (path2Player.Count < 9 && path2Player.Count > 1)
         {
             animator.SetBool("isWalking", true);
             if (targetNode == existingTarget)
@@ -113,7 +118,7 @@ public class Skeleton2 : MonoBehaviour
                 if (!coroutineStart)
                 {
                     coroutineStart = true;
-                    StartCoroutine(move(path2Player));
+                    StartCoroutine(Move(path2Player));
                 }
 
             }
@@ -122,6 +127,7 @@ public class Skeleton2 : MonoBehaviour
                 existingTarget = targetNode;
             }
         }
+        //If not they will walk between a given list of points
         else
         {
             animator.SetBool("isWalking", true);
@@ -136,7 +142,7 @@ public class Skeleton2 : MonoBehaviour
                         if (!coroutineStart)
                         {
                             coroutineStart = true;
-                            StartCoroutine(move(back2Pos));
+                            StartCoroutine(Move(back2Pos));
                         }
 
                     }
@@ -158,9 +164,11 @@ public class Skeleton2 : MonoBehaviour
         }
     }
 
-    private IEnumerator move(List<Node> path)
+
+    //Monster movement
+    //source: https://forum.unity.com/threads/transform-position-speed.744293/
+    private IEnumerator Move(List<Node> path)
     {
-        //source: https://forum.unity.com/threads/transform-position-speed.744293/
         if (existingTarget == null)
         {
             existingTarget = targetNode;
@@ -179,7 +187,7 @@ public class Skeleton2 : MonoBehaviour
             goal = path[1].worldPosition.y;
             while (pos.y != goal)
             {
-                pos.y = Mathf.MoveTowards(pos.y, goal, 1.5f * Time.deltaTime);
+                pos.y = Mathf.MoveTowards(pos.y, goal, 2f * Time.deltaTime);
                 transform.localPosition = pos;
                 yield return null;
             }
@@ -190,7 +198,7 @@ public class Skeleton2 : MonoBehaviour
 
             while (pos.x != goal)
             {
-                pos.x = Mathf.MoveTowards(pos.x, goal, 1.5f * Time.deltaTime);
+                pos.x = Mathf.MoveTowards(pos.x, goal, 2f * Time.deltaTime);
                 transform.localPosition = pos;
                 yield return null;
             }
@@ -198,11 +206,13 @@ public class Skeleton2 : MonoBehaviour
 
         }
         coroutineStart = false;
-        setPositionGhost(path[1]);
+        SetPositionGhost(path[1]);
 
     }
 
-    private bool next2Player()
+
+    //Checks if they are next to the player
+    private bool Next2Player()
     {
         foreach (Node neighbour in grid.GetNodeNeighbours(grid.GetNodeFromWorldPos(transform.position)))
         {
@@ -219,19 +229,24 @@ public class Skeleton2 : MonoBehaviour
         }
         return false;
     }
-    IEnumerator hit()
+
+
+    //Function to attack the player
+    IEnumerator Attack()
     {
 
         animator.SetBool("isWalking", false);
         yield return new WaitForSeconds(0.1f);
 
         animator.SetTrigger("attack");
-        player.GetComponent<Player>().reduceStrength(hitValue);
+        player.GetComponent<Player>().ReduceStrength(hitValue);
         yield return new WaitForSeconds(2);
 
         hitPlayer = false;
     }
-    IEnumerator block()
+
+    //Function to block the player's attack
+    IEnumerator Block()
     {
         animator.SetBool("isWalking", false);
         yield return new WaitForSeconds(3);
@@ -240,15 +255,17 @@ public class Skeleton2 : MonoBehaviour
         blockPlayer = false;
 
     }
-    private void setPositionGhost(Node currentNode)
+
+    //Sets the tag on the given node as enemy
+    private void SetPositionGhost(Node currentNode)
     {
         foreach(Node node in grid.grid)
         {
             if(node.onTop == "Enemy")
             {
-                node.setItemOnTop(null);
+                node.SetItemOnTop(null);
             }
         }
-        currentNode.setItemOnTop("Enemy");
+        currentNode.SetItemOnTop("Enemy");
     }
 }

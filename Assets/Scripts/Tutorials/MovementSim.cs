@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Class to simulate the movement
 public class MovementSim : MonoBehaviour
 {
     public GameObject touchSim;
@@ -23,7 +24,7 @@ public class MovementSim : MonoBehaviour
             animator.SetFloat("YInput", 0);
             animator.SetFloat("XInput", 1);
             animator.SetBool("isWalking", true);
-
+            //player walks towards touched placed
             this.transform.localPosition = Vector2.MoveTowards(transform.localPosition, new Vector2(2, 3), 1f * Time.deltaTime);
             if(transform.localPosition == new Vector3(2, 3, 0))
             {
@@ -31,9 +32,10 @@ public class MovementSim : MonoBehaviour
             }
         }
     }
+
     IEnumerator wait()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         touchSim.SetActive(false);
         go = true;
     }

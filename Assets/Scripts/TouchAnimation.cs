@@ -25,6 +25,8 @@ public class TouchAnimation : MonoBehaviour
             StartCoroutine(increaseCircle());
         }
     }
+    
+    //Function draw increasingly bigger circles so it seems like an animation
     IEnumerator increaseCircle()
     {
         running = true;
@@ -43,6 +45,7 @@ public class TouchAnimation : MonoBehaviour
         running = false;
     }
 
+    //Function to drwa a circle
     //source https://www.loekvandenouweland.com/content/use-linerenderer-in-unity-to-draw-a-circle.html
     private void DrawCircle(GameObject circle, float radius)
     {

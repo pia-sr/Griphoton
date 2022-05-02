@@ -6,6 +6,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridField))]
 public class ReplacementPuzzle2 : MonoBehaviour
 {
+    //public field objects
     public GridField grid;
     public GameObject symbol;
     public Text rowText;
@@ -13,78 +14,71 @@ public class ReplacementPuzzle2 : MonoBehaviour
     public GameObject symbolManager;
     public GameObject exchangeButton;
     public GameObject selectedTiles;
-    public GameObject griphoton;
-    public GameObject player;
-    public ReplacementTutorial tutorial;
     public GameObject messageExit;
     public Text message;
 
-    private int rowNumber;
-    private List<GameObject> selected;
-    private List<int> row;
-    private List<int> finalRow;
-    private float size;
-    private List<List<int>> inputSymbols;
-    private List<List<int>> outputSymbols;
-    private Color buttonColour;
+    //public variables to communicate with other scripts
+    public GameObject griphoton;
+    public GameObject player;
+    public ReplacementTutorial tutorial;
 
-
-    void Awake()
-    {
-        grid = GetComponent<GridField>();
-    }
-
-    private void setUp()
-    {
-        size = grid.nodeRadius * 1.25f;
-        selected = new List<GameObject>();
-        for(int i = 0; i < symbolManager.transform.childCount; i++)
-        {
-            Destroy(symbolManager.transform.GetChild(i).gameObject);
-        }
-        rowNumber = 6;
-        row = new List<int>() { 1, 0 };
-        symbol.transform.localScale = new Vector3(size, size, 0);
-        GameObject symbol1 = Instantiate(symbol, grid.grid[1, 6].worldPosition, Quaternion.identity, symbolManager.transform);
-        symbol1.GetComponent<SpriteRenderer>().color = Color.red;
-        GameObject symbol2 = Instantiate(symbol, grid.grid[2, 6].worldPosition, Quaternion.identity, symbolManager.transform);
-        symbol2.GetComponent<SpriteRenderer>().color = Color.black;
-        inputSymbols = new List<List<int>>()
-        {
-            new List<int>(){1},
-            new List<int>(){0},
-            new List<int>() {0,1,1}
-        };
-        outputSymbols = new List<List<int>>()
-        {
-            new List<int>(){0,1},
-            new List<int>(){0,1},
-            new List<int>(){0,0}
-        };
-        finalRow = new List<int>() { 1, 0, 1, 1, 1, 0 };
-
-        buttonColour = exchangeButton.GetComponent<SpriteRenderer>().color;
-    }
+    //private variables
+    private int _rowNumber;
+    private List<GameObject> _selected;
+    private List<int> _row;
+    private List<int> _finalRow;
+    private float _size;
+    private List<List<int>> _inputSymbols;
+    private List<List<int>> _outputSymbols;
+    private Color _buttonColour;
 
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < grid.getGridSizeY(); i++)
+        for (int i = 0; i < grid.GetGridSizeY(); i++)
         {
             rowText.GetComponent<RectTransform>().sizeDelta = new Vector3(130, 130, 0);
             rowText.fontSize = 160;
             Text text = Instantiate(rowText, grid.grid[0, i].worldPosition, Quaternion.identity, rowCanvas.transform);
             text.text = (7 - i).ToString();
         }
-        setUp();
+        SetUp();
     }
 
-    private Rect tile2Rect(GameObject tile)
+
+    //Sets up the first row with symbols
+    private void SetUp()
     {
+        _size = grid.nodeRadius * 1.25f;
+        _selected = new List<GameObject>();
+        for(int i = 0; i < symbolManager.transform.childCount; i++)
+        {
+            Destroy(symbolManager.transform.GetChild(i).gameObject);
+        }
+        _rowNumber = 6;
+        _row = new List<int>() { 1, 0 };
+        symbol.transform.localScale = new Vector3(_size, _size, 0);
+        GameObject symbol1 = Instantiate(symbol, grid.grid[1, 6].worldPosition, Quaternion.identity, symbolManager.transform);
+        symbol1.GetComponent<SpriteRenderer>().color = Color.red;
+        GameObject symbol2 = Instantiate(symbol, grid.grid[2, 6].worldPosition, Quaternion.identity, symbolManager.transform);
+        symbol2.GetComponent<SpriteRenderer>().color = Color.black;
+        _inputSymbols = new List<List<int>>()
+        {
+            new List<int>(){1},
+            new List<int>(){0},
+            new List<int>() {0,1,1}
+        };
+        _outputSymbols = new List<List<int>>()
+        {
+            new List<int>(){0,1},
+            new List<int>(){0,1},
+            new List<int>(){0,0}
+        };
+        _finalRow = new List<int>() { 1, 0, 1, 1, 1, 0 };
 
-        Rect rect = new Rect(tile.transform.position.x - (grid.nodeRadius * 0.75f), tile.transform.position.y - (grid.nodeRadius *0.75f), grid.nodeRadius* 1.5f, grid.nodeRadius * 1.5f);
-        return rect;
+        _buttonColour = exchangeButton.GetComponent<SpriteRenderer>().color;
     }
+
 
     // Update is called once per frame
     void Update()
@@ -92,21 +86,24 @@ public class ReplacementPuzzle2 : MonoBehaviour
         if (Input.touchCount > 0 && !tutorial.inactive)
         {
 
-            exchangeButton.GetComponent<SpriteRenderer>().color = buttonColour;
+            exchangeButton.GetComponent<SpriteRenderer>().color = _buttonColour;
             Touch touch = Input.GetTouch(0);
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-            Rect button = tile2Rect(exchangeButton);
+            Rect button = Object2Rect(exchangeButton);
+
+            //User can select multiple symbols and if they fit the rules they can be replaced
+            //If not an error message will pop up
             if (button.Contains(touchPosition) && touch.phase == TouchPhase.Began)
             {
-                sortList();
-                if (selected.Count != 0 && checkNeighbours())
+                SortList();
+                if (_selected.Count != 0 && CheckNeighbours())
                 {
                     List<int> newRow = new List<int>();
                     List<int> rowSymbols = new List<int>();
-                    for (int i = 0; i < selected.Count; i++)
+                    for (int i = 0; i < _selected.Count; i++)
                     {
                 
-                        if (selected[i].GetComponent<SpriteRenderer>().color == Color.black)
+                        if (_selected[i].GetComponent<SpriteRenderer>().color == Color.black)
                         {
                             rowSymbols.Add(0);
 
@@ -117,35 +114,35 @@ public class ReplacementPuzzle2 : MonoBehaviour
                         }
                         Destroy(selectedTiles.transform.GetChild(i).gameObject);
                     }
-                    selected.Clear();
-                    if (replace(rowSymbols).Count != 0)
+                    _selected.Clear();
+                    if (ReplacedList(rowSymbols).Count != 0)
                     {
-                        rowNumber--;
-                        for (int i = 0; i < row.Count; i++)
+                        _rowNumber--;
+                        for (int i = 0; i < _row.Count; i++)
                         {
-                            if (row[i] == -1)
+                            if (_row[i] == -1)
                             {
-                                for (int j = 0; j < replace(rowSymbols).Count; j++)
+                                for (int j = 0; j < ReplacedList(rowSymbols).Count; j++)
                                 {
-                                    newRow.Add(replace(rowSymbols)[j]);
+                                    newRow.Add(ReplacedList(rowSymbols)[j]);
                                 }
                                 rowSymbols.Clear();
                             }
                             else
                             {
-                                newRow.Add(row[i]);
+                                newRow.Add(_row[i]);
                             }
                         }
-                        row = newRow;
-                        if (row.Count < 8)
+                        _row = newRow;
+                        if (_row.Count < 8)
                         {
 
-                            for (int i = 0; i < row.Count; i++)
+                            for (int i = 0; i < _row.Count; i++)
                             {
 
-                                symbol.transform.localScale = new Vector3(size, size, 0);
-                                GameObject item = Instantiate(symbol, grid.grid[1 + i, rowNumber].worldPosition, Quaternion.identity, symbolManager.transform);
-                                if (row[i].ToString() == "0")
+                                symbol.transform.localScale = new Vector3(_size, _size, 0);
+                                GameObject item = Instantiate(symbol, grid.grid[1 + i, _rowNumber].worldPosition, Quaternion.identity, symbolManager.transform);
+                                if (_row[i].ToString() == "0")
                                 {
                                     item.GetComponent<SpriteRenderer>().color = Color.black;
                                 }
@@ -154,7 +151,7 @@ public class ReplacementPuzzle2 : MonoBehaviour
                                     item.GetComponent<SpriteRenderer>().color = Color.red;
                                 }
                             }
-                            selected.Clear();
+                            _selected.Clear();
                         }
                         else
                         {
@@ -180,13 +177,13 @@ public class ReplacementPuzzle2 : MonoBehaviour
 
             }
 
-            for (int i = 1; i < grid.getGridSizeX(); i++)
+            for (int i = 1; i < grid.GetGridSizeX(); i++)
             {
                 GameObject chosenSymbol = null;
                 int index = -1;
                 for(int j = 0; j< symbolManager.transform.childCount; j++)
                 {
-                    if (symbolManager.transform.GetChild(j).transform.position == grid.grid[i, rowNumber].worldPosition)
+                    if (symbolManager.transform.GetChild(j).transform.position == grid.grid[i, _rowNumber].worldPosition)
                     {
                         chosenSymbol = symbolManager.transform.GetChild(j).gameObject;
                         index = i-1;
@@ -194,13 +191,13 @@ public class ReplacementPuzzle2 : MonoBehaviour
                 }
                 if(chosenSymbol != null)
                 {
-                    Rect rect = tile2Rect(chosenSymbol);
+                    Rect rect = Object2Rect(chosenSymbol);
                     if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                     {
-                        if (!selected.Contains(chosenSymbol))
+                        if (!_selected.Contains(chosenSymbol))
                         {
-                            selected.Add(chosenSymbol);
-                            row[index] = -1;
+                            _selected.Add(chosenSymbol);
+                            _row[index] = -1;
                             symbol.transform.localScale = new Vector3(grid.nodeRadius*1.5f, grid.nodeRadius * 1.5f, 0);
                             Color tinted = new Color(0.5566038f, 0.4865907f, 0.4965926f, 1);
                             symbol.GetComponent<SpriteRenderer>().color = tinted;
@@ -209,7 +206,7 @@ public class ReplacementPuzzle2 : MonoBehaviour
                         }
                         else
                         {
-                            selected.Remove(chosenSymbol);
+                            _selected.Remove(chosenSymbol);
                             for(int j = 0; j < selectedTiles.transform.childCount; j++)
                             {
 
@@ -221,11 +218,11 @@ public class ReplacementPuzzle2 : MonoBehaviour
                             }
                             if(chosenSymbol.GetComponent<SpriteRenderer>().color == Color.black)
                             {
-                                row[index] = 0;
+                                _row[index] = 0;
                             }
                             else
                             {
-                                row[index] = 1;
+                                _row[index] = 1;
                             }
 
                         }
@@ -233,46 +230,59 @@ public class ReplacementPuzzle2 : MonoBehaviour
                 }
 
             }
-            if (checkWin())
+            if (CheckWin())
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
                 this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
 
         }
     }
-    private void sortList()
+
+    //Function to create a rectagle on top of a given object to set rectangular boundaries for that object
+    private Rect Object2Rect(GameObject tile)
     {
-        if(selected.Count > 0)
+
+        Rect rect = new Rect(tile.transform.position.x - (grid.nodeRadius * 0.75f), tile.transform.position.y - (grid.nodeRadius *0.75f), grid.nodeRadius* 1.5f, grid.nodeRadius * 1.5f);
+        return rect;
+    }
+
+
+    //Function to sort the list with selected symbols based on their position
+    private void SortList()
+    {
+        if(_selected.Count > 0)
         {
-            for (int i = 1; i < selected.Count; i++)
+            for (int i = 1; i < _selected.Count; i++)
             {
                 for (int j = 0; j < i; j++)
                 {
-                    if (selected[j].transform.position.x > selected[j + 1].transform.position.x)
+                    if (_selected[j].transform.position.x > _selected[j + 1].transform.position.x)
                     {
-                        GameObject item = selected[j];
-                        selected[j] = selected[j + 1];
-                        selected[j + 1] = item;
+                        GameObject item = _selected[j];
+                        _selected[j] = _selected[j + 1];
+                        _selected[j + 1] = item;
                     }
                 }
             }
         }
     }
-    private bool checkNeighbours()
+
+    //Function to check if all the selected symbols are all next to each other
+    private bool CheckNeighbours()
     {
-        if(selected.Count > 1)
+        if(_selected.Count > 1)
         {
             float distance = grid.grid[1, 0].worldPosition.x - grid.grid[0, 0].worldPosition.x;
-            for(int i = 0; i < selected.Count -1; i++)
+            for(int i = 0; i < _selected.Count -1; i++)
             {
                 foreach(Node node in grid.grid)
                 {
-                    if(node.worldPosition == selected[i].transform.position)
+                    if(node.worldPosition == _selected[i].transform.position)
                     {
-                        if(grid.grid[node.gridX+1,node.gridY].worldPosition != selected[i + 1].transform.position)
+                        if(grid.grid[node.gridX+1,node.gridY].worldPosition != _selected[i + 1].transform.position)
                         {
                             return false;
                         }
@@ -283,23 +293,24 @@ public class ReplacementPuzzle2 : MonoBehaviour
         return true;
     }
 
-    private bool checkWin()
+    //Function to check if the player has solved the puzzle
+    private bool CheckWin()
     {
-        if(rowNumber > 0)
+        if(_rowNumber > 0)
         {
             return false;
         }
         else
         {
-            if(row.Count != finalRow.Count)
+            if(_row.Count != _finalRow.Count)
             {
                 return false;
             }
             else
             {
-                for(int i = 0; i < row.Count; i++)
+                for(int i = 0; i < _row.Count; i++)
                 {
-                    if(row[i] != finalRow[i])
+                    if(_row[i] != _finalRow[i])
                     {
                         return false;
                     }
@@ -308,25 +319,28 @@ public class ReplacementPuzzle2 : MonoBehaviour
         }
         return true;
     }
-    private List<int> replace(List<int> input)
+
+
+    //Function to create of list with the new symbol sequence based on the given list
+    private List<int> ReplacedList(List<int> input)
     {
         List<int> output = new List<int>();
-        for(int i = 0; i< inputSymbols.Count; i++)
+        for(int i = 0; i< _inputSymbols.Count; i++)
         {
-            if(input.Count == inputSymbols[i].Count)
+            if(input.Count == _inputSymbols[i].Count)
             {
 
                 int counter = 0;
-                for (int j = 0; j < inputSymbols[i].Count; j++)
+                for (int j = 0; j < _inputSymbols[i].Count; j++)
                 {
-                    if(input[j] == inputSymbols[i][j])
+                    if(input[j] == _inputSymbols[i][j])
                     {
                         counter++;
                     }
                 }
                 if(counter == input.Count)
                 {
-                    output = outputSymbols[i];
+                    output = _outputSymbols[i];
                 }
             }
         }
@@ -334,13 +348,17 @@ public class ReplacementPuzzle2 : MonoBehaviour
     }
 
 
+    //Function for the restart button
     public void restart()
     {
         if (!tutorial.inactive)
         {
-            setUp();
+            SetUp();
         }
     }
+
+    //Function for the leave button
+    //Open up a panel to check if the user really wants to leave
     public void leave()
     {
         if (!tutorial.inactive)
@@ -351,20 +369,25 @@ public class ReplacementPuzzle2 : MonoBehaviour
 
     }
 
+    //Function for the yes button, if the user really wants to leave
     public void yes()
     {
-        setUp();
+        SetUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         messageExit.SetActive(false);
     }
+
+    //Function for the no button, if the user does not want to leave
     public void no()
     {
         tutorial.inactive = false;
         messageExit.SetActive(false);
     }
+
+    //Function to close the message after user violated one of the rules
     public void close()
     {
         tutorial.inactive = false;

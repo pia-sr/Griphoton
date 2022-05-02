@@ -4,27 +4,31 @@ using UnityEngine;
 
 public class Reaper : MonoBehaviour
 {
-
+    //public variables
     public GridField grid;
     public GameObject player;
     public float hitValue = 500;
+    public Animator animator;
+    
+    //private variables
     private float healthValue;
     private bool hitPlayer = false;
     private HealthBar healthBar;
-    public Animator animator;
 
     void Start()
     {
 
-        int middleY = Mathf.RoundToInt(grid.getGridSizeY() / 2);
-        transform.position = grid.grid[grid.getGridSizeX() - 2, middleY].worldPosition + new Vector3(0, 0, -1f);
-        begin();
+        int middleY = Mathf.RoundToInt(grid.GetGridSizeY() / 2);
+        transform.position = grid.grid[grid.GetGridSizeX() - 2, middleY].worldPosition + new Vector3(0, 0, -1f);
+        SetUp();
     }
-    private void begin()
+
+    //Function to bring the reaper to their start position
+    private void SetUp()
     {
         StopAllCoroutines();
         hitPlayer = false;
-        healthValue = 100;
+        healthValue = 1000;
         healthBar = transform.GetChild(0).GetComponentInChildren<HealthBar>();
         healthBar.SetHealthBarValue(1);
         grid.GetNodeFromWorldPos(transform.position).isWalkable = false;
@@ -33,13 +37,13 @@ public class Reaper : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (next2Player())
+        if (Next2Player())
         {
             if (!hitPlayer)
             {
                 hitPlayer = true;
                 animator.SetBool("attack", hitPlayer);
-                StartCoroutine(hit());
+                StartCoroutine(Attack());
             }
             if (player.GetComponent<Player>().enemyHit)
             {
@@ -57,7 +61,9 @@ public class Reaper : MonoBehaviour
         }
     }
 
-    private bool next2Player()
+
+    //Checks if they are next to the player
+    private bool Next2Player()
     {
         foreach (Node neightbour in grid.GetNodeNeighbours(grid.GetNodeFromWorldPos(transform.position)))
         {
@@ -68,12 +74,13 @@ public class Reaper : MonoBehaviour
         }
         return false;
     }
-    IEnumerator hit()
-    {
 
-        //
+
+    //Function to attack the player
+    IEnumerator Attack()
+    {
         yield return new WaitForSeconds(0.5f);
-        player.GetComponent<Player>().reduceStrength(hitValue);
+        player.GetComponent<Player>().ReduceStrength(hitValue);
         animator.SetBool("attack", false);
         yield return new WaitForSeconds(2.5f);
 

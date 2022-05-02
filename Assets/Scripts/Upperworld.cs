@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class Upperworld : MonoBehaviour
 {
+    //public objects used in the field
     public GridField grid;
     public GameObject houses;
     public GameObject pathManager;
@@ -22,7 +23,8 @@ public class Upperworld : MonoBehaviour
     public GameObject path4Direction;
     public GameObject pathEnd;
 
-    private List<string> wonSentences;
+    //private list for the sentences after the user has solved the game
+    private List<string> _wonSentences;
 
     
 
@@ -30,77 +32,80 @@ public class Upperworld : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //grass tiles
         foreach (Node node in grid.grid)
         {
-            //if (node.onTop == null)
-            //{
-                int rand = Random.Range(0, 100);
-                GameObject grassObject;
-                if(rand < 2)
-                {
-                    grassObject = grass[0];
-                }
-                else if(rand < 4)
-                {
-                    grassObject = grass[1];
-                }
-                else if(rand < 6)
-                {
-                    grassObject = grass[2];
-                }
-                else if(rand < 8)
-                {
-                    grassObject = grass[3];
-                }
-                else if(rand < 10)
-                {
-                    grassObject = grass[4];
-                }
-                else if(rand < 12)
-                {
-                    grassObject = grass[5];
-                }
-                else if(rand < 30)
-                {
-                    grassObject = grass[6];
-                }
-                else
-                {
-                    grassObject = grass[7];
-                }
-                GameObject grassTile = Instantiate(grassObject, node.worldPosition, Quaternion.identity, treeManager.transform);
-                grassTile.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 1);
-                grassTile.transform.localPosition += new Vector3(0, 0, 5);
+            int rand = Random.Range(0, 100);
+            GameObject grassObject;
+            if (rand < 2)
+            {
+                grassObject = grass[0];
+            }
+            else if (rand < 4)
+            {
+                grassObject = grass[1];
+            }
+            else if (rand < 6)
+            {
+                grassObject = grass[2];
+            }
+            else if (rand < 8)
+            {
+                grassObject = grass[3];
+            }
+            else if (rand < 10)
+            {
+                grassObject = grass[4];
+            }
+            else if (rand < 12)
+            {
+                grassObject = grass[5];
+            }
+            else if (rand < 30)
+            {
+                grassObject = grass[6];
+            }
+            else
+            {
+                grassObject = grass[7];
+            }
+            GameObject grassTile = Instantiate(grassObject, node.worldPosition, Quaternion.identity, treeManager.transform);
+            grassTile.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 1);
+            grassTile.transform.localPosition += new Vector3(0, 0, 5);
 
-            //}
         }
-        houses.SetActive(true);
-        Node center = grid.grid[(int)grid.getGridSizeX() / 2, ((int)grid.getGridSizeY() / 2) +2];
-        grid.setHouse(center, "Dungeon");
 
-        houses.transform.GetChild(houses.transform.childCount - 1).transform.localPosition = center.worldPosition + new Vector3(0, 0, ( 150 * 150 * 0.000001f));
+        //Dungeon
+        houses.SetActive(true);
+        Node center = grid.grid[(int)grid.GetGridSizeX() / 2, ((int)grid.GetGridSizeY() / 2) +2];
+        grid.SetHouse(center, "Dungeon");
+
+        houses.transform.GetChild(houses.transform.childCount - 1).transform.localPosition = center.worldPosition + new Vector3(0, 0, (center.gridY * 0.000001f * center.gridX));
         houses.transform.GetChild(houses.transform.childCount - 1).GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 5);
         
         Pathfinder pathFinder = this.GetComponent<Pathfinder>();
         
-        if (data.namePlayer.Length == 0)
+        //if the user opens the app for the first time
+        if (data.namePlayer.Length == 0 || data.namePlayer == null)
         {
+            //houses
             for (int i = 0; i < houses.transform.childCount - 1; i++)
             {
-                int x = Random.Range(5, grid.getGridSizeX()-5);
-                int y = Random.Range(5, grid.getGridSizeY()-5);
+                int x = Random.Range(5, grid.GetGridSizeX()-5);
+                int y = Random.Range(5, grid.GetGridSizeY()-5);
 
 
                 while (grid.grid[x, y].onTop != null  || HouseNearby(grid.grid[x,y]))
                 {
-                    x = Random.Range(5, grid.getGridSizeX()-5);
-                    y = Random.Range(5, grid.getGridSizeY()-5);
+                    x = Random.Range(5, grid.GetGridSizeX()-5);
+                    y = Random.Range(5, grid.GetGridSizeY()-5);
                 }
 
-                grid.setHouse(grid.grid[x, y], houses.transform.GetChild(i).name);
-                buildHouse(grid.grid[x, y]);
+                grid.SetHouse(grid.grid[x, y], houses.transform.GetChild(i).name);
+                BuildHouse(grid.grid[x, y]);
 
             }
+            //creating the paths
             for (int i = 0; i < houses.transform.childCount; i++)
             {
                 int index = Random.Range(0, houses.transform.childCount - 1);
@@ -111,52 +116,59 @@ public class Upperworld : MonoBehaviour
                 List<Node> path = pathFinder.FindPath(houses.transform.GetChild(i).transform.localPosition, houses.transform.GetChild(index).transform.localPosition);
                 
             }
+            //trees
             for (int i = 0; i < 3000; i++)
             {
-                int x = Random.Range(0, grid.getGridSizeX());
-                int y = Random.Range(1, grid.getGridSizeY());
+                int x = Random.Range(0, grid.GetGridSizeX());
+                int y = Random.Range(1, grid.GetGridSizeY());
 
                 while (grid.grid[x, y].onTop != null)
                 {
-                    x = Random.Range(0, grid.getGridSizeX());
-                    y = Random.Range(1, grid.getGridSizeY());
+                    x = Random.Range(0, grid.GetGridSizeX());
+                    y = Random.Range(1, grid.GetGridSizeY());
 
                 }
                 GameObject treeT = Instantiate(tree, grid.grid[x, y].worldPosition, Quaternion.identity, treeManager.transform);
-                treeT.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 4);
-                treeT.transform.localPosition += new Vector3(0, 0, -0.1f +( y * x * 0.000001f));
-                grid.grid[x, y].setItemOnTop("Tree");
+                treeT.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 1);
+                treeT.transform.localPosition += new Vector3(0, 0, -0.1f + (y *  0.000001f * (x/10)));
+                grid.grid[x, y].SetItemOnTop("Tree");
 
             }
+            //setting the path
+            FindEndPath();
+            CreatingPath();
 
+            //saving everything
             data.xPos = center.gridX;
             data.yPos = center.gridY - 2;
-            findEndPath();
-            creatingPath();
             data.namePlayer = playerName;
             SaveSystem.saveGame(data);
             
         }
+        //user has played before and the previous layout is used
         else
         {
             int counter = 0;
             foreach (Node node in grid.grid)
             {
+                //houses
                 if (grid.ghostNames().Contains(node.onTop))
                 {
-                    grid.setHouse(node, node.onTop);
-                    buildHouse(node);
+                    grid.SetHouse(node, node.onTop);
+                    BuildHouse(node);
                     
                 }
+                //trees
                 else if (node.onTop == "Tree")
                 {
                     GameObject treeT = Instantiate(tree, node.worldPosition, Quaternion.identity, treeManager.transform);
                     treeT.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 4);
-                    treeT.transform.localPosition += new Vector3(0, 0, -0.1f + (node.gridX * node.gridY * 0.000001f));
+                    treeT.transform.localPosition += new Vector3(0, 0, -0.1f + ((node.gridX/2) * node.gridY * 0.000001f));
                 }
-                else if(node.onTop == "SovedCenter")
+                //solved houses
+                else if(node.onTop == "SolvedCenter")
                 {
-                    GameObject solvedHouse = Instantiate(moudField, node.worldPosition, Quaternion.identity, houses.transform);
+                    GameObject solvedHouse = Instantiate(moudField, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, pathManager.transform);
                     solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 1);
                 }
                 counter++;
@@ -168,14 +180,14 @@ public class Upperworld : MonoBehaviour
                     houses.transform.GetChild(i).gameObject.SetActive(false);
                 }
             }
-            findEndPath();
-            creatingPath();
-
+            //path
+            FindEndPath();
+            CreatingPath();
 
         }
 
         
-        wonSentences = new List<string>()
+        _wonSentences = new List<string>()
         {
             "Congratulations! \nYou solved the puzzle!",
             "Thank you so much for your help, " + playerName + "!",
@@ -184,69 +196,44 @@ public class Upperworld : MonoBehaviour
             "Now I can finally pass on. \nThank you, " + playerName + "!"
 
         };
-
-
     }
 
-    private void buildHouse(Node node)
+    //Function to build a house at a given node
+    private void BuildHouse(Node node)
     {
         GameObject house = GameObject.Find(node.onTop);
         house.transform.GetChild(0).gameObject.transform.localScale = new Vector3(grid.nodeRadius * 9, grid.nodeRadius * 9, 5);
-        house.transform.localPosition = node.worldPosition + new Vector3(0, 0, 1 + (node.gridX * node.gridY * 0.000001f));
+        house.transform.localPosition = node.worldPosition + new Vector3(0, 0, 1 + (node.gridY * node.gridX * 0.000001f));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-    private bool neighboursTree(Node node)
-    {
-        foreach(Node neighbour in grid.GetNodeNeighbours(node))
-        {
-            foreach(Node neighbours in grid.GetNodeNeighbours(neighbour))
-            {
-
-                if (neighbours.onTop == "House" || neighbours.onTop == "Dungeon" || neighbour.onTop == "House" || neighbour.onTop == "Dungeon")
-                {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    public void activateHouses(bool active)
-    {
-        for(int i = 0; i < houses.transform.childCount; i++)
-        {
-            houses.transform.GetChild(i).transform.GetChild(0).gameObject.SetActive(active);
-        }
-    }
-
-    public void setHouseSolved(string houseName)
+    //Function to set a given house as solved
+    public void SetHouseSolved(string houseName)
     {
         data.increaseMultiplier();
         foreach(Node node in grid.grid)
         {
             if(node.onTop == houseName)
             {
-                int randIndex = Random.Range(0, wonSentences.Count);
-                grid.solvedHouse(node);
+                int randIndex = Random.Range(0, _wonSentences.Count);
+                grid.SetHouseSolved(node);
                 GameObject house = GameObject.Find(houseName);
                 house.SetActive(false);
-                GameObject solvedHouse = Instantiate(moudField, node.worldPosition, Quaternion.identity, houses.transform);
+                GameObject solvedHouse = Instantiate(moudField, node.worldPosition + new Vector3(0,0,1), Quaternion.identity, houses.transform);
                 solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 1);
-                messageSimple.transform.parent.gameObject.SetActive(true);
-                messageSimple.text = wonSentences[randIndex];
+                messageSimple.transform.parent.parent.gameObject.SetActive(true);
+                messageSimple.text = _wonSentences[randIndex];
             }
         }
     }
+
+    //Function to close the won message
     public void close()
     {
-        messageSimple.transform.parent.gameObject.SetActive(false);
+        messageSimple.transform.parent.parent.gameObject.SetActive(false);
     }
 
-    private void creatingPath()
+    //Function to set the path for every single type of path
+    private void CreatingPath()
     {
         float size = 7;
         foreach(Node node in grid.grid)
@@ -264,7 +251,6 @@ public class Upperworld : MonoBehaviour
                 {
                     rotation.z = 180;
                     pathTile.transform.localRotation = Quaternion.Euler(rotation);
-                    //pathTile.transform.localPosition -= new Vector3(0, 0.2f, 0);
                 }
                 else if (node.onTop.Contains("Up"))
                 {
@@ -275,7 +261,6 @@ public class Upperworld : MonoBehaviour
                 {
                     rotation.z = 90;
                     pathTile.transform.localRotation = Quaternion.Euler(rotation);
-                    //pathTile.transform.localPosition += new Vector3( 0.1f, 0, 0);
                 }
             }
 
@@ -296,7 +281,6 @@ public class Upperworld : MonoBehaviour
                         var rotation = pathTile.transform.localRotation.eulerAngles;
                         rotation.z = 90;
                         pathTile.transform.localRotation = Quaternion.Euler(rotation);
-                        //pathTile.transform.localPosition += new Vector3(-0.1f, 0, 0);
                     }
                     else if (!node.onTop.Contains("Right"))
                     {
@@ -326,8 +310,6 @@ public class Upperworld : MonoBehaviour
                         var rotation = pathTile.transform.localRotation.eulerAngles;
                         rotation.z = 270;
                         pathTile.transform.localRotation = Quaternion.Euler(rotation);
-                        //pathTile.transform.localPosition += new Vector3(0, (0.085f * grid.nodeRadius * size), 0);
-                        //pathTile.transform.localPosition += new Vector3(-0.2f, -0.2f, 0);
                     }
                     else
                     {
@@ -348,7 +330,6 @@ public class Upperworld : MonoBehaviour
                     var rotation = pathTile.transform.localRotation.eulerAngles;
                     rotation.z = 180;
                     pathTile.transform.localRotation = Quaternion.Euler(rotation);
-                    //pathTile.transform.localPosition += new Vector3((0.085f * grid.nodeRadius * size), (0.085f * grid.nodeRadius * size), 0);
                 }
                 else if (!node.onTop.Contains("Right"))
                 {
@@ -357,7 +338,6 @@ public class Upperworld : MonoBehaviour
                     var rotation = pathTile.transform.localRotation.eulerAngles;
                     rotation.z = 90;
                     pathTile.transform.localRotation = Quaternion.Euler(rotation);
-                    //pathTile.transform.localPosition += new Vector3((0.085f * grid.nodeRadius * size), 0, 0);
                 }
                 else
                 {
@@ -376,7 +356,8 @@ public class Upperworld : MonoBehaviour
         }
     }
 
-    private void findEndPath()
+    //Function to find the end of a path
+    private void FindEndPath()
     {
         foreach(Node node in grid.grid)
         {
@@ -387,6 +368,7 @@ public class Upperworld : MonoBehaviour
         }
     }
 
+    //Function to check if another house is nearby so that the houses are not build so close to each other
     private bool HouseNearby(Node node)
     {
         foreach(Node neighbour1 in grid.GetNodeNeighboursDiagonal(node))

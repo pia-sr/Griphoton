@@ -8,52 +8,47 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    //public variables
     public GridField grid;
-    private Node targetNode;
     public GameObject options;
     public GameObject puzzles;
     public GameObject griphoton;
     public Pathfinder pathFinder;
-    private Node dungeon;
-    private List<Node> path;
-    private Node existingTarget;
-    public float speed;
-    private float strength;
+    public AudioSource griphotonSound;
+    public AudioSource dungeonSound;
+    public AudioSource puzzleSound;
+    public bool activateTutorial;
     public bool lost = false;
     public bool upperWorld;
     public int hitValue;
     public bool enemyHit;
     public bool blockEnemy = false;
-    private bool blockBool;
-    private bool foundPos = false;
-    private bool coroutineStart;
-    private float fullHealth;
-    private Game data;
     public bool leaveLevel;
-    private bool chooseExit;
-    private bool attackBool;
+    public float speed;
     public GameObject messageSimple;
     public Text message2Options;
     public Animator animator;
-    private int xInput;
-    private int yInput;
-    public AudioSource griphotonSound;
-    public AudioSource dungeonSound;
-    public AudioSource puzzleSound;
-    public bool activateTutorial;
-
-    private void setAllBoolsFalse()
-    {
-        blockEnemy = false;
-        blockBool = false;
-        coroutineStart = false;
-        attackBool = false;
-    }
-
     public HealthBar healthBar;
+
+    //private variables
+    private Node _existingTarget;
+    private List<Node> _path;
+    private float _strength;
+    private bool _blockBool;
+    private Node _targetNode;
+    private bool _foundPos;
+    private bool _coroutineStart;
+    private float _fullHealth;
+    private Game _data;
+    private bool _chooseExit;
+    private bool _attackBool;
+    private int _xInput;
+    private int _yInput;
+
+    //On awke the player looks for the game data
     private void Awake()
     {
-        data = GameObject.Find("GameData").GetComponent<Game>();
+        _data = GameObject.Find("GameData").GetComponent<Game>();
         
     }
 
@@ -62,70 +57,73 @@ public class Player : MonoBehaviour
     {
         animator.SetBool("isWalking", false);
         enemyHit = false;
-        hitValue = 25 + (10 * data.strenghtMultiplier);
-        targetNode = null;
-        existingTarget = null;
-        strength = 100 + (75 + data.strenghtMultiplier);
-        fullHealth = strength;
+        hitValue = 25 + (15 * _data.strenghtMultiplier);
+        _targetNode = null;
+        _existingTarget = null;
+        _strength = 100 + (100 + _data.strenghtMultiplier);
+        _fullHealth = _strength;
         if (!upperWorld)
         {
             healthBar.SetHealthBarValue(1);
-            chooseExit = false;
+            _chooseExit = false;
             dungeonSound.Play();
         }
         else
         {
             griphotonSound.Play();
-            transform.position = grid.grid[data.xPos, data.yPos].worldPosition;
+            transform.position = grid.grid[_data.xPos, _data.yPos].worldPosition;
 
-            foundPos = true;
+            _foundPos = true;
         }
-        xInput = 0;
-        yInput = -1;
+        _xInput = 0;
+        _yInput = -1;
 
 
-        animator.SetFloat("XInput", xInput);
-        animator.SetFloat("YInput", yInput);
+        animator.SetFloat("XInput", _xInput);
+        animator.SetFloat("YInput", _yInput);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(xInput == 0 && yInput == 0)
+        //The player looks downwards if they do not have a direction
+        if(_xInput == 0 && _yInput == 0)
         {
 
-            xInput = 0;
-            yInput = -1;
+            _xInput = 0;
+            _yInput = -1;
 
 
-            animator.SetFloat("XInput", xInput);
-            animator.SetFloat("YInput", yInput);
+            animator.SetFloat("XInput", _xInput);
+            animator.SetFloat("YInput", _yInput);
         }
+
+        //if the player is not active in Griphoton, the sound is turned off
         if (!this.gameObject.activeSelf && griphotonSound.isPlaying)
         {
             griphotonSound.Pause();
         }
-        if(targetNode == null)
+        
+        //The animation of walkíng stops if the player has no target
+        if(_targetNode == null)
         {
 
             animator.SetBool("isWalking", false);
         }
+        //the user can leave the game by pressing the exit button on their phone, the player will then save their progress
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (!upperWorld)
+            if(upperWorld)
             {
-                data.xPos = 150;
-                data.yPos = 150;
-            }
-            else
-            {
-                data.xPos = grid.GetNodeFromWorldPos(transform.position).gridX;
-                data.yPos = grid.GetNodeFromWorldPos(transform.position).gridY;
+                _data.xPos = grid.GetNodeFromWorldPos(transform.position).gridX;
+                _data.yPos = grid.GetNodeFromWorldPos(transform.position).gridY;
                 
             }
-            data.SaveGame();
+            _data.SaveGame();
             Application.Quit();
         }
+
+        //sets all things active that need to be active in Griphoton
         if(this.gameObject.activeSelf && upperWorld)
         {
             if (!options.activeSelf)
@@ -142,49 +140,51 @@ public class Player : MonoBehaviour
                 puzzleSound.Pause();
             }
         }
-        restart();
-        if (!foundPos)
+        //After dungeon lost to find their position
+        RestartLevel();
+        if (!_foundPos)
         {
             if (!upperWorld)
             {
-                if (!chooseExit)
+                if (!_chooseExit)
                 {
 
-                    entranceLevel();
+                    EntranceLevel();
                 }
                 else
                 {
-                    chooseExit = false;
-                    exitLevel();
+                    _chooseExit = false;
+                    ExitLevel();
                 }
             }
         }
-        else if (targetNode != null)
+        else if (_targetNode != null)
         {
-            path = pathFinder.FindPathPlayer(transform.position, targetNode.worldPosition);
-            if (path.Count > 1)
+            _path = pathFinder.FindPathPlayer(transform.position, _targetNode.worldPosition);
+            if (_path.Count > 1)
             {
-                if (targetNode == existingTarget)
+                if (_targetNode == _existingTarget)
                 {
-                    if (!coroutineStart)
+                    if (!_coroutineStart)
                     {
                         animator.SetBool("isWalking", true);
-                        coroutineStart = true;
-                        StartCoroutine(move());
+                        _coroutineStart = true;
+                        StartCoroutine(Move());
                     }
 
 
                 }
-                else if (!coroutineStart)
+                else if (!_coroutineStart)
                 {
-                    existingTarget = targetNode;
+                    _existingTarget = _targetNode;
                 }
 
             }
-            else if (targetNode.onTop == "Portal")
+            //if the player reached the portal, the game is over
+            else if (_targetNode.onTop == "Portal")
             {
-                pause();
-                int unsolvedPuzzles = 23 - data.strenghtMultiplier;
+                Pause();
+                int unsolvedPuzzles = 23 - _data.strenghtMultiplier;
                 if (unsolvedPuzzles == 0)
                 {
                     messageSimple.SetActive(true);
@@ -194,62 +194,79 @@ public class Player : MonoBehaviour
                     message2Options.text = "You still have " + unsolvedPuzzles + " unsolved Puzzles left. \n Do you want to stay and solve them or do you want to leave?";
                 }
             }
-            else if (grid.GetNodeFromWorldPos(transform.position).onTop == "Entrance" && targetNode.onTop == "Entrance")
+            //if the player reached an entrance in the dungeon, they will walk to the previous level
+            else if (grid.GetNodeFromWorldPos(transform.position).onTop == "Entrance" && _targetNode.onTop == "Entrance")
             {
 
                 animator.SetBool("isWalking", false);
-                previousLevel();
-                data.SaveGame();
+                PreviousLevel();
+                _data.SaveGame();
             }
+            //if the player reached an exit in the dungeon, they will walk into the next level
             else if (grid.GetNodeFromWorldPos(transform.position).onTop == "ExitOpen")
             {
 
                 animator.SetBool("isWalking", false);
-                nextLevel();
-                data.SaveGame();
+                NextLevel();
+                _data.SaveGame();
             }
-            else if (grid.ghostNames().Contains(targetNode.onTop) || grid.ghostNames().Contains(targetNode.owner))
+            //if the player walks into a house the specific house with its puzzle will be set as active
+            else if (grid.ghostNames().Contains(_targetNode.onTop) || grid.ghostNames().Contains(_targetNode.owner))
             {
                 griphotonSound.Pause();
                 animator.SetBool("isWalking", false);
                 activateTutorial = true;
                 options.SetActive(false);
-                data.SaveGame();
-                string ghostName = grid.grid[path[0].gridX, path[0].gridY + 2].onTop;
-                GameObject ghostHouse = findWithTag(ghostName);
+                _data.SaveGame();
+                string ghostName = grid.grid[_path[0].gridX, _path[0].gridY + 2].onTop;
+                GameObject ghostHouse = FindWithTag(ghostName);
                 griphoton.SetActive(false);
                 ghostHouse.SetActive(true);
-                targetNode = null;
-                setAllBoolsFalse();
+                _targetNode = null;
+                SetAllBoolsFalse();
                 this.gameObject.SetActive(false);
             }
-            else if (targetNode.onTop == "Dungeon" || targetNode.owner == "Dungeon")
+            //if the player enters the dungeon, all the data is saved and the dungeon loaded
+            else if (_targetNode.onTop == "Dungeon" || _targetNode.owner == "Dungeon")
             {
-                data.xPos = grid.GetNodeFromWorldPos(transform.position).gridX;
-                data.yPos = grid.GetNodeFromWorldPos(transform.position).gridY;
+                _data.xPos = grid.TagToNode("Dungeon").gridX;
+                _data.yPos = grid.TagToNode("Dungeon").gridY - 2;
                 animator.SetBool("isWalking", false);
-                data.SaveGame();
+                _data.SaveGame();
                 SceneManager.LoadScene("Dungeon");
             }
-            else if (targetNode == grid.GetNodeFromWorldPos(transform.position))
+            //if the player reached their target the walking animation stops
+            else if (_targetNode == grid.GetNodeFromWorldPos(transform.position))
             {
                 animator.SetBool("isWalking", false);
             }
         }
+        //waits for user input to find target
         if (Input.touchCount > 0 && EventSystem.current.currentSelectedGameObject == null)
         {
             Touch touch = Input.GetTouch(0);
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-            if(grid.bounds().Contains(touchPosition))
+            if(grid.Bounds().Contains(touchPosition))
             {
-                targetNode = grid.GetNodeFromWorldPos(touchPosition);
+                _targetNode = grid.GetNodeFromWorldPos(touchPosition);
             }
 
             
         }
 
     }
-    private void entranceLevel()
+
+    //Function to set all important bools as false
+    private void SetAllBoolsFalse()
+    {
+        blockEnemy = false;
+        _blockBool = false;
+        _coroutineStart = false;
+        _attackBool = false;
+    }
+
+    //Player entering a room by its entrance
+    private void EntranceLevel()
     {
         List<Node> entraceNodes = new List<Node>();
         foreach (Node node in grid.grid)
@@ -262,10 +279,12 @@ public class Player : MonoBehaviour
         if (entraceNodes.Count == 3)
         {
             transform.position = entraceNodes[1].worldPosition - new Vector3(0, 0, 1);
-            foundPos = true;
+            _foundPos = true;
         }
     }
-    private void exitLevel()
+
+    //PLayer entering a room by its exit
+    private void ExitLevel()
     {
         List<Node> entraceNodes = new List<Node>();
         foreach (Node node in grid.grid)
@@ -278,11 +297,12 @@ public class Player : MonoBehaviour
         if (entraceNodes.Count != 0)
         {
             transform.position = entraceNodes[1].worldPosition - new Vector3(0, 0, 1);
-            foundPos = true;
+            _foundPos = true;
         }
     }
 
-    private void previousLevel()
+    //Player going to the previous dungeon level
+    private void PreviousLevel()
     {
         int levelNr = -1;
         GameObject levels = GameObject.FindWithTag("Levels");
@@ -296,18 +316,19 @@ public class Player : MonoBehaviour
         if (levelNr != -1)
         {
             leaveLevel = true;
-            setAllBoolsFalse();
-            pause();
+            SetAllBoolsFalse();
+            Pause();
             levels.transform.GetChild(levelNr).gameObject.SetActive(false);
             levels.transform.GetChild(levelNr - 1).gameObject.SetActive(true);
-            chooseExit = true;
-            foundPos = false;
-            StartCoroutine(wait());
-            unpause();
+            _chooseExit = true;
+            _foundPos = false;
+            StartCoroutine(Wait());
+            Unpause();
         }
     }
 
-    private void nextLevel()
+    //Player going to the next level
+    private void NextLevel()
     {
         int levelNr = -1;
         GameObject levels = GameObject.FindWithTag("Levels");
@@ -321,35 +342,35 @@ public class Player : MonoBehaviour
         if(levelNr != -1)
         {
             leaveLevel = true;
-            setAllBoolsFalse();
-            pause();
+            SetAllBoolsFalse();
+            Pause();
             levels.transform.GetChild(levelNr).gameObject.SetActive(false);
             levels.transform.GetChild(levelNr + 1).gameObject.SetActive(true);
-            foundPos = false;
-            StartCoroutine(wait());
-            unpause();
+            _foundPos = false;
+            StartCoroutine(Wait());
+            Unpause();
         }
     }
     
-
-    private IEnumerator move()
+    //Function for the player to move
+    //source: https://forum.unity.com/threads/transform-position-speed.744293/
+    private IEnumerator Move()
     {
-        //source: https://forum.unity.com/threads/transform-position-speed.744293/
-        if(existingTarget == null)
+        if(_existingTarget == null)
         {
-            existingTarget = targetNode;
+            _existingTarget = _targetNode;
         }
         Vector3 pos = transform.position;
-        xInput = path[1].gridX - grid.GetNodeFromWorldPos(pos).gridX;
-        yInput = path[1].gridY - grid.GetNodeFromWorldPos(pos).gridY;
+        _xInput = _path[1].gridX - grid.GetNodeFromWorldPos(pos).gridX;
+        _yInput = _path[1].gridY - grid.GetNodeFromWorldPos(pos).gridY;
 
         
-        animator.SetFloat("XInput", xInput);
-        animator.SetFloat("YInput", yInput);
+        animator.SetFloat("XInput", _xInput);
+        animator.SetFloat("YInput", _yInput);
         float goal;
-        if (pos.x == path[1].worldPosition.x)
+        if (pos.x == _path[1].worldPosition.x)
         {
-            goal = path[1].worldPosition.y;
+            goal = _path[1].worldPosition.y;
             while (pos.y != goal)
             {
                 pos.y = Mathf.MoveTowards(pos.y, goal, 2f * Time.deltaTime);
@@ -357,9 +378,9 @@ public class Player : MonoBehaviour
                 yield return null;
             }
         }
-        else if(pos.y == path[1].worldPosition.y)
+        else if(pos.y == _path[1].worldPosition.y)
         {
-            goal = path[1].worldPosition.x;
+            goal = _path[1].worldPosition.x;
 
             while (pos.x != goal)
             {
@@ -370,81 +391,88 @@ public class Player : MonoBehaviour
 
 
         }
-        coroutineStart = false;
+        _coroutineStart = false;
 
     }
 
-    public void reduceStrength(float hit)
+    //Function to reduce the player's health
+    public void ReduceStrength(float hit)
     {
-        float healthReduc = hit / fullHealth;
+        float healthReduc = hit / _fullHealth;
         
-        strength -= hit;
+        _strength -= hit;
         healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
-        if(strength <= 0)
+        if(_strength <= 0)
         {
             lost = true;
         }
 
     }
-    private void restart()
+
+    //Function to restart a dungeon level
+    private void RestartLevel()
     {
         if (lost)
         {
-            pause();
+            Pause();
             lost = false;
             GameObject levels = GameObject.FindWithTag("Levels");
-            targetNode = null;
+            _targetNode = null;
             StopAllCoroutines();
             leaveLevel = true;
-            setAllBoolsFalse();
+            SetAllBoolsFalse();
 
-            if(data.activeLevel != 1) 
+            if(_data.activeLevel != 1) 
             { 
-                levels.transform.GetChild(data.activeLevel-1).gameObject.SetActive(false);
-                levels.transform.GetChild(data.activeLevel-2).gameObject.SetActive(true);
+                levels.transform.GetChild(_data.activeLevel-1).gameObject.SetActive(false);
+                levels.transform.GetChild(_data.activeLevel-2).gameObject.SetActive(true);
             }
             healthBar.SetHealthBarValue(1);
-            foundPos = false;
-            strength = fullHealth;
-            StartCoroutine(wait());
-            unpause();
+            _foundPos = false;
+            _strength = _fullHealth;
+            StartCoroutine(Wait());
+            Unpause();
         }
     }
 
-    public void attack()
+    //Function for the attack button to attack a monster
+    public void Attack()
     {
         animator.SetBool("isWalking", false);
-        targetNode = null;
-        coroutineStart = false;
-        if (enemyNearby() && !attackBool)
+        _targetNode = null;
+        _coroutineStart = false;
+        if (MonsterNearby() && !_attackBool)
         {
             animator.SetTrigger("Attack");
-            StartCoroutine(wait2Hit());
+            StartCoroutine(WaitToAttack());
         }
     }
+
+    //Function for the block button to block a monster
     public void block()
     {
 
         animator.SetBool("isWalking", false);
-        targetNode = null;
-        coroutineStart = false;
-        if (!blockBool && enemyNearby())
+        _targetNode = null;
+        _coroutineStart = false;
+        if (!_blockBool && MonsterNearby())
         {
-            StartCoroutine(wait2Block());
+            StartCoroutine(WaitToBlock());
         }
     }
 
-    private bool enemyNearby()
+    //Function to check if a monster is next to the player
+    private bool MonsterNearby()
     {
         foreach (Node neighbour in grid.GetNodeNeighbours(grid.GetNodeFromWorldPos(transform.position)))
         {
-            if (grid.getEnemiesPos().Contains(neighbour))
+            if (grid.GetEnemiesPos().Contains(neighbour))
             {
-                xInput = neighbour.gridX - grid.GetNodeFromWorldPos(transform.position).gridX;
-                yInput = neighbour.gridY - grid.GetNodeFromWorldPos(transform.position).gridY;
+                _xInput = neighbour.gridX - grid.GetNodeFromWorldPos(transform.position).gridX;
+                _yInput = neighbour.gridY - grid.GetNodeFromWorldPos(transform.position).gridY;
 
-                animator.SetFloat("XInput", xInput);
-                animator.SetFloat("YInput", yInput);
+                animator.SetFloat("XInput", _xInput);
+                animator.SetFloat("YInput", _yInput);
 
                 return true;
             }
@@ -452,30 +480,35 @@ public class Player : MonoBehaviour
 
         return false;
     }
-    IEnumerator wait2Hit()
+
+    //Function to make the player wait until he can attack again
+    IEnumerator WaitToAttack()
     {
-        attackBool = true;
+        _attackBool = true;
         enemyHit = true;
         yield return new WaitForSeconds(1);
-        attackBool = false;
+        _attackBool = false;
     }
 
-    IEnumerator wait2Block()
+    //Function to make the player wait until he can block again
+    IEnumerator WaitToBlock()
     {
-        blockBool = true;
+        _blockBool = true;
         blockEnemy = true;
         yield return new WaitForSeconds(0.5f);
         blockEnemy = false;
         yield return new WaitForSeconds(2);
-        blockBool = false;
+        _blockBool = false;
     }
-    IEnumerator wait()
+    //Function to wait
+    IEnumerator Wait()
     {
         yield return new WaitForSeconds(0.1f);
         leaveLevel = false;
     }
 
-    private GameObject findWithTag(string tag)
+    //Function to find a puzzle by its tag
+    private GameObject FindWithTag(string tag)
     {
         GameObject foundPuzzles = null;
         for(int i = 0; i < puzzles.transform.childCount; i++)
@@ -487,35 +520,37 @@ public class Player : MonoBehaviour
         }
         return foundPuzzles;
     }
-    public void pause()
+
+    //Function to pause the player
+    public void Pause()
     {
-        animator.SetBool("isWalking", false);
         StopAllCoroutines();
-        targetNode = null;
-        coroutineStart = true;
+        _targetNode = null;
+        _coroutineStart = true;
+        animator.SetBool("isWalking", false);
     }
-    public void unpause()
+
+    //Function to unpause the player
+    public void Unpause()
     {
-        StartCoroutine(wait2Move());
+        StartCoroutine(WaitToMove());
     }
 
-    IEnumerator wait2Move()
+    //Function to make the player wait until they can move again
+    IEnumerator WaitToMove()
     {
-        yield return new WaitForSeconds(2f);
-        coroutineStart = false;
+        yield return new WaitForSeconds(1f);
+        _targetNode = null;
+        _coroutineStart = false;
 
     }
 
+    //Function for the restart button to restart the whole game
     public void Restart()
     {
-        data.namePlayer = null;
-        data.SaveGame();
+        _data.namePlayer = null;
+        _data.SaveGame();
         Application.Quit();
     }
 
-    public void Stay()
-    {
-        message2Options.transform.parent.transform.parent.gameObject.SetActive(false);
-        unpause();
-    }
 }

@@ -6,52 +6,56 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridField))]
 public class RoomPuzzle : MonoBehaviour
 {
+    //public field objects
     public GridField grid;
-
     public GameObject tile;
     public GameObject tilemanager;
     public GameObject colourTile;
-    private List<GameObject> neighbours;
-    private List<Node> textTiles;
     public Canvas canvas;
     public Text numbers;
+    public GameObject message;
+
+    //public variables to communicate with other scripts
     public GameObject griphoton;
     public GameObject player;
     public RoomTutorial tutorial;
-    public GameObject message;
 
-    private List<Node> red;
-    private List<Node> blue;
-    private List<Node> yellow;
-    private bool select;
-    private bool unselect;
-    private Color colourEmpty;
+    //private variabels
+    private List<Node> _red;
+    private List<Node> _blue;
+    private List<Node> _yellow;
+    private bool _select;
+    private bool _unselect;
+    private Color _colourEmpty;
+    private List<GameObject> _neighbours;
+    private List<Node> _textTiles;
+    private float _size;
 
-    private float size;
-
-    //compare bounds instead of list size
-
-    void Awake()
+    // Start is called before the first frame update
+    void Start()
     {
-        grid = GetComponent<GridField>();
+
+        _colourEmpty = new Color(1, 0.8f, 0.65f);
+        SetUp();
     }
 
-    private void setUp()
+    //Function to set the field to its original state
+    private void SetUp()
     {
 
         for (int i = 0; i < tilemanager.transform.childCount; i++)
         {
             Destroy(tilemanager.transform.GetChild(i).gameObject);
         }
-        select = false;
-        unselect = false;
+        _select = false;
+        _unselect = false;
         colourTile.GetComponent<SpriteRenderer>().color = Color.red;
-        size = grid.nodeRadius;
-        red = new List<Node>();
-        blue = new List<Node>();
-        yellow = new List<Node>();
+        _size = grid.nodeRadius;
+        _red = new List<Node>();
+        _blue = new List<Node>();
+        _yellow = new List<Node>();
 
-        textTiles = new List<Node>()
+        _textTiles = new List<Node>()
         {
             grid.grid[0,1],
             grid.grid[0,5],
@@ -63,10 +67,10 @@ public class RoomPuzzle : MonoBehaviour
         };
         foreach (Node node in grid.grid)
         {
-            tile.transform.localScale = new Vector3(size * 2, size * 2, 0);
-            tile.GetComponent<SpriteRenderer>().color = colourEmpty;
+            tile.transform.localScale = new Vector3(_size * 2, _size * 2, 0);
+            tile.GetComponent<SpriteRenderer>().color = _colourEmpty;
             Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
-            if (textTiles.Contains(node) && canvas.transform.childCount < textTiles.Count)
+            if (_textTiles.Contains(node) && canvas.transform.childCount < _textTiles.Count)
             {
                 numbers.fontSize = 120;
                 numbers.GetComponent<RectTransform>().sizeDelta = new Vector3(160, 160, 0);
@@ -77,19 +81,6 @@ public class RoomPuzzle : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-
-        colourEmpty = new Color(1, 0.8f, 0.65f);
-        setUp();
-    }
-    private Rect tile2Rect(Transform tile)
-    {
-
-        Rect rect = new Rect(tile.transform.position.x - size, tile.transform.position.y - size, size*2, size*2);
-        return rect;
-    }
 
     // Update is called once per frame
     void Update()
@@ -98,44 +89,44 @@ public class RoomPuzzle : MonoBehaviour
         {
 
             Color colour = colourTile.GetComponent<SpriteRenderer>().color;
-            Rect rectColour = tile2Rect(colourTile.transform);
+            Rect rectColour = Object2Rect(colourTile.transform);
             Touch touch = Input.GetTouch(0);
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             for (int i = 0; i < tilemanager.transform.childCount; i++)
             {
-                Rect rect = tile2Rect(tilemanager.transform.GetChild(i));
+                Rect rect = Object2Rect(tilemanager.transform.GetChild(i));
 
-
-
+                //Depending if the touch just a tap or hold and depending if the tile is already coloured-in
+                //it will either colour in one or more tiles or set them as empty
                 if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                 {
                     
                     var rend = tilemanager.transform.GetChild(i).GetComponent<SpriteRenderer>();
                     Node child = grid.GetNodeFromWorldPos(rect.center);
-                    if (rend.color == colourEmpty && !unselect)
+                    if (rend.color == _colourEmpty && !_unselect)
                     {
                         if (touch.phase == TouchPhase.Began)
                         {
-                            select = true;
+                            _select = true;
                         }
-                        if (colourAlreadyExists())
+                        if (ColourAlreadyExists())
                         {
-                            foreach (GameObject neighbour in neighbourTiles(tilemanager.transform.GetChild(i).gameObject))
+                            foreach (GameObject neighbour in NeighbourTiles(tilemanager.transform.GetChild(i).gameObject))
                             {
                                 if (neighbour.GetComponent<SpriteRenderer>().color == colour)
                                 {
                                     rend.color = colour;
-                                    if (colour == Color.red && !red.Contains(child))
+                                    if (colour == Color.red && !_red.Contains(child))
                                     {
-                                        red.Add(child);
+                                        _red.Add(child);
                                     }
-                                    else if (colour == Color.blue && !blue.Contains(child))
+                                    else if (colour == Color.blue && !_blue.Contains(child))
                                     {
-                                        blue.Add(child);
+                                        _blue.Add(child);
                                     }
-                                    else if (colour == Color.yellow && !yellow.Contains(child))
+                                    else if (colour == Color.yellow && !_yellow.Contains(child))
                                     {
-                                        yellow.Add(child);
+                                        _yellow.Add(child);
                                     }
 
                                 }
@@ -144,39 +135,39 @@ public class RoomPuzzle : MonoBehaviour
                         else
                         {
                             rend.color = colour;
-                            if (colour == Color.red && !red.Contains(child))
+                            if (colour == Color.red && !_red.Contains(child))
                             {
-                                red.Add(child);
+                                _red.Add(child);
                             }
-                            else if (colour == Color.blue && !blue.Contains(child))
+                            else if (colour == Color.blue && !_blue.Contains(child))
                             {
-                                blue.Add(child);
+                                _blue.Add(child);
                             }
-                            else if (colour == Color.yellow && !yellow.Contains(child))
+                            else if (colour == Color.yellow && !_yellow.Contains(child))
                             {
-                                yellow.Add(child);
+                                _yellow.Add(child);
                             }
                         }
                     }
-                    else if(!select)
+                    else if(!_select)
                     {
                         if (touch.phase == TouchPhase.Began)
                         {
-                            unselect = true;
+                            _unselect = true;
                         }
                         if (rend.color == Color.red)
                         {
-                            red.Remove(child);
+                            _red.Remove(child);
                         }
                         else if (rend.color == Color.blue)
                         {
-                            blue.Remove(child);
+                            _blue.Remove(child);
                         }
                         else if (rend.color == Color.yellow)
                         {
-                            yellow.Remove(child);
+                            _yellow.Remove(child);
                         }
-                        rend.color = colourEmpty;
+                        rend.color = _colourEmpty;
                     }
                 }
 
@@ -202,23 +193,33 @@ public class RoomPuzzle : MonoBehaviour
             }
             else if (touch.phase == TouchPhase.Ended)
             {
-                select = false;
-                unselect = false;
+                _select = false;
+                _unselect = false;
             }
 
-            if (checkWin())
+            if (CheckWin())
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
                 this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
 
         }
     }
-    private List<GameObject> neighbourTiles(GameObject tile)
+
+    //Function to create a rectagle on top of a given object to set rectangular boundaries for that object
+    private Rect Object2Rect(Transform tile)
     {
-        neighbours = new List<GameObject>();
+
+        Rect rect = new Rect(tile.transform.position.x - _size, tile.transform.position.y - _size, _size*2, _size*2);
+        return rect;
+    }
+
+    //Function to create a list of all the neighbouring tiles of the given tile
+    private List<GameObject> NeighbourTiles(GameObject tile)
+    {
+        _neighbours = new List<GameObject>();
         for (int i = -1; i < 2; i++)
         {
             for (int j = -1; j < 2; j++)
@@ -232,19 +233,21 @@ public class RoomPuzzle : MonoBehaviour
                     for (int k = 0; k < tilemanager.transform.childCount; k++)
                     {
                         Bounds bounds = new Bounds(grid.transform.position, grid.gridWorldSize);
-                        if (bounds.Contains(tile.transform.position + new Vector3(size*2 * i, size*2 * j, 0)) && tile.transform.position + new Vector3(size*2 * i, size*2 * j, 0) == tilemanager.transform.GetChild(k).transform.position)
+                        if (bounds.Contains(tile.transform.position + new Vector3(_size*2 * i, _size*2 * j, 0)) && tile.transform.position + new Vector3(_size*2 * i, _size*2 * j, 0) == tilemanager.transform.GetChild(k).transform.position)
                         {
-                            neighbours.Add(tilemanager.transform.GetChild(k).gameObject);
+                            _neighbours.Add(tilemanager.transform.GetChild(k).gameObject);
                         }
                     }
                 }
 
             }
         }
-        return neighbours;
+        return _neighbours;
 
     }
-    private bool colourAlreadyExists()
+
+    //Function to check if a colour already exists on the field
+    private bool ColourAlreadyExists()
     {
         for (int i = 0; i < tilemanager.transform.childCount; i++)
         {
@@ -255,34 +258,37 @@ public class RoomPuzzle : MonoBehaviour
         }
         return false;
     }
-    private bool checkWin()
+
+
+    //Function to check if the player has solved the puzzle
+    private bool CheckWin()
     {
-        if (!(red.Count == 12 && blue.Count == 12 && yellow.Count == 12))
+        if (!(_red.Count == 12 && _blue.Count == 12 && _yellow.Count == 12))
         {
             return false;
         }
         else
         {
   
-            for(int i = 0; i < textTiles.Count; i++)
+            for(int i = 0; i < _textTiles.Count; i++)
             {
                 int next = 0;
                 int counter = 0;
                 int varX;
                 int varY;
-                Node nextNode = textTiles[i];
+                Node nextNode = _textTiles[i];
                 List<Node> varList = new List<Node>();
-                if (red.Contains(nextNode))
+                if (_red.Contains(nextNode))
                 {
-                    varList = red;
+                    varList = _red;
                 }
-                else if (blue.Contains(nextNode))
+                else if (_blue.Contains(nextNode))
                 {
-                    varList = blue;
+                    varList = _blue;
                 }
-                else if (yellow.Contains(nextNode))
+                else if (_yellow.Contains(nextNode))
                 {
-                    varList = yellow;
+                    varList = _yellow;
                 }
                 while (next < 4)
                 {
@@ -306,8 +312,8 @@ public class RoomPuzzle : MonoBehaviour
                         varX = 0;
                         varY = -1;
                     }
-                    if (nextNode.gridX + varX >= 0 && nextNode.gridX + varX < grid.getGridSizeX() && nextNode.gridY + varY >= 0 
-                        && nextNode.gridY + varY < grid.getGridSizeY() && varList.Contains(grid.grid[nextNode.gridX + varX, nextNode.gridY + varY]))
+                    if (nextNode.gridX + varX >= 0 && nextNode.gridX + varX < grid.GetGridSizeX() && nextNode.gridY + varY >= 0 
+                        && nextNode.gridY + varY < grid.GetGridSizeY() && varList.Contains(grid.grid[nextNode.gridX + varX, nextNode.gridY + varY]))
                     {
                         counter++;
                         nextNode = grid.grid[nextNode.gridX + varX, nextNode.gridY + varY];
@@ -315,7 +321,7 @@ public class RoomPuzzle : MonoBehaviour
                     else
                     {
                         next++;
-                        nextNode = textTiles[i];
+                        nextNode = _textTiles[i];
                     }
                 }
                 if(counter != 3)
@@ -326,14 +332,19 @@ public class RoomPuzzle : MonoBehaviour
         }
         return true;
     }
+
+    //Function for the restart button
     public void restart()
     {
         if (!tutorial.inactive)
         {
-            setUp();
+            SetUp();
 
         }
     }
+
+    //Function for the leave button
+    //Open up a panel to check if the user really wants to leave
     public void leave()
     {
         if (!tutorial.inactive)
@@ -344,15 +355,18 @@ public class RoomPuzzle : MonoBehaviour
 
     }
 
+    //Function for the yes button, if the user really wants to leave
     public void yes()
     {
-        setUp();
+        SetUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         message.SetActive(false);
     }
+
+    //Function for the no button, if the user does not want to leave
     public void no()
     {
         tutorial.inactive = false;

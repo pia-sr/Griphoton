@@ -6,40 +6,42 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridField))]
 public class PiecesOf8_2 : MonoBehaviour
 {
+    //public field objects
     public GridField grid;
-
     public GameObject tile;
     public GameObject tilemanager;
     public GameObject colourTile;
-    private List<GameObject> neighbours;
-    private List<Node> sideNumbersPos;
     public GameObject sideNumbers;
     public GameObject tileNumbers;
     public Text numbers;
+    public GameObject message;
     public Text colourText;
+
+    //public variables to communicate with other scripts
     public GameObject griphoton;
     public GameObject player;
     public PieceOf8Tutorial tutorial;
-    public GameObject message;
-    private Color colourEmpty;
 
-    private List<Color> colours;
+    //private variables
+    private List<GameObject> _neighbours;
+    private List<Node> _sideNumbersPos;
+    private Color _colourEmpty;
+    private List<Color> _colours;
+    private float _size;
 
-
-    private float size;
-
-    //compare bounds instead of list size
-
-    void Awake()
+    // Start is called before the first frame update
+    void Start()
     {
-        grid = GetComponent<GridField>();
+        _colourEmpty = new Color(1, 0.8f, 0.65f);
+        SetUp();
     }
 
-    private void setUp()
+    //Function to set the field to its original state
+    private void SetUp()
     {
         colourTile.GetComponent<SpriteRenderer>().color = Color.red;
         colourText.text = "1";
-        size = grid.nodeRadius;
+        _size = grid.nodeRadius;
         for(int i = 0; i < tileNumbers.transform.childCount; i++)
         {
             Destroy(tileNumbers.transform.GetChild(i).gameObject);
@@ -51,14 +53,14 @@ public class PiecesOf8_2 : MonoBehaviour
         Color orange = new Color(1, 0.5539422f, 0.1006289f, 1);
         Color blue = new Color(0.2019105f, 0.5038049f, 0.7735849f, 1);
         Color purple = new Color(0.7108399f, 0.5169099f, 0.9339623f, 1);
-        sideNumbersPos = new List<Node>()
+        _sideNumbersPos = new List<Node>()
         {
             grid.grid[2,0],
             grid.grid[3,0],
             grid.grid[4,0],
             grid.grid[0,4]
         };
-        colours = new List<Color>()
+        _colours = new List<Color>()
         {
             Color.red,
             blue,
@@ -71,8 +73,8 @@ public class PiecesOf8_2 : MonoBehaviour
         };
         foreach (Node node in grid.grid)
         {
-            tile.transform.localScale = new Vector3(size * 2, size * 2, 0);
-            tile.GetComponent<SpriteRenderer>().color = colourEmpty;
+            tile.transform.localScale = new Vector3(_size * 2, _size * 2, 0);
+            tile.GetComponent<SpriteRenderer>().color = _colourEmpty;
             numbers.GetComponent<RectTransform>().sizeDelta = new Vector3(130, 130, 0);
             numbers.fontSize = 120;
             numbers.text = "";
@@ -83,18 +85,6 @@ public class PiecesOf8_2 : MonoBehaviour
 
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        colourEmpty = new Color(1, 0.8f, 0.65f);
-        setUp();
-    }
-    private Rect tile2Rect(Transform tile)
-    {
-
-        Rect rect = new Rect(tile.transform.position.x - size, tile.transform.position.y - size, size * 2, size * 2);
-        return rect;
-    }
 
     // Update is called once per frame
     void Update()
@@ -103,26 +93,24 @@ public class PiecesOf8_2 : MonoBehaviour
         {
 
             Color colour = colourTile.GetComponent<SpriteRenderer>().color;
-            Rect rectColour = tile2Rect(colourTile.transform);
+            Rect rectColour = Object2Rect(colourTile.transform);
             Touch touch = Input.GetTouch(0);
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
             for (int i = 0; i < tilemanager.transform.childCount; i++)
             {
-                Rect rect = tile2Rect(tilemanager.transform.GetChild(i));
-
-
+                Rect rect = Object2Rect(tilemanager.transform.GetChild(i));
 
                 if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                 {
                     var rend = tilemanager.transform.GetChild(i).GetComponent<SpriteRenderer>();
                     Node child = grid.GetNodeFromWorldPos(rect.center);
-                    if (rend.color == colourEmpty)
+                    if (rend.color == _colourEmpty)
                     {
-                        if (colourAlreadyExists())
+                        if (ColourAlreadyExists())
                         {
-                            foreach (GameObject neighbour in neighbourTiles(tilemanager.transform.GetChild(i).gameObject))
+                            foreach (GameObject neighbour in NeighbourTiles(tilemanager.transform.GetChild(i).gameObject))
                             {
-                                if (neighbour.GetComponent<SpriteRenderer>().color == colour && !exceedingColourCount())
+                                if (neighbour.GetComponent<SpriteRenderer>().color == colour && !ExceedingColourCount())
                                 {
                                     rend.color = colour;
                                     tileNumbers.transform.GetChild(i).GetComponent<Text>().text = colourText.text;
@@ -138,7 +126,7 @@ public class PiecesOf8_2 : MonoBehaviour
                     }
                     else
                     {
-                        rend.color = colourEmpty;
+                        rend.color = _colourEmpty;
                         tileNumbers.transform.GetChild(i).GetComponent<Text>().text = " ";
                     }
                 }
@@ -147,39 +135,50 @@ public class PiecesOf8_2 : MonoBehaviour
             if (rectColour.Contains(touchPosition) && touch.phase == TouchPhase.Began)
             {
 
-                for(int i = 0; i < colours.Count; i++)
+                for(int i = 0; i < _colours.Count; i++)
                 {
-                    if(colour == colours[i])
+                    if(colour == _colours[i])
                     {
-                        if(i != colours.Count - 1)
+                        if(i != _colours.Count - 1)
                         {
-                            colourTile.GetComponent<SpriteRenderer>().color = colours[i + 1];
+                            colourTile.GetComponent<SpriteRenderer>().color = _colours[i + 1];
                             int textString = i + 2;
                             colourText.text = (textString).ToString();
                         }
                         else
                         {
 
-                            colourTile.GetComponent<SpriteRenderer>().color = colours[0];
+                            colourTile.GetComponent<SpriteRenderer>().color = _colours[0];
                             colourText.text = "1";
 
                         }
                     }
                 }
             }
-            if (checkWin())
+            if (CheckWin())
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
                 this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
 
         }
     }
-    private List<GameObject> neighbourTiles(GameObject tile)
+
+    //Function to create a rectagle on top of a given object to set rectangular boundaries for that object
+    private Rect Object2Rect(Transform tile)
     {
-        neighbours = new List<GameObject>();
+
+        Rect rect = new Rect(tile.transform.position.x - _size, tile.transform.position.y - _size, _size * 2, _size * 2);
+        return rect;
+    }
+
+
+    //Function to create a list of all the neighbouring tiles of the given tile
+    private List<GameObject> NeighbourTiles(GameObject tile)
+    {
+        _neighbours = new List<GameObject>();
         for (int i = -1; i < 2; i++)
         {
             for (int j = -1; j < 2; j++)
@@ -193,19 +192,21 @@ public class PiecesOf8_2 : MonoBehaviour
                     for (int k = 0; k < tilemanager.transform.childCount; k++)
                     {
                         Bounds bounds = new Bounds(grid.transform.position, grid.gridWorldSize);
-                        if (bounds.Contains(tile.transform.position + new Vector3(size * 2 * i, size * 2 * j, 0)) && tile.transform.position + new Vector3(size * 2 * i, size * 2 * j, 0) == tilemanager.transform.GetChild(k).transform.position)
+                        if (bounds.Contains(tile.transform.position + new Vector3(_size * 2 * i, _size * 2 * j, 0)) && tile.transform.position + new Vector3(_size * 2 * i, _size * 2 * j, 0) == tilemanager.transform.GetChild(k).transform.position)
                         {
-                            neighbours.Add(tilemanager.transform.GetChild(k).gameObject);
+                            _neighbours.Add(tilemanager.transform.GetChild(k).gameObject);
                         }
                     }
                 }
 
             }
         }
-        return neighbours;
+        return _neighbours;
 
     }
-    private bool colourAlreadyExists()
+
+    //Function to check if a colour already exists on the field
+    private bool ColourAlreadyExists()
     {
         for (int i = 0; i < tilemanager.transform.childCount; i++)
         {
@@ -217,7 +218,8 @@ public class PiecesOf8_2 : MonoBehaviour
         return false;
     }
 
-    private bool exceedingColourCount()
+    //Function to check if the colour exceeded the limit of tiles
+    private bool ExceedingColourCount()
     {
         int colourCounter = 0;
         for (int i = 0; i < tilemanager.transform.childCount; i++)
@@ -233,7 +235,9 @@ public class PiecesOf8_2 : MonoBehaviour
         }
         return false;
     }
-    private int numberAtNode(Node node)
+
+    //Function to return the number at a given node
+    private int NumberAtNode(Node node)
     {
         int textNumber = 0;
         for( int i = 0; i < tileNumbers.transform.childCount; i++)
@@ -245,28 +249,30 @@ public class PiecesOf8_2 : MonoBehaviour
         }
         return textNumber;
     }
-    private bool checkWin()
+
+    //Function to check if the player has solved the puzzle
+    private bool CheckWin()
     {
         for (int i = 0; i < tilemanager.transform.childCount; i++)
         {
             var rend = tilemanager.transform.GetChild(i).GetComponent<SpriteRenderer>();
-            if (rend.color == colourEmpty)
+            if (rend.color == _colourEmpty)
             {
                 return false;
             }
         }
-        for (int i = 0; i < sideNumbersPos.Count; i++)
+        for (int i = 0; i < _sideNumbersPos.Count; i++)
         {
             int result = int.Parse(sideNumbers.transform.GetChild(i).GetComponent<Text>().text);
             for(int j = 0; j < 6; j++)
             {
-                if(sideNumbersPos[i].gridY == 0)
+                if(_sideNumbersPos[i].gridY == 0)
                 {
-                    result -= numberAtNode(grid.grid[sideNumbersPos[i].gridX, j]);
+                    result -= NumberAtNode(grid.grid[_sideNumbersPos[i].gridX, j]);
                 }
                 else
                 {
-                    result -= numberAtNode(grid.grid[j,sideNumbersPos[i].gridY]);
+                    result -= NumberAtNode(grid.grid[j,_sideNumbersPos[i].gridY]);
                 }
             }
             if(result != 0)
@@ -278,13 +284,17 @@ public class PiecesOf8_2 : MonoBehaviour
         return true;
     }
 
+    //Function for the restart button
     public void restart()
     {
         if (!tutorial.inactive)
         {
-            setUp();
+            SetUp();
         }
     }
+
+    //Function for the leave button
+    //Open up a panel to check if the user really wants to leave
     public void leave()
     {
         if (!tutorial.inactive)
@@ -295,15 +305,18 @@ public class PiecesOf8_2 : MonoBehaviour
 
     }
 
+    //Function for the yes button, if the user really wants to leave
     public void yes()
     {
-        setUp();
+        SetUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         message.SetActive(false);
     }
+
+    //Function for the no button, if the user does not want to leave
     public void no()
     {
         tutorial.inactive = false;

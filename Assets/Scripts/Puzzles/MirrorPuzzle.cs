@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class MirrorPuzzle : MonoBehaviour
 {
 
+    //public field objects
     public GridField grid;
     public GameObject tile;
     public GameObject tileManager;
@@ -14,18 +15,22 @@ public class MirrorPuzzle : MonoBehaviour
     public GameObject ghosts;
     public GameObject mirror;
     public Canvas canvas;
+    public GameObject message;
+
+    //public variables to communicate with other scripts
     public GameObject griphoton;
     public GameObject player;
     public MirrorTutorial tutorial;
-    public GameObject message;
 
-
-    void Awake()
+    // Start is called before the first frame update
+    void Start()
     {
-        grid = GetComponent<GridField>();
+        SetUp();
+        
     }
 
-    private void setUp()
+    //Function to set the puzzle to its original state
+    private void SetUp()
     {
         for(int i = 0; i < symbolManager.transform.childCount; i++)
         {
@@ -42,15 +47,11 @@ public class MirrorPuzzle : MonoBehaviour
             tile.GetComponent<SpriteRenderer>().color = new Color(1, 0.8f, 0.65f);
             Instantiate(tile, node.worldPosition, Quaternion.identity, tileManager.transform);
         }
+
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        setUp();
-        
-    }
-    private Rect tile2Rect(Vector3 center)
+    //Function to create a rectagle on top of a given object to set rectangular boundaries for that object
+    private Rect Object2Rect(Vector3 center)
     {
 
         Rect rect = new Rect(center.x - grid.nodeRadius, center.y - grid.nodeRadius, grid.nodeRadius * 2f, grid.nodeRadius * 2f);
@@ -66,9 +67,10 @@ public class MirrorPuzzle : MonoBehaviour
             {
                 Touch touch = Input.GetTouch(0);
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-                Rect rect = tile2Rect(node.worldPosition);
+                Rect rect = Object2Rect(node.worldPosition);
                 if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                 {
+                    //Sets Ghost
                     if(node.onTop == "Empty")
                     {
                         GameObject ghost = Instantiate(ghosts, node.worldPosition + new Vector3(0, 0, -4), Quaternion.identity, symbolManager.transform);
@@ -76,6 +78,7 @@ public class MirrorPuzzle : MonoBehaviour
                         node.onTop = "Ghost";
 
                     }
+                    //Sets first mirror
                     else if(node.onTop == "Ghost")
                     {
                         GameObject oldSymbol = null;
@@ -97,6 +100,7 @@ public class MirrorPuzzle : MonoBehaviour
                         }
                         
                     }
+                    //Sets second mirror
                     else if(node.onTop == "LeftRight")
                     {
                         GameObject oldSymbol = null;
@@ -117,6 +121,7 @@ public class MirrorPuzzle : MonoBehaviour
                             node.onTop = "RightLeft";
                         }
                     }
+                    //Remove all symbols
                     else
                     {
                         GameObject oldSymbol = null;
@@ -143,12 +148,15 @@ public class MirrorPuzzle : MonoBehaviour
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
                 this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
 
         }
     }
+
+
+    //Function to check if the player has solved the puzzle
     private bool checkWin()
     {
         List<string> counters = new List<string>();
@@ -169,21 +177,21 @@ public class MirrorPuzzle : MonoBehaviour
             Node nextNode;
             bool search = true;
             int counterCheck = 0;
-            if (grid.bounds().Contains(new Vector2(text.transform.position.x, text.transform.position.y + (grid.nodeRadius * 2))))
+            if (grid.Bounds().Contains(new Vector2(text.transform.position.x, text.transform.position.y + (grid.nodeRadius * 2))))
             {
                 direction = "Up";
                 x = 0;
                 y = 1;
                 nextNode = grid.GetNodeFromWorldPos(new Vector2(text.transform.position.x, text.transform.position.y + (grid.nodeRadius * 2)));
             }
-            else if (grid.bounds().Contains(new Vector2(text.transform.position.x, text.transform.position.y - (grid.nodeRadius * 2))))
+            else if (grid.Bounds().Contains(new Vector2(text.transform.position.x, text.transform.position.y - (grid.nodeRadius * 2))))
             {
                 direction = "Down";
                 x = 0;
                 y = -1;
                 nextNode = grid.GetNodeFromWorldPos(new Vector2(text.transform.position.x, text.transform.position.y - (grid.nodeRadius * 2)));
             }
-            else if (grid.bounds().Contains(new Vector2(text.transform.position.x - (grid.nodeRadius * 2), text.transform.position.y)))
+            else if (grid.Bounds().Contains(new Vector2(text.transform.position.x - (grid.nodeRadius * 2), text.transform.position.y)))
             {
                 direction = "Left";
                 x = -1;
@@ -257,7 +265,7 @@ public class MirrorPuzzle : MonoBehaviour
                             break;
                     }
                 }
-                if(nextNode.gridX + x >= 0 && nextNode.gridX + x < grid.getGridSizeX() && nextNode.gridY + y >= 0 && nextNode.gridY + y < grid.getGridSizeY())
+                if(nextNode.gridX + x >= 0 && nextNode.gridX + x < grid.GetGridSizeX() && nextNode.gridY + y >= 0 && nextNode.gridY + y < grid.GetGridSizeY())
                 {
 
                     nextNode = grid.grid[nextNode.gridX + x, nextNode.gridY + y];
@@ -278,15 +286,20 @@ public class MirrorPuzzle : MonoBehaviour
         }
 
         return true;
-       
+
     }
+
+    //Function for the restart button
     public void restart()
     {
         if (!tutorial.inactive)
         {
-            setUp();
+            SetUp();
         }
     }
+
+    //Function for the leave button
+    //Open up a panel to check if the user really wants to leave
     public void leave()
     {
         if (!tutorial.inactive)
@@ -297,15 +310,18 @@ public class MirrorPuzzle : MonoBehaviour
 
     }
 
+    //Function for the yes button, if the user really wants to leave
     public void yes()
     {
-        setUp();
+        SetUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         message.SetActive(false);
     }
+
+    //Function for the no button, if the user does not want to leave
     public void no()
     {
         tutorial.inactive = false;

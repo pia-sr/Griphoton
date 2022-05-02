@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Class to serialize the variables from the game
+//source:https://www.youtube.com/watch?v=XOjd_qU2Ido
 [System.Serializable]
 public class GameData
 {
@@ -25,6 +27,4 @@ public class GameData
         xPos = game.xPos;
         yPos = game.yPos;
     }
-
-    
 }

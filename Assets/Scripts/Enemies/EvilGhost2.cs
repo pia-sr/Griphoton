@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class EvilGhost2 : MonoBehaviour
 {
+    //Public variables
     public int[] startPos = new int[2];
     public GridField grid;
     public GameObject player;
     public Pathfinder pathFinder;
-    private List<Node> path2Player;
     public float hitValue;
+    public Animator animator;
+
+    //private variables
     private float healthValue;
     private float hitSpeed;
     private Node targetNode;
@@ -22,18 +25,19 @@ public class EvilGhost2 : MonoBehaviour
     private bool coroutineStart;
     private Node playerPos;
     private HealthBar healthBar;
-    public Animator animator;
     private int xInput;
     private int yInput;
+    private List<Node> path2Player;
 
     // Start is called before the first frame update
     void Start()
     {
-        begin();
+        SetUp();
         
     }
 
-    private void begin()
+    //Function to bring the ghost to their start position
+    private void SetUp()
     {
         moveAway = false;
         stay = false;
@@ -73,7 +77,7 @@ public class EvilGhost2 : MonoBehaviour
         }
         if (player.GetComponent<Player>().leaveLevel)
         {
-            begin();
+            SetUp();
         }
         if (grid.GetNodeFromWorldPos(this.gameObject.transform.position) == playerPos)
         {
@@ -81,7 +85,7 @@ public class EvilGhost2 : MonoBehaviour
         }
 
         path2Player = pathFinder.FindPathEnemies(transform.position, player.transform.position);
-        if (next2Player() && !moveAway)
+        if (Next2Player() && !moveAway)
         {
             animator.SetBool("isWalking", true);
             attackPlayer = false;
@@ -92,13 +96,13 @@ public class EvilGhost2 : MonoBehaviour
 
                 if (player.GetComponent<Player>().blockEnemy)
                 {
-                    player.GetComponent<Player>().reduceStrength(hitValue / 2);
+                    player.GetComponent<Player>().ReduceStrength(hitValue / 2);
                 }
                 else
                 {
-                    player.GetComponent<Player>().reduceStrength(hitValue);
+                    player.GetComponent<Player>().ReduceStrength(hitValue);
                 }
-                StartCoroutine(fight());
+                StartCoroutine(Attack());
             }
             if (player.GetComponent<Player>().enemyHit)
             {
@@ -150,9 +154,10 @@ public class EvilGhost2 : MonoBehaviour
         }
     }
 
+    //Monster movement
+    //source: https://forum.unity.com/threads/transform-position-speed.744293/
     private IEnumerator move(List<Node> path)
     {
-        //source: https://forum.unity.com/threads/transform-position-speed.744293/
         if (existingTarget == null)
         {
             existingTarget = targetNode;
@@ -201,11 +206,12 @@ public class EvilGhost2 : MonoBehaviour
 
         }
         coroutineStart = false;
-        setPositionGhost(path[1]);
+        SetPositionGhost(path[1]);
 
     }
 
-    private bool next2Player()
+    //Checks if they are next to the player
+    private bool Next2Player()
     {
         foreach (Node neightbour in grid.GetNodeNeighbours(grid.GetNodeFromWorldPos(transform.position)))
         {
@@ -217,29 +223,33 @@ public class EvilGhost2 : MonoBehaviour
         return false;
     }
 
-    private void setPositionGhost(Node currentNode)
+
+    //Sets the tag on the given node as enemy
+    private void SetPositionGhost(Node currentNode)
     {
         foreach (Node node in grid.grid)
         {
             if (node.onTop == "Enemy")
             {
-                node.setItemOnTop(null);
+                node.SetItemOnTop(null);
             }
         }
-        currentNode.setItemOnTop("Enemy");
+        currentNode.SetItemOnTop("Enemy");
     }
 
-    IEnumerator fight()
+
+    //Function to attack the player
+    IEnumerator Attack()
     {
         animator.SetBool("isWalking", false);
         yield return new WaitForSeconds(2);
         moveAway = true;
         hitSpeed = 0;
         visitedNodes.Clear();
-        targetNode = grid.grid[Random.Range(0, grid.getGridSizeX() - 1), Random.Range(0, grid.getGridSizeY() - 1)];
+        targetNode = grid.grid[Random.Range(0, grid.GetGridSizeX() - 1), Random.Range(0, grid.GetGridSizeY() - 1)];
         while (!(targetNode.onTop == "Floor" || targetNode.onTop == "Spikes"))
         {
-            targetNode = grid.grid[Random.Range(0, grid.getGridSizeX() - 1), Random.Range(0, grid.getGridSizeY() - 1)];
+            targetNode = grid.grid[Random.Range(0, grid.GetGridSizeX() - 1), Random.Range(0, grid.GetGridSizeY() - 1)];
             
         }
         playerPos = targetNode;

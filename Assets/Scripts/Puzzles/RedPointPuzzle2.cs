@@ -5,26 +5,39 @@ using UnityEngine;
 [RequireComponent(typeof(GridField))]
 public class RedPointPuzzle2 : MonoBehaviour
 {
+    //public field objects
     public GridField grid;
     public GameObject circle;
     public GameObject circleManager;
-    private List<Node> selectedDots;
-    private List<Node> dots;
+    public GameObject message;
+
+    //public variables to communicate with other scripts
     public GameObject griphoton;
     public GameObject player;
     public RedPointTutorial tutorial;
-    public GameObject message;
 
+    //private variables
+    private List<Node> _selectedDots;
+    private List<Node> _dots;
 
-    void Awake()
+    // Start is called before the first frame update
+    void Start()
     {
-        grid = GetComponent<GridField>();
+        SetUp();
+        foreach (Node node in _dots)
+        {
+
+            circle.transform.localScale = new Vector3(grid.nodeRadius * 1.5f, grid.nodeRadius * 1.5f, 0);
+            circle.GetComponent<SpriteRenderer>().color = Color.black;
+            Instantiate(circle, node.worldPosition, Quaternion.identity, circleManager.transform);
+        }
     }
 
-    private void setUp()
+    //Function to set up the points to their original state
+    private void SetUp()
     {
-        selectedDots = new List<Node>();
-        dots = new List<Node>()
+        _selectedDots = new List<Node>();
+        _dots = new List<Node>()
         {
             grid.grid[0,0],
             grid.grid[1,0],
@@ -45,24 +58,7 @@ public class RedPointPuzzle2 : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        setUp();
-        foreach (Node node in dots)
-        {
 
-            circle.transform.localScale = new Vector3(grid.nodeRadius * 1.5f, grid.nodeRadius * 1.5f, 0);
-            circle.GetComponent<SpriteRenderer>().color = Color.black;
-            Instantiate(circle, node.worldPosition, Quaternion.identity, circleManager.transform);
-        }
-    }
-
-    private Rect tile2Rect(Transform tile)
-    {
-        Rect rect = new Rect(tile.transform.position.x - (grid.nodeRadius * 0.75f), tile.transform.position.y - (grid.nodeRadius * 0.75f), grid.nodeRadius * 1.5f, grid.nodeRadius * 1.5f);
-        return rect;
-    }
 
     // Update is called once per frame
     void Update()
@@ -74,18 +70,18 @@ public class RedPointPuzzle2 : MonoBehaviour
 
                 Touch touch = Input.GetTouch(0);
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-                Rect rect = tile2Rect(circleManager.transform.GetChild(i));
+                Rect rect = Object2Rect(circleManager.transform.GetChild(i));
                 if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                 {
                     GameObject currentDot = circleManager.transform.GetChild(i).gameObject;
                     if(currentDot.GetComponent<SpriteRenderer>().color == Color.black)
                     {
                         currentDot.GetComponent<SpriteRenderer>().color = Color.red;
-                        foreach(Node node in dots)
+                        foreach(Node node in _dots)
                         {
                             if(grid.GetNodeFromWorldPos(currentDot.transform.position) == node)
                             {
-                                selectedDots.Add(node);
+                                _selectedDots.Add(node);
                             }
                         }
                     }
@@ -93,7 +89,7 @@ public class RedPointPuzzle2 : MonoBehaviour
                     {
                         Node node2Remove = null;
                         currentDot.GetComponent<SpriteRenderer>().color = Color.black;
-                        foreach (Node node in selectedDots)
+                        foreach (Node node in _selectedDots)
                         {
                             if (grid.GetNodeFromWorldPos(currentDot.transform.position) == node)
                             {
@@ -102,33 +98,39 @@ public class RedPointPuzzle2 : MonoBehaviour
                         }
                         if(node2Remove != null)
                         {
-                            selectedDots.Remove(node2Remove);
+                            _selectedDots.Remove(node2Remove);
                         }
                     }
-                    
-
-
                 }
 
             }
-            if (checkWin())
+            if (CheckWin())
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
-                griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
                 this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
 
         }
     }
-    private bool checkWin()
+
+    //Function to create a rectagle on top of a given object to set rectangular boundaries for that object
+    private Rect Object2Rect(Transform tile)
+    {
+        Rect rect = new Rect(tile.transform.position.x - (grid.nodeRadius * 0.75f), tile.transform.position.y - (grid.nodeRadius * 0.75f), grid.nodeRadius * 1.5f, grid.nodeRadius * 1.5f);
+        return rect;
+    }
+
+    //Function to check if the player has solved the puzzle
+    private bool CheckWin()
     {
         List<float> distances = new List<float>();
-        if(selectedDots.Count == 5)
+        if(_selectedDots.Count == 5)
         {
-            foreach(Node node in selectedDots)
+            foreach(Node node in _selectedDots)
             {
-                foreach(Node nextDot in selectedDots)
+                foreach(Node nextDot in _selectedDots)
                 {
                     if(nextDot != node)
                     {
@@ -148,13 +150,17 @@ public class RedPointPuzzle2 : MonoBehaviour
         return false;
     }
 
+    //Function for the restart button
     public void restart()
     {
         if (!tutorial.inactive)
         {
-            setUp();
+            SetUp();
         }
     }
+
+    //Function for the leave button
+    //Open up a panel to check if the user really wants to leave
     public void leave()
     {
         if (!tutorial.inactive)
@@ -165,15 +171,18 @@ public class RedPointPuzzle2 : MonoBehaviour
 
     }
 
+    //Function for the yes button, if the user really wants to leave
     public void yes()
     {
-        setUp();
+        SetUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         message.SetActive(false);
     }
+
+    //Function for the no button, if the user does not want to leave
     public void no()
     {
         tutorial.inactive = false;

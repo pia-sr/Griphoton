@@ -5,62 +5,69 @@ using UnityEngine.UI;
 
 public class MatchstickPuzzle2 : MonoBehaviour
 {
+    //public field objects
     public GameObject matchstickManager;
     public GameObject rotateButton;
     public GameObject moveButton;
-    private GameObject selectedStick;
-    private List<GameObject> matchsticks;
-    private Bounds selectedBounds;
-    private bool selected;
-    private bool activeMove;
-    private List<GameObject> movedSticks;
-    private float distStick;
-    private float distRotate;
-    private float distMove;
-    private bool moveStick;
     public Text message;
+    public GameObject messageExit;
+
+    //public variables to communicate with other scripts
     public GameObject griphoton;
     public GameObject player;
-    public MatchstickTutorial2 tutorial;
-    public GameObject messageExit;
-    private List<Vector3> positions;
-    private List<float> rotations;
+    public MatchstickTutorial1 tutorial;
 
-    private void setUp()
-    {
-
-        moveButton.SetActive(false);
-        rotateButton.SetActive(false);
-        moveStick = false;
-        selected = false;
-        movedSticks = new List<GameObject>();
-        selectedStick = null;
-        matchsticks = new List<GameObject>();
-        for(int i = 0; i < matchstickManager.transform.childCount; i++)
-        {
-
-            matchstickManager.transform.GetChild(i).transform.localPosition = positions[i];
-            matchsticks.Add(matchstickManager.transform.GetChild(i).gameObject); 
-            var rotation = matchstickManager.transform.GetChild(i).transform.localRotation.eulerAngles;
-            rotation.z = rotations[i];
-            matchstickManager.transform.GetChild(i).transform.localRotation = Quaternion.Euler(rotation);
-        }
-
-    }
+    //private variables
+    private GameObject _selectedStick;
+    private List<GameObject> _matchsticks;
+    private Bounds _selectedBounds;
+    private bool _selected;
+    private bool _activeMove;
+    private GameObject _movedStick;
+    private Vector2 _distStick;
+    private Vector2 _distRotate;
+    private Vector2 _distMove;
+    private bool _moveStick;
+    private List<Vector3> _positions;
+    private List<float> _rotations;
+    private List<GameObject> _movedSticks;
 
     // Start is called before the first frame update
     void Start()
     {
 
-        positions = new List<Vector3>();
-        rotations = new List<float>();
+        _positions = new List<Vector3>();
+        _rotations = new List<float>();
         for (int i = 0; i < matchstickManager.transform.childCount; i++)
         {
-            positions.Add(matchstickManager.transform.GetChild(i).transform.localPosition);
-            rotations.Add(matchstickManager.transform.GetChild(i).transform.localRotation.eulerAngles.z);
+            _positions.Add(matchstickManager.transform.GetChild(i).transform.localPosition);
+            _rotations.Add(matchstickManager.transform.GetChild(i).transform.localRotation.eulerAngles.z);
         }
-        setUp();
+        SetUp();
     }
+
+    //Function to set matchsticks to original position and rotation
+    private void SetUp()
+    {
+        moveButton.SetActive(false);
+        rotateButton.SetActive(false);
+        _moveStick = false;
+        _selected = false;
+        _movedSticks = new List<GameObject>();
+        _selectedStick = null;
+        _matchsticks = new List<GameObject>();
+        for(int i = 0; i < matchstickManager.transform.childCount; i++)
+        {
+
+            matchstickManager.transform.GetChild(i).transform.localPosition = _positions[i];
+            _matchsticks.Add(matchstickManager.transform.GetChild(i).gameObject); 
+            var rotation = matchstickManager.transform.GetChild(i).transform.localRotation.eulerAngles;
+            rotation.z = _rotations[i];
+            matchstickManager.transform.GetChild(i).transform.localRotation = Quaternion.Euler(rotation);
+        }
+
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -71,48 +78,53 @@ public class MatchstickPuzzle2 : MonoBehaviour
             Touch touch = Input.GetTouch(0);
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
 
-            if (moveStick)
+            //if the user touches the move button the matchstick moves with the user's touch
+            if (_moveStick)
             {
-                if (!movedSticks.Contains(selectedStick))
+                if (!_movedSticks.Contains(_selectedStick))
                 {
-                    movedSticks.Add(selectedStick);
+                    _movedSticks.Add(_selectedStick);
                 }
-                if (!activeMove)
+                if (!_activeMove)
                 {
-                    distStick = touchPosition.x - selectedStick.transform.localPosition.x;
-                    distRotate = touchPosition.x - rotateButton.transform.localPosition.x;
-                    distMove = touchPosition.x - moveButton.transform.localPosition.x;
+                    _distStick.x = touchPosition.x - _selectedStick.transform.localPosition.x;
+                    _distStick.y = touchPosition.y - _selectedStick.transform.localPosition.y;
+                    _distRotate.x = touchPosition.x - rotateButton.transform.localPosition.x;
+                    _distRotate.y = touchPosition.y - rotateButton.transform.localPosition.y;
+                    _distMove.x = touchPosition.x - moveButton.transform.localPosition.x;
+                    _distMove.y = touchPosition.y - moveButton.transform.localPosition.y;
                 }
-                activeMove = true;
-                moveButton.transform.localPosition = touchPosition - new Vector2(distMove,0);
-                selectedStick.transform.localPosition = touchPosition - new Vector2(distStick,0);
-                rotateButton.transform.localPosition = touchPosition - new Vector2(distRotate, 0);
+                _activeMove = true;
+                moveButton.transform.localPosition = touchPosition - _distMove;
+                _selectedStick.transform.localPosition = touchPosition - _distStick;
+                rotateButton.transform.localPosition = touchPosition - _distRotate;
             }
+            //waits for user to either select or rotate a matchstick
             else if (touch.phase == TouchPhase.Began)
             {
-                if (!selected)
+                if (!_selected)
                 {
-                    foreach (GameObject matchstick in matchsticks)
+                    foreach (GameObject matchstick in _matchsticks)
                     {
                         var rend = matchstick.GetComponent<SpriteRenderer>();
 
                         if (rend.bounds.Contains(touchPosition))
                         {
-                            if(movedSticks.Count == 3 && !movedSticks.Contains(matchstick))
+                            if(_movedSticks.Count == 3 && !_movedSticks.Contains(matchstick))
                             {
                                 tutorial.inactive = true;
                                 message.transform.parent.transform.parent.gameObject.SetActive(true);
                                 message.text = "You already moved 3 matchsticks! \nYou can reset the matchsticks with the reset button, if you want to move a different one.";
                             }
-                            selected = true;
-                            selectedBounds = new Bounds(matchstick.transform.localPosition, matchstick.transform.localScale);
+                            _selected = true;
+                            _selectedBounds = new Bounds(matchstick.transform.localPosition, matchstick.transform.localScale);
                             rotateButton.SetActive(true);
                             rotateButton.transform.localPosition = matchstick.transform.position + new Vector3(-1, 0, 0);
                             moveButton.SetActive(true);
                             moveButton.transform.localPosition = matchstick.transform.position + new Vector3(1, 0, 0);
-                            selectedBounds.Encapsulate(rotateButton.GetComponent<SpriteRenderer>().bounds);
-                            selectedBounds.Encapsulate(moveButton.GetComponent<SpriteRenderer>().bounds);
-                            selectedStick = matchstick;
+                            _selectedBounds.Encapsulate(rotateButton.GetComponent<SpriteRenderer>().bounds);
+                            _selectedBounds.Encapsulate(moveButton.GetComponent<SpriteRenderer>().bounds);
+                            _selectedStick = matchstick;
 
                         }
 
@@ -125,13 +137,12 @@ public class MatchstickPuzzle2 : MonoBehaviour
                     
                     if (rotateButton.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
                     {
-                        if (!movedSticks.Contains(selectedStick))
+                        if (!_movedSticks.Contains(_selectedStick))
                         {
-                            movedSticks.Add(selectedStick);
+                            _movedSticks.Add(_selectedStick);
                         }
-                        var rotation = selectedStick.transform.localRotation.eulerAngles;
-                            float rotationZ = rotation.z;
-                        //rotationZ -= 30;
+                        var rotation = _selectedStick.transform.localRotation.eulerAngles;
+                        float rotationZ = rotation.z;
                         if (rotation.x <= 180f)
                         {
                             rotationZ += 30;
@@ -141,54 +152,55 @@ public class MatchstickPuzzle2 : MonoBehaviour
                             rotationZ -= 330;
                         }
                         rotation.z = rotationZ;
-                            selectedStick.transform.localRotation = Quaternion.Euler(rotation);
-                        
+                        _selectedStick.transform.localRotation = Quaternion.Euler(rotation);
+
                     }
                     else if (moveButton.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
                     {
-                        moveStick = true;
+                        _moveStick = true;
                     }
                     else
                     {
                         moveButton.SetActive(false);
                         rotateButton.SetActive(false);
-                        selected = false;
-                        selectedStick = null;
+                        _selected = false;
+                        _selectedStick = null;
                     }
                 }
             }
 
-            else if (touch.phase == TouchPhase.Ended)
+            if (touch.phase == TouchPhase.Ended)
             {
-                activeMove = false;
-                moveStick = false;
+                _activeMove = false;
+                _moveStick = false;
             }
 
 
         }
-        if (won())
+        if (CheckWin())
         {
 
             griphoton.SetActive(true);
             player.SetActive(true);
-            griphoton.GetComponent<Upperworld>().setHouseSolved(this.transform.parent.transform.parent.tag);
+            griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
             this.transform.parent.transform.parent.gameObject.SetActive(false);
         }
     }
-    
-    private bool won()
+
+    //Function to check if the player has solved the puzzle
+    private bool CheckWin()
     {
         
         Bounds rightArea1 = new Bounds(new Vector2(0,-0.2f), new Vector2(1, 1f));
-        Bounds rightArea2 = new Bounds(new Vector2(7,-0.25f), new Vector2(1f, 1.3f));
+        Bounds rightArea2 = new Bounds(new Vector2(7,-0.3f), new Vector2(1f, 1.4f));
         List<GameObject> position2 = new List<GameObject>();
 
         bool pos1 = false;
         bool pos2 = false;
         
-        if (!activeMove && movedSticks.Count == 3)
+        if (!_activeMove && _movedSticks.Count == 3)
         {
-            foreach(GameObject matchstick in movedSticks)
+            foreach(GameObject matchstick in _movedSticks)
             {
                 if((Mathf.Round(matchstick.transform.rotation.z * 100) * 0.01f).ToString() == "0.71")
                 {
@@ -226,13 +238,17 @@ public class MatchstickPuzzle2 : MonoBehaviour
         return false;
     }
 
+    //Function for the restart button
     public void restart()
     {
         if (!tutorial.inactive)
         {
-            setUp();
+            SetUp();
         }
     }
+
+    //Function for the leave button
+    //Open up a panel to check if the user really wants to leave
     public void leave()
     {
         if (!tutorial.inactive)
@@ -243,21 +259,25 @@ public class MatchstickPuzzle2 : MonoBehaviour
 
     }
 
+    //Function for the yes button, if the user really wants to leave
     public void yes()
     {
-        setUp();
+        SetUp();
         this.transform.parent.transform.parent.gameObject.SetActive(false);
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
         messageExit.SetActive(false);
     }
+
+    //Function for the no button, if the user does not want to leave
     public void no()
     {
         tutorial.inactive = false;
         messageExit.SetActive(false);
     }
 
+    //Function to close the message after user violated one of the rules
     public void close()
     {
         message.transform.parent.transform.parent.gameObject.SetActive(false);

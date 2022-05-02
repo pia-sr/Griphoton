@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class Level8 : MonoBehaviour
 {
+    //public variabels
     public GridField grid;
     public GameObject wallUp;
     public GameObject wallSides;
     public GameObject prefabManager;
     public GameObject floorTile;
     public GameObject door;
+
+    //private variables
     private Game data;
     private float size;
     private GameObject exitDoor;
@@ -19,9 +22,10 @@ public class Level8 : MonoBehaviour
         data = GameObject.Find("GameData").GetComponent<Game>();
     }
 
-    private void begin()
+    //Function to set level back to its original state
+    private void SetUp()
     {
-        resetGrid();
+        ResetGrid();
         string exit;
         if (data.activeLevel == int.Parse(this.gameObject.tag))
         {
@@ -38,10 +42,10 @@ public class Level8 : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(false);
         }
 
-        int middleX = Mathf.RoundToInt(grid.getGridSizeX() / 2);
-        int middleY = Mathf.RoundToInt(grid.getGridSizeY() / 2);
-        grid.door(grid.grid[middleX, 0], "horizontal", exit);
-        grid.door(grid.grid[middleX, grid.getGridSizeY() - 1], "horizonal", "Entrance");
+        int middleX = Mathf.RoundToInt(grid.GetGridSizeX() / 2);
+        int middleY = Mathf.RoundToInt(grid.GetGridSizeY() / 2);
+        grid.SetDoors(grid.grid[middleX, 0], "horizontal", exit);
+        grid.SetDoors(grid.grid[middleX, grid.GetGridSizeY() - 1], "horizonal", "Entrance");
         size = 2 * grid.nodeRadius;
         foreach (Node node in grid.grid)
         {
@@ -52,7 +56,7 @@ public class Level8 : MonoBehaviour
             }
             else if (node.gridX > middleX - 7 && node.gridX < middleX + 7 && node.gridY > middleY - 3 && node.gridY < middleY + 3)
             {
-                node.setItemOnTop("Nothing");
+                node.SetItemOnTop("Nothing");
             }
         }
         foreach (Node node in grid.grid)
@@ -60,7 +64,7 @@ public class Level8 : MonoBehaviour
             foreach (Node neighbour in grid.GetNodeNeighboursDiagonal(node))
             {
 
-                if ((neighbour.onTop == "Nothing" || node.gridX == 0 || node.gridX == grid.getGridSizeX() - 1 || node.gridY == 0 || node.gridY == grid.getGridSizeY() - 1) && node.onTop == null)
+                if ((neighbour.onTop == "Nothing" || node.gridX == 0 || node.gridX == grid.GetGridSizeX() - 1 || node.gridY == 0 || node.gridY == grid.GetGridSizeY() - 1) && node.onTop == null)
                 {
                     GameObject wall = null;
                     wallUp.transform.localScale = new Vector3(size * 6.5f, size * 7, 0);
@@ -79,7 +83,7 @@ public class Level8 : MonoBehaviour
                     }
                     if (wall != null)
                     {
-                        node.setItemOnTop("Wall");
+                        node.SetItemOnTop("Wall");
                         Instantiate(wall, node.worldPosition + new Vector3(0, 0, 1), Quaternion.identity, prefabManager.transform);
                     }
                 }
@@ -92,7 +96,7 @@ public class Level8 : MonoBehaviour
                 if (node.onTop == null)
                 {
 
-                    node.setItemOnTop("Floor");
+                    node.SetItemOnTop("Floor");
                 }
                 floorTile.transform.localScale = new Vector3(1.1f, 1.1f, 0);
                 Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);
@@ -104,21 +108,22 @@ public class Level8 : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        begin();
+        SetUp();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (data.activeLevel == int.Parse(this.gameObject.tag) && noEnemiesLeft())
+        //if the player has won the door will open
+        if (data.activeLevel == int.Parse(this.gameObject.tag) && NoEnemiesLeft())
         {
             foreach (Node node in grid.grid)
             {
                 if (node.onTop == "Exit")
                 {
                     Destroy(exitDoor);
-                    node.setItemOnTop("ExitOpen");
+                    node.SetItemOnTop("ExitOpen");
                     floorTile.transform.localScale = new Vector3(1.1f, 1.1f, 0);
                     Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);
 
@@ -128,21 +133,25 @@ public class Level8 : MonoBehaviour
         }
         if (GameObject.Find("Player").GetComponent<Player>().leaveLevel)
         {
-            begin();
+            SetUp();
         }
     }
-    private void resetGrid()
+
+    //Function to reset the grid and all of its nodes
+    private void ResetGrid()
     {
         foreach (Node node in grid.grid)
         {
-            node.setItemOnTop(null);
+            node.SetItemOnTop(null);
         }
         for (int i = 0; i < prefabManager.transform.childCount; i++)
         {
             Destroy(prefabManager.transform.GetChild(0).gameObject);
         }
     }
-    private bool noEnemiesLeft()
+
+    //Function to check if no monster is left in the room
+    private bool NoEnemiesLeft()
     {
         for (int i = 0; i < transform.GetChild(0).childCount; i++)
         {

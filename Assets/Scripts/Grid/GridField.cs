@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Code is based on the code given by our lecturer in a module last year
 public class GridField : MonoBehaviour
 {
     //Array of nodes in the grid
     public Node[,] grid;
 
-    //Grid size (280,310)
+    //Grid size 
     public Vector2 gridWorldSize;
 
-    //Areas where pac man should not walk
-    public LayerMask unwalkableMask;
-    public LayerMask buttonMask;
     //Array of nodes in the grid
     public float nodeRadius;
 
@@ -26,47 +24,14 @@ public class GridField : MonoBehaviour
     public List<Node> listNodes;
 
 
-
-    /*
-     * use gismo to draw cubes with spaces inbetween for lines (cubes white, background black)
-     * if user taps on space between cubes, draw line from corner of cube to the other
-     * maybe calculate if touch is inside the bounds of node and then how far it is away from center and based on that choose side
-     * or draw every line in blaxk with line renderer and make a set of every line. check if line is touched and just change the colour
-     */
-
-
-    // Start is called before the first frame update
+    //the grid is drawn on awake
     void Awake()
     {
-
-        //_nodeDiameter, _gridSizeX and _gridSizeY are set passed on the radius and gridWorldSize
         _nodeDiameter = 2 * nodeRadius;
         _gridSizeX = Mathf.RoundToInt(gridWorldSize.x / _nodeDiameter);
         _gridSizeY = Mathf.RoundToInt(gridWorldSize.y / _nodeDiameter);
         CreateGrid();
     }
-    
-    /*
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireCube(transform.position, new Vector2(gridWorldSize.x, gridWorldSize.y));
-
-        
-        foreach(Node node in grid)
-        {
-            /*
-            if (node == grid[getGridSizeX()/2, getGridSizeY()/2])
-            {
-                Gizmos.color = Color.red;
-            }
-            else
-            {
-                Gizmos.color = Color.cyan;
-            }
-            Gizmos.DrawWireCube(node.worldPosition, new Vector3(1,1,1) * (_nodeDiameter - 0.05f));
-        }
-        
-    }*/
 
     
     //Getter for the total number of nodes in the grid
@@ -78,12 +43,12 @@ public class GridField : MonoBehaviour
         }
     }
 
-    public int getGridSizeX()
+    public int GetGridSizeX()
     {
         return _gridSizeX;
     }
 
-    public int getGridSizeY()
+    public int GetGridSizeY()
     {
         return _gridSizeY;
     }
@@ -101,8 +66,6 @@ public class GridField : MonoBehaviour
     }
 
     //Returns a list of nodes which are up, left, down and right of a given node
-    //Since the play can walk through a passage to end up on the other side of
-    //the field, two extra nodes are added in a special case
     public List<Node> GetNodeNeighbours(Node node)
     {
         List<Node> neighbours = new List<Node>();
@@ -132,7 +95,9 @@ public class GridField : MonoBehaviour
         }
         return neighbours;
     }
-    public List<Node> getEnemiesPos()
+
+    //Function to get the position of the monsters
+    public List<Node> GetEnemiesPos()
     {
         List<Node> enemiesPos = new List<Node>();
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -146,9 +111,7 @@ public class GridField : MonoBehaviour
         return enemiesPos;
     }
 
-    //Returns a list of nodes which are up, left, down and right of a given node
-    //Since the play can walk through a passage to end up on the other side of
-    //the field, two extra nodes are added in a special case
+    //Returns a list of nodes which are all next to the given node
     public List<Node> GetNodeNeighboursDiagonal(Node node)
     {
         List<Node> neighbours = new List<Node>();
@@ -178,36 +141,6 @@ public class GridField : MonoBehaviour
         }
         return neighbours;
     }
-   
-
-    //Returns a neighbour node from a given Vector3 on the grid, based on a given rotation
-    public Node GetNextNeighbour(Vector3 position, Vector3 rotation)
-    {
-        Node current = GetNodeFromWorldPos(position);
-        List<Node> neighbours = GetNodeNeighbours(current);
-        Node next = current;
-        switch (rotation.y)
-        {
-            case 0:
-            case 360:
-                next = neighbours[2];
-                break;
-            case 90:
-            case -270:
-                next = neighbours[3];
-                break;
-            case 180:
-            case -180:
-                next = neighbours[1];
-                break;
-            case 270:
-            case -90:
-                next = neighbours[0];
-                break;
-        }
-
-        return next;
-    }
 
 
     //Creates the grid based on the gridworldsize
@@ -220,44 +153,45 @@ public class GridField : MonoBehaviour
             for (int y = 0; y < _gridSizeY; y++)
             {
                 Vector3 nodeWorldPos = gridBottomLeftWordPos + Vector3.right * (x * _nodeDiameter + nodeRadius) + Vector3.up * (y * _nodeDiameter + nodeRadius);
-
-                //nodes which are on either ghostHouse or unwalkable layers are marked
-                //bool walkable = !Physics.CheckSphere(nodeWorldPos, nodeRadius, unwalkableMask);
-
-                //all the nodes of the grid are added to the grid array
                 grid[x, y] = new Node(nodeWorldPos, x, y);
             }
         }
     }
 
-    public Rect bounds()
+    //Function to create boundaries for the whole grid
+    public Rect Bounds()
     {
         Vector3 gridBottomLeftWordPos = transform.position - Vector3.right * (gridWorldSize.x / 2) - Vector3.up * (gridWorldSize.y / 2);
         Rect rectGrid = new Rect(gridBottomLeftWordPos, gridWorldSize);
         return rectGrid;
     }
 
-    public void spikes(Node node)
+    //Function to set the spike tags
+    public void SetSpikes(Node node)
     {
         for(int i = -1; i < 2; i++)
         {
             for(int j = -1; j < 2; j++)
             {
-                grid[node.gridX + i, node.gridY + j].setItemOnTop("Spikes");
+                grid[node.gridX + i, node.gridY + j].SetItemOnTop("Spikes");
             }
         }
     }
-    public void spikesLarger(Node node, int size)
+
+    //Function to set a bigger square of spikes
+    public void SetSpikesLager(Node node, int size)
     {
         for(int i = -size; i <= size; i++)
         {
             for(int j = -size; j <= size; j++)
             {
-                grid[node.gridX + i, node.gridY + j].setItemOnTop("Spikes");
+                grid[node.gridX + i, node.gridY + j].SetItemOnTop("Spikes");
             }
         }
     }
-    public void spikesCustom(Node node, int x, int y)
+
+    //Function to set a custom square of spikes
+    public void SetSpikesCustom(Node node, int x, int y)
     {
         for(int i = 0; i <= x; i++)
         {
@@ -266,27 +200,30 @@ public class GridField : MonoBehaviour
                 if(grid[node.gridX + i, node.gridY + j].onTop == null)
                 {
 
-                    grid[node.gridX + i, node.gridY + j].setItemOnTop("Spikes");
+                    grid[node.gridX + i, node.gridY + j].SetItemOnTop("Spikes");
                 }
             }
         }
     }
 
-    public void door(Node node, string direction, string entrance)
+    //Function to set the doors of the dungeon
+    public void SetDoors(Node node, string direction, string entrance)
     {
         for(int i = -1; i < 2; i++)
         {
             if(direction == "vertical")
             {
-                grid[node.gridX, node.gridY + i].setItemOnTop(entrance);
+                grid[node.gridX, node.gridY + i].SetItemOnTop(entrance);
             }
             else
             {
-                grid[node.gridX+i, node.gridY].setItemOnTop(entrance);
+                grid[node.gridX+i, node.gridY].SetItemOnTop(entrance);
             }
         }
     }
-    public void setHouse(Node node, string name)
+
+    //Function to set a house on the given node with the given name
+    public void SetHouse(Node node, string name)
     {
         for (int i = -1; i < 2; i++)
         {
@@ -299,14 +236,16 @@ public class GridField : MonoBehaviour
                 }
                 else
                 {
-                    grid[node.gridX + i, node.gridY + j].setItemOnTop("House");
+                    grid[node.gridX + i, node.gridY + j].SetItemOnTop("House");
                     grid[node.gridX + i, node.gridY + j].isWalkable = false;
                     grid[node.gridX + i, node.gridY + j].owner = name;
                 }
             }
         }
     }
-    public void setTree(Node node)
+
+    //Function to set a tree at the given node
+    public void SetTree(Node node)
     {
         for (int i = -1; i < 2; i++)
         {
@@ -316,7 +255,9 @@ public class GridField : MonoBehaviour
             }
         }
     }
-    public void solvedHouse(Node node)
+
+    //Function to set a house as solved
+    public void SetHouseSolved(Node node)
     {
         for (int i = -1; i < 2; i++)
         {
@@ -329,14 +270,16 @@ public class GridField : MonoBehaviour
                 }
                 else
                 {
-                    grid[node.gridX + i, node.gridY + j].setItemOnTop("Solved");
+                    grid[node.gridX + i, node.gridY + j].SetItemOnTop("Solved");
                     grid[node.gridX + i, node.gridY + j].owner = null;
                     grid[node.gridX + i, node.gridY + j].isWalkable = true;
                 }
             }
         }
     }
-    public Node tagToNode(string tag)
+
+    //Function to return a node based on the given tag
+    public Node TagToNode(string tag)
     {
         Node chosenNode = null;
         foreach(Node node in grid)
@@ -348,6 +291,9 @@ public class GridField : MonoBehaviour
         }
         return chosenNode;
     }
+    
+    //Function to create a list of all the ghost names
+    //all the names are gender-neutral
     public List<string> ghostNames()
     {
         List<string> names = new List<string>{
