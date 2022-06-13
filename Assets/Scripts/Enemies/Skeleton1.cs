@@ -224,8 +224,8 @@ public class Skeleton1 : MonoBehaviour
     IEnumerator Attack()
     {
         animator.SetBool("isWalking", false);
-        yield return new WaitForSeconds(0.1f);
         animator.SetTrigger("attack");
+        yield return new WaitForSeconds(0.1f);
         player.GetComponent<Player>().ReduceStrength(hitValue);
         yield return new WaitForSeconds(2);
 

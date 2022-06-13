@@ -32,7 +32,7 @@ public class Level20 : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(true);
             for (int i = 0; i < transform.GetChild(0).childCount; i++)
             {
-                transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
             }
             exit = "Exit";
         }
@@ -131,6 +131,7 @@ public class Level20 : MonoBehaviour
         }
         if (data.activeLevel == int.Parse(this.gameObject.tag) && NoEnemiesLeft())
         {
+            data.setLevel(21);
             foreach (Node node in grid.grid)
             {
                 if (node.onTop == "Exit")
@@ -138,7 +139,6 @@ public class Level20 : MonoBehaviour
                     node.SetItemOnTop("Portal");
 
                 }
-                data.setLevel(10);
             }
         }
 

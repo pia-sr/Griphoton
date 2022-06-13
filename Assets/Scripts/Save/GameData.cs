@@ -11,6 +11,7 @@ public class GameData
     public int activeLevel;
     public string namePlayer;
     public string[] nodeTags;
+    public string[] mapTags;
     public bool sound;
     public int strenghtMultiplier;
     public int xPos;
@@ -22,6 +23,7 @@ public class GameData
         activeLevel = game.activeLevel;
         namePlayer = game.namePlayer;
         nodeTags = game.getGrid();
+        mapTags = game.getMap();
         sound = game.sound;
         strenghtMultiplier = game.strenghtMultiplier;
         xPos = game.xPos;

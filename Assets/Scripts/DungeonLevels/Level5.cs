@@ -34,7 +34,7 @@ public class Level5 : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(true);
             for (int i = 0; i < transform.GetChild(0).childCount; i++)
             {
-                transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
             }
             exit = "Exit";
         }
@@ -61,8 +61,6 @@ public class Level5 : MonoBehaviour
             {
                 door.transform.localScale = new Vector3(2.75f, 1.85f, 0);
                 exitDoor = Instantiate(door, node.worldPosition + new Vector3(0, 0, -0.1f), Quaternion.identity, prefabManager.transform);
-
-                door.transform.localScale = new Vector3(size * 3, size, 0);
             }
             else if (node.gridX >= 0 && node.gridX < grid.GetGridSizeX() - 7 && node.gridY > 7 && node.gridY < 11)
             {
@@ -132,17 +130,17 @@ public class Level5 : MonoBehaviour
         //if the player has won the door will open
         if (data.activeLevel == int.Parse(this.gameObject.tag) && NoEnemiesLeft())
         {
+            Destroy(exitDoor);
+            data.setLevel(6);
             foreach (Node node in grid.grid)
             {
                 if (node.onTop == "Exit")
                 {
-                    Destroy(exitDoor);
                     node.SetItemOnTop("ExitOpen");
                     floorTile.transform.localScale = new Vector3(1.1f, 1.1f, 0);
                     Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);
 
                 }
-                data.setLevel(6);
             }
         }
         if (GameObject.Find("Player").GetComponent<Player>().leaveLevel)
@@ -160,7 +158,7 @@ public class Level5 : MonoBehaviour
         }
         for (int i = 0; i < prefabManager.transform.childCount; i++)
         {
-            Destroy(prefabManager.transform.GetChild(0).gameObject);
+            Destroy(prefabManager.transform.GetChild(i).gameObject);
         }
     }
 

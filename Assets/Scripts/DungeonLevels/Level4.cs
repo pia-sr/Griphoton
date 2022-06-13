@@ -33,7 +33,7 @@ public class Level4 : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(true);
             for (int i = 0; i < transform.GetChild(0).childCount; i++)
             {
-                transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
             }
             exit = "Exit";
         }
@@ -44,12 +44,13 @@ public class Level4 : MonoBehaviour
         }
 
         int middleX = Mathf.RoundToInt(grid.GetGridSizeX() / 2);
+        int middleY = Mathf.RoundToInt(grid.GetGridSizeY() / 2);
         grid.SetDoors(grid.grid[middleX, 0], "horizontal", "Entrance");
-        grid.SetDoors(grid.grid[grid.GetGridSizeX() - 1, grid.GetGridSizeY() - 4], "vertical", exit);
+        grid.SetDoors(grid.grid[grid.GetGridSizeX() - 1, middleY+2], "vertical", exit);
         size = 2 * grid.nodeRadius;
         foreach (Node node in grid.grid)
         {
-            if (node == grid.grid[grid.GetGridSizeX() - 1, grid.GetGridSizeY() - 4] && node.onTop == "Exit")
+            if (node == grid.grid[grid.GetGridSizeX() - 1, middleY + 2] && node.onTop == "Exit")
             {
                 door.transform.localScale = new Vector3(2.75f, 1.85f, 0);
                 exitDoor = Instantiate(door, node.worldPosition + new Vector3(0, 0, -0.11f), Quaternion.identity, prefabManager.transform);
@@ -57,11 +58,11 @@ public class Level4 : MonoBehaviour
                 rotation.z = 270;
                 exitDoor.transform.localRotation = Quaternion.Euler(rotation);
             }
-            else if (node.gridX > 6 && node.gridX < grid.GetGridSizeX() && node.gridY > 7 && node.gridY < 11)
+            else if (node.gridX > 6 && node.gridX < middleX+3 && node.gridY > 7 && node.gridY < 11)
             {
                 node.SetItemOnTop("Nothing");
             }
-            else if (node.gridX > middleX + 3 && node.gridX < grid.GetGridSizeX() && node.gridY >= 0 && node.gridY < 8)
+            else if (node.gridX > middleX + 3 && node.gridX < grid.GetGridSizeX() && node.gridY >= 0 && node.gridY < 7)
             {
                 node.SetItemOnTop("Nothing");
             }
@@ -125,17 +126,17 @@ public class Level4 : MonoBehaviour
         //if the player has won the door will open
         if (data.activeLevel == int.Parse(this.gameObject.tag) && NoEnemiesLeft())
         {
+            Destroy(exitDoor);
+            data.setLevel(5);
             foreach (Node node in grid.grid)
             {
                 if (node.onTop == "Exit")
                 {
-                    Destroy(exitDoor);
                     node.SetItemOnTop("ExitOpen");
                     floorTile.transform.localScale = new Vector3(1.1f, 1.1f, 0);
                     Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);
 
                 }
-                data.setLevel(5);
             }
         }
         if (GameObject.Find("Player").GetComponent<Player>().leaveLevel)
@@ -153,7 +154,7 @@ public class Level4 : MonoBehaviour
         }
         for (int i = 0; i < prefabManager.transform.childCount; i++)
         {
-            Destroy(prefabManager.transform.GetChild(0).gameObject);
+            Destroy(prefabManager.transform.GetChild(i).gameObject);
         }
     }
 

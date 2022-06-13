@@ -29,6 +29,9 @@ public class Player : MonoBehaviour
     public Text message2Options;
     public Animator animator;
     public HealthBar healthBar;
+    public GameObject playerCam;
+    public GameObject centerCam;
+    public bool DoNotShowOptions;
 
     //private variables
     private Node _existingTarget;
@@ -60,7 +63,7 @@ public class Player : MonoBehaviour
         hitValue = 25 + (15 * _data.strenghtMultiplier);
         _targetNode = null;
         _existingTarget = null;
-        _strength = 100 + (100 + _data.strenghtMultiplier);
+        _strength = 100 + (100 * _data.strenghtMultiplier);
         _fullHealth = _strength;
         if (!upperWorld)
         {
@@ -70,14 +73,14 @@ public class Player : MonoBehaviour
         }
         else
         {
-            griphotonSound.Play();
+            //griphotonSound.Play();
             transform.position = grid.grid[_data.xPos, _data.yPos].worldPosition;
 
             _foundPos = true;
         }
         _xInput = 0;
         _yInput = -1;
-
+        Unpause();
 
         animator.SetFloat("XInput", _xInput);
         animator.SetFloat("YInput", _yInput);
@@ -99,7 +102,7 @@ public class Player : MonoBehaviour
         }
 
         //if the player is not active in Griphoton, the sound is turned off
-        if (!this.gameObject.activeSelf && griphotonSound.isPlaying)
+        if (isInvisiable() && !this.gameObject.activeSelf && griphotonSound.isPlaying)
         {
             griphotonSound.Pause();
         }
@@ -124,9 +127,9 @@ public class Player : MonoBehaviour
         }
 
         //sets all things active that need to be active in Griphoton
-        if(this.gameObject.activeSelf && upperWorld)
+        if(!isInvisiable()&& this.gameObject.activeSelf && upperWorld)
         {
-            if (!options.activeSelf)
+            if (!options.activeSelf && !DoNotShowOptions)
             {
                 options.SetActive(true);
 
@@ -167,7 +170,6 @@ public class Player : MonoBehaviour
                 {
                     if (!_coroutineStart)
                     {
-                        animator.SetBool("isWalking", true);
                         _coroutineStart = true;
                         StartCoroutine(Move());
                     }
@@ -217,13 +219,21 @@ public class Player : MonoBehaviour
                 animator.SetBool("isWalking", false);
                 activateTutorial = true;
                 options.SetActive(false);
-                _data.SaveGame();
                 string ghostName = grid.grid[_path[0].gridX, _path[0].gridY + 2].onTop;
+                if(grid.grid[_path[0].gridX, _path[0].gridY].mapTag != ghostName)
+                {
+                    grid.grid[_path[0].gridX, _path[0].gridY].mapTag = ghostName;
+                    GameObject.Find("Map").GetComponent<Map>().AddTag(_path[0].gridX, _path[0].gridY, ghostName);
+
+                }
                 GameObject ghostHouse = FindWithTag(ghostName);
                 griphoton.SetActive(false);
                 ghostHouse.SetActive(true);
                 _targetNode = null;
                 SetAllBoolsFalse();
+                SwitchCams();
+                Pause();
+                _data.SaveGame();
                 this.gameObject.SetActive(false);
             }
             //if the player enters the dungeon, all the data is saved and the dungeon loaded
@@ -245,7 +255,7 @@ public class Player : MonoBehaviour
         if (Input.touchCount > 0 && EventSystem.current.currentSelectedGameObject == null)
         {
             Touch touch = Input.GetTouch(0);
-            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+            Vector2 touchPosition = Camera.current.ScreenToWorldPoint(Input.GetTouch(0).position);
             if(grid.Bounds().Contains(touchPosition))
             {
                 _targetNode = grid.GetNodeFromWorldPos(touchPosition);
@@ -321,7 +331,6 @@ public class Player : MonoBehaviour
             levels.transform.GetChild(levelNr).gameObject.SetActive(false);
             levels.transform.GetChild(levelNr - 1).gameObject.SetActive(true);
             _chooseExit = true;
-            _foundPos = false;
             StartCoroutine(Wait());
             Unpause();
         }
@@ -346,7 +355,6 @@ public class Player : MonoBehaviour
             Pause();
             levels.transform.GetChild(levelNr).gameObject.SetActive(false);
             levels.transform.GetChild(levelNr + 1).gameObject.SetActive(true);
-            _foundPos = false;
             StartCoroutine(Wait());
             Unpause();
         }
@@ -356,7 +364,9 @@ public class Player : MonoBehaviour
     //source: https://forum.unity.com/threads/transform-position-speed.744293/
     private IEnumerator Move()
     {
-        if(_existingTarget == null)
+
+        animator.SetBool("isWalking", true);
+        if (_existingTarget == null)
         {
             _existingTarget = _targetNode;
         }
@@ -373,7 +383,7 @@ public class Player : MonoBehaviour
             goal = _path[1].worldPosition.y;
             while (pos.y != goal)
             {
-                pos.y = Mathf.MoveTowards(pos.y, goal, 2f * Time.deltaTime);
+                pos.y = Mathf.MoveTowards(pos.y, goal, 2.5f * Time.deltaTime);
                 transform.localPosition = pos;
                 yield return null;
             }
@@ -384,7 +394,7 @@ public class Player : MonoBehaviour
 
             while (pos.x != goal)
             {
-                pos.x = Mathf.MoveTowards(pos.x, goal, 2f * Time.deltaTime);
+                pos.x = Mathf.MoveTowards(pos.x, goal, 2.5f * Time.deltaTime);
                 transform.localPosition = pos;
                 yield return null;
             }
@@ -419,7 +429,6 @@ public class Player : MonoBehaviour
             GameObject levels = GameObject.FindWithTag("Levels");
             _targetNode = null;
             StopAllCoroutines();
-            leaveLevel = true;
             SetAllBoolsFalse();
 
             if(_data.activeLevel != 1) 
@@ -427,8 +436,8 @@ public class Player : MonoBehaviour
                 levels.transform.GetChild(_data.activeLevel-1).gameObject.SetActive(false);
                 levels.transform.GetChild(_data.activeLevel-2).gameObject.SetActive(true);
             }
+            leaveLevel = true;
             healthBar.SetHealthBarValue(1);
-            _foundPos = false;
             _strength = _fullHealth;
             StartCoroutine(Wait());
             Unpause();
@@ -504,6 +513,7 @@ public class Player : MonoBehaviour
     IEnumerator Wait()
     {
         yield return new WaitForSeconds(0.1f);
+        _foundPos = false;
         leaveLevel = false;
     }
 
@@ -533,13 +543,15 @@ public class Player : MonoBehaviour
     //Function to unpause the player
     public void Unpause()
     {
+        animator.SetBool("isWalking", false);
         StartCoroutine(WaitToMove());
     }
 
     //Function to make the player wait until they can move again
     IEnumerator WaitToMove()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
         _targetNode = null;
         _coroutineStart = false;
 
@@ -553,4 +565,29 @@ public class Player : MonoBehaviour
         Application.Quit();
     }
 
+    public void PlayerInvisiable()
+    {
+        this.GetComponent<SpriteRenderer>().enabled = false;
+        Pause();
+    }
+
+    public void PlayerVisiable()
+    {
+        this.GetComponent<SpriteRenderer>().enabled = true;
+    }
+
+    public bool isInvisiable()
+    {
+        if(this.GetComponent<SpriteRenderer>().enabled == true)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    public void SwitchCams()
+    {
+        playerCam.SetActive(!playerCam.activeSelf);
+        centerCam.SetActive(!centerCam.activeSelf);
+    }
 }

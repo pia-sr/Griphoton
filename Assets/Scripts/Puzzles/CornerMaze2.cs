@@ -131,6 +131,8 @@ public class CornerMaze2 : MonoBehaviour
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
+                player.GetComponent<Player>().SwitchCams();
+                player.GetComponent<Player>().Unpause();
                 griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
                 this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
@@ -159,7 +161,7 @@ public class CornerMaze2 : MonoBehaviour
             end
         };
         _pathRend = currentLine.GetComponent<LineRenderer>();
-        _pathRend.material.color = Color.black;
+        _pathRend.material.color = new Color(0.5f, 0.3f, 0.25f);
         _pathRend.positionCount = _linePath.Count;
         _pathRend.SetPositions(_linePath.ToArray());
     }
@@ -257,6 +259,8 @@ public class CornerMaze2 : MonoBehaviour
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
+        player.GetComponent<Player>().SwitchCams();
+        player.GetComponent<Player>().Unpause();
         message.SetActive(false);
     }
 

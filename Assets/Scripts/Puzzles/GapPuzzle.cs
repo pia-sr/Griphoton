@@ -44,6 +44,7 @@ public class GapPuzzle : MonoBehaviour
 
         foreach (Node node in grid.grid)
         {
+            node.selected = false;
             tile.transform.localScale = new Vector3(size, size, 0);
             tile.GetComponent<SpriteRenderer>().color = _colourEmpty;
             Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
@@ -89,6 +90,8 @@ public class GapPuzzle : MonoBehaviour
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
+                player.GetComponent<Player>().SwitchCams();
+                player.GetComponent<Player>().Unpause();
                 griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
                 this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
@@ -190,6 +193,8 @@ public class GapPuzzle : MonoBehaviour
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
+        player.GetComponent<Player>().SwitchCams();
+        player.GetComponent<Player>().Unpause();
         message.SetActive(false);
     }
 

@@ -103,7 +103,7 @@ public class Skeleton2 : MonoBehaviour
                     healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
                     if (healthValue <= 0)
                     {
-                        Destroy(this.gameObject);
+                        this.gameObject.SetActive(false);
                     }
 
                 }
@@ -236,9 +236,9 @@ public class Skeleton2 : MonoBehaviour
     {
 
         animator.SetBool("isWalking", false);
+        animator.SetTrigger("attack");
         yield return new WaitForSeconds(0.1f);
 
-        animator.SetTrigger("attack");
         player.GetComponent<Player>().ReduceStrength(hitValue);
         yield return new WaitForSeconds(2);
 

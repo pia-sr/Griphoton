@@ -35,6 +35,7 @@ public class ReplacementTutorial : MonoBehaviour
         this.transform.parent.GetChild(0).gameObject.SetActive(false);
         options.SetActive(false);
         ghost.SetActive(true);
+        ghost.transform.localPosition = Vector3.up;
         inactive = true;
         _running = false;
         _counter = 0;

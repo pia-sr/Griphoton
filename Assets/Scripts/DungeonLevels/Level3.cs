@@ -116,17 +116,17 @@ public class Level3 : MonoBehaviour
         //if the player has won the door will open
         if (data.activeLevel == int.Parse(this.gameObject.tag) && NoEnemiesLeft())
         {
+            Destroy(exitDoor);
+            data.setLevel(4);
             foreach (Node node in grid.grid)
             {
                 if (node.onTop == "Exit")
                 {
-                    Destroy(exitDoor);
                     node.SetItemOnTop("ExitOpen");
                     floorTile.transform.localScale = new Vector3(1.1f, 1.1f, 0);
                     Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);
 
                 }
-                data.setLevel(4);
             }
         }
         if (GameObject.Find("Player").GetComponent<Player>().leaveLevel)
@@ -144,7 +144,7 @@ public class Level3 : MonoBehaviour
         }
         for (int i = 0; i < prefabManager.transform.childCount; i++)
         {
-            Destroy(prefabManager.transform.GetChild(0).gameObject);
+            Destroy(prefabManager.transform.GetChild(i).gameObject);
         }
     }
 

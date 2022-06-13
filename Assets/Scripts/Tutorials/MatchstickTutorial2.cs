@@ -36,6 +36,7 @@ public class MatchstickTutorial2 : MonoBehaviour
         this.transform.parent.GetChild(1).gameObject.SetActive(false);
         options.SetActive(false);
         ghost.SetActive(true);
+        ghost.transform.localPosition = Vector3.up;
         inactive = true;
         _running = false;
         _counter = 0;

@@ -42,10 +42,12 @@ public class DungeonTutorial : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         //If the user is for the first time in the dungeon, it will go through the dungeon
         if (_data.tutorial)
         {
             ghost.SetActive(true);
+            ghost.transform.position = Vector3.up;
             _data.tutorial = false;
             _running = false;
             _counter = 0;
@@ -58,7 +60,10 @@ public class DungeonTutorial : MonoBehaviour
         {
             options.SetActive(true);
             this.transform.parent.parent.gameObject.SetActive(false);
+
             player.SetActive(true);
+            player.GetComponent<Player>().PlayerInvisiable();
+            player.GetComponent<Player>().PlayerVisiable();
             player.GetComponent<Player>().Pause();
             player.GetComponent<Player>().Unpause();
             _running = true;
@@ -106,6 +111,8 @@ public class DungeonTutorial : MonoBehaviour
                     ghost.SetActive(false);
                     skipButton.SetActive(true);
                     dungeon.SetActive(true);
+                    player.SetActive(true);
+                    player.GetComponent<Player>().PlayerInvisiable();
                     string sentence = "This here is the first room of the dungeon.| To go to the next room, you first need to defeat all the monsters in the room.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
@@ -131,7 +138,7 @@ public class DungeonTutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 7:
-                    player.SetActive(true);
+                    player.GetComponent<Player>().PlayerVisiable();
                     player.GetComponent<Player>().Pause();
                     player.GetComponent<Player>().Unpause();
                     this.transform.parent.parent.gameObject.SetActive(false);
@@ -176,7 +183,7 @@ public class DungeonTutorial : MonoBehaviour
     {
         options.SetActive(true);
         this.transform.parent.parent.gameObject.SetActive(false);
-        player.SetActive(true);
+        player.GetComponent<Player>().PlayerVisiable();
         player.GetComponent<Player>().Pause();
         player.GetComponent<Player>().Unpause();
         _running = true;

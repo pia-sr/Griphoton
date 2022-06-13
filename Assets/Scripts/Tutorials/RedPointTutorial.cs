@@ -34,7 +34,7 @@ public class RedPointTutorial : MonoBehaviour
         this.transform.parent.GetChild(0).gameObject.SetActive(false);
         this.transform.parent.GetChild(1).gameObject.SetActive(false);
         options.SetActive(false);
-        ghost.transform.localPosition = Vector3.zero;
+        ghost.transform.localPosition = Vector3.up;
         inactive = true;
         _running = false;
         _counter = 0;
@@ -81,7 +81,7 @@ public class RedPointTutorial : MonoBehaviour
             switch (_counter)
             {
                 case 1:
-                    ghost.transform.localPosition = new Vector3(-5, 0, 0);
+                    ghost.transform.localPosition = new Vector3(-5, 1, 0);
                     this.transform.parent.GetChild(0).gameObject.SetActive(true);
                     string sentence = "I have a collection of point and I want to colour in 5 of them.| The pairwise distances between every coloured-in points should all be different. ";
                     StartCoroutine(WordbyWord(sentence));

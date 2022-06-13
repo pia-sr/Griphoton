@@ -103,7 +103,7 @@ public class EvilGhost1 : MonoBehaviour
                 healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
                 if (healthValue <= 0)
                 {
-                    Destroy(this.gameObject);
+                    this.gameObject.SetActive(false);
                 }
             }
 

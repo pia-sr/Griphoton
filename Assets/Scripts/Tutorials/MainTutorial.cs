@@ -18,6 +18,7 @@ public class MainTutorial : MonoBehaviour
     public GameObject questions;
     public GameObject settings;
     public GameObject options;
+    public GameObject map;
     public Text message;
     public GameObject soundButton;
     public Sprite soundOn;
@@ -54,7 +55,7 @@ public class MainTutorial : MonoBehaviour
     void Start()
     {
         Ghost.SetActive(true);
-        Ghost.transform.localPosition = Vector3.zero;
+        Ghost.transform.localPosition = Vector3.up;
         //if the user opens the app for the first time
         if (data.namePlayer == null || data.namePlayer.Length == 0)
         {
@@ -79,6 +80,7 @@ public class MainTutorial : MonoBehaviour
             foreach (Node node in grid.grid)
             {
                 node.SetItemOnTop(data.nodeTags[counterNode]);
+                node.mapTag = data.mapTags[counterNode];
                 counterNode++;
             } 
             if (data.sound)
@@ -119,10 +121,11 @@ public class MainTutorial : MonoBehaviour
                 griphoton.SetActive(true);
                 options.SetActive(true);
                 player.SetActive(true);
+                player.GetComponent<Player>().SwitchCams();
                 player.GetComponent<Player>().Pause();
-                player.GetComponent<Player>().Unpause();
                 _running = true;
                 _start = false;
+                player.GetComponent<Player>().Unpause();
                 this.transform.parent.parent.gameObject.SetActive(false);
                 Ghost.SetActive(false);
             }
@@ -198,7 +201,7 @@ public class MainTutorial : MonoBehaviour
                     break;
                 case 14:
                     options.SetActive(true);
-                    sentence = "If you have any questions, there is a help button in the settings| \nYou can also access the setting by tapping the setting icon.| \nGood luck, " + _playerName + "!";
+                    sentence = "If you have any questions, there is a help button in the settings| \nYou can also access the setting by tapping the setting icon.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 15:
@@ -208,6 +211,7 @@ public class MainTutorial : MonoBehaviour
                     break;
                 case 16:
                     player.SetActive(true);
+                    player.GetComponent<Player>().SwitchCams();
                     player.GetComponent<Player>().Pause();
                     player.GetComponent<Player>().Unpause();
                     this.transform.parent.parent.gameObject.SetActive(false);
@@ -276,6 +280,7 @@ public class MainTutorial : MonoBehaviour
         player.GetComponent<Player>().Unpause();
         _running = true;
         _start = false;
+        player.GetComponent<Player>().SwitchCams();
         Ghost.SetActive(false);
 
     }
@@ -360,6 +365,7 @@ public class MainTutorial : MonoBehaviour
         options.SetActive(true);
         player.GetComponent<Player>().Unpause();
         settings.SetActive(false);
+        player.GetComponent<Player>().DoNotShowOptions = false;
     }
 
     //Function to open the question overview
@@ -375,6 +381,7 @@ public class MainTutorial : MonoBehaviour
         options.SetActive(false);
         player.GetComponent<Player>().Pause();
         settings.SetActive(true);
+        player.GetComponent<Player>().DoNotShowOptions = true;
     }
 
 
@@ -412,9 +419,8 @@ public class MainTutorial : MonoBehaviour
         }
         else
         {
-            data.tutorial = true;
-            data.namePlayer = null;
-            data.SaveGame();
+            string path = Application.persistentDataPath + "/gameData.game";
+            File.Delete(path);
             Application.Quit();
 
         }
@@ -495,5 +501,38 @@ public class MainTutorial : MonoBehaviour
         credits.SetActive(true);
     }
 
+    public void Menu()
+    {
+        bool active = true;
+        if (options.transform.GetChild(1).gameObject.activeSelf)
+        {
+            active = false;
+        }
+        for(int i = 1; i < options.transform.childCount; i++)
+        {
+            options.transform.GetChild(i).gameObject.SetActive(active);
+        }
+    }
+
+    public void OpenMap()
+    {
+
+        data.xPos = grid.GetNodeFromWorldPos(player.transform.position).gridX;
+        data.yPos = grid.GetNodeFromWorldPos(player.transform.position).gridY;
+        GameObject.Find("Map").GetComponent<Map>().update = true;
+        options.SetActive(false);
+        player.GetComponent<Player>().Pause();
+        map.SetActive(true);
+        player.GetComponent<Player>().DoNotShowOptions = true;
+    }
+
+    public void CloseMap()
+    {
+
+        options.SetActive(true);
+        player.GetComponent<Player>().Unpause();
+        map.SetActive(false);
+        player.GetComponent<Player>().DoNotShowOptions = false;
+    }
 
 }

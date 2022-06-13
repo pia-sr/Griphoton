@@ -15,7 +15,7 @@ public class MatchstickPuzzle2 : MonoBehaviour
     //public variables to communicate with other scripts
     public GameObject griphoton;
     public GameObject player;
-    public MatchstickTutorial1 tutorial;
+    public MatchstickTutorial2 tutorial;
 
     //private variables
     private GameObject _selectedStick;
@@ -182,6 +182,8 @@ public class MatchstickPuzzle2 : MonoBehaviour
 
             griphoton.SetActive(true);
             player.SetActive(true);
+            player.GetComponent<Player>().SwitchCams();
+            player.GetComponent<Player>().Unpause();
             griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
             this.transform.parent.transform.parent.gameObject.SetActive(false);
         }
@@ -192,7 +194,7 @@ public class MatchstickPuzzle2 : MonoBehaviour
     {
         
         Bounds rightArea1 = new Bounds(new Vector2(0,-0.2f), new Vector2(1, 1f));
-        Bounds rightArea2 = new Bounds(new Vector2(7,-0.3f), new Vector2(1f, 1.4f));
+        Bounds rightArea2 = new Bounds(new Vector2(7,-0.3f), new Vector2(1f, 2f));
         List<GameObject> position2 = new List<GameObject>();
 
         bool pos1 = false;
@@ -267,6 +269,8 @@ public class MatchstickPuzzle2 : MonoBehaviour
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
+        player.GetComponent<Player>().SwitchCams();
+        player.GetComponent<Player>().Unpause();
         messageExit.SetActive(false);
     }
 

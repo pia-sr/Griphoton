@@ -230,6 +230,8 @@ public class RegionDivision : MonoBehaviour
             {
                 griphoton.SetActive(true);
                 player.SetActive(true);
+                player.GetComponent<Player>().SwitchCams();
+                player.GetComponent<Player>().Unpause();
                 griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
                 this.transform.parent.transform.parent.gameObject.SetActive(false);
             }
@@ -369,6 +371,8 @@ public class RegionDivision : MonoBehaviour
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
+        player.GetComponent<Player>().SwitchCams();
+        player.GetComponent<Player>().Unpause();
         message.SetActive(false);
     }
 

@@ -103,8 +103,8 @@ MonoBehaviour:
   grid: {fileID: 0}
   player: {fileID: 0}
   pathFinder: {fileID: 0}
-  hitValue: 25
   animator: {fileID: 4990554658410862996}
+  hitValue: 25
 --- !u!114 &7561828489229345211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 075868e76b305fa4cb1f3ffdec70892b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _grid: {fileID: 0}
+  grid: {fileID: 0}
 --- !u!95 &4990554658410862996
 Animator:
   serializedVersion: 3
@@ -222,7 +222,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7228539407521597300, guid: 48784167efd056b4c93140d210d8de03, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.4
+      value: 0.22
       objectReference: {fileID: 0}
     - target: {fileID: 7228539407521597300, guid: 48784167efd056b4c93140d210d8de03, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

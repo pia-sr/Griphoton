@@ -33,7 +33,7 @@ public class Level14 : MonoBehaviour
             transform.GetChild(0).gameObject.SetActive(true);
             for (int i = 0; i < transform.GetChild(0).childCount; i++)
             {
-                transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+                transform.GetChild(0).GetChild(i).gameObject.SetActive(true);
             }
             exit = "Exit";
         }
@@ -125,17 +125,16 @@ public class Level14 : MonoBehaviour
         //if the player has won the door will open
         if (data.activeLevel == int.Parse(this.gameObject.tag) && NoEnemiesLeft())
         {
+            Destroy(exitDoor);
+            data.setLevel(15);
             foreach (Node node in grid.grid)
             {
                 if (node.onTop == "Exit")
                 {
-                    Destroy(exitDoor);
                     node.SetItemOnTop("ExitOpen");
                     floorTile.transform.localScale = new Vector3(1.1f, 1.1f, 0);
                     Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);
-
                 }
-                data.setLevel(15);
             }
         }
         if (GameObject.Find("Player").GetComponent<Player>().leaveLevel)
