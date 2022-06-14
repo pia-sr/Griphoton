@@ -117,7 +117,8 @@ public class Level8 : MonoBehaviour
     {
         //if the player has won the door will open
         if (data.activeLevel == int.Parse(this.gameObject.tag) && NoEnemiesLeft())
-        {Destroy(exitDoor);
+        {
+            Destroy(exitDoor);
             data.setLevel(9);
             foreach (Node node in grid.grid)
             {

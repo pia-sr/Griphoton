@@ -144,14 +144,10 @@ public class MirrorPuzzle : MonoBehaviour
                 }
 
             }
-            if (checkWin())
+            if (CheckWin() && !tutorial.inactive)
             {
-                griphoton.SetActive(true);
-                player.SetActive(true);
-                player.GetComponent<Player>().SwitchCams();
-                player.GetComponent<Player>().Unpause();
-                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
-                this.transform.parent.transform.parent.gameObject.SetActive(false);
+                tutorial.inactive = true;
+                tutorial.WonPuzzle();
             }
 
         }
@@ -159,7 +155,7 @@ public class MirrorPuzzle : MonoBehaviour
 
 
     //Function to check if the player has solved the puzzle
-    private bool checkWin()
+    private bool CheckWin()
     {
         List<string> counters = new List<string>();
         string direction;

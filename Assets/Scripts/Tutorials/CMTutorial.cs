@@ -22,6 +22,7 @@ public class CMTutorial : MonoBehaviour
     public Player player;
     public Game data;
     public bool inactive;
+    public GameObject griphoton;
 
     //private variables for the tutorial flow
     private int _counter;
@@ -75,6 +76,16 @@ public class CMTutorial : MonoBehaviour
             }
             touchAni.SetActive(false);
             _start = true;
+
+            if (_counter > 9)
+            {
+                griphoton.SetActive(true);
+                player.gameObject.SetActive(true);
+                player.SwitchCams();
+                player.Unpause();
+                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.gameObject.tag);
+                this.transform.parent.gameObject.SetActive(false);
+            }
         }
 
         //Text sequences
@@ -122,6 +133,7 @@ public class CMTutorial : MonoBehaviour
                     inactive = false;
                     this.gameObject.SetActive(false);
                     puzzleSound.Play();
+                    _counter++;
                     break;
             }
         }
@@ -157,6 +169,7 @@ public class CMTutorial : MonoBehaviour
     //Function to skip the tutorial
     public void skipTutorial()
     {
+        _counter = 9;
         this.transform.parent.GetChild(0).gameObject.SetActive(true);
         options.SetActive(true);
         inactive = false;
@@ -272,5 +285,14 @@ public class CMTutorial : MonoBehaviour
         options.SetActive(false);
         inactive = true;
         questions.SetActive(true);
+    }
+
+    public void WonPuzzle()
+    {
+        this.gameObject.SetActive(true);
+        skipButton.SetActive(false);
+        int randIndex = Random.Range(0, player.WonSentences().Count);
+        StartCoroutine(WordbyWord(player.WonSentences()[randIndex]));
+
     }
 }

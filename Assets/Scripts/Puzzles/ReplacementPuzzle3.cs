@@ -54,6 +54,10 @@ public class ReplacementPuzzle3 : MonoBehaviour
         {
             Destroy(symbolManager.transform.GetChild(i).gameObject);
         }
+        for (int i = 0; i < selectedTiles.transform.childCount; i++)
+        {
+            Destroy(selectedTiles.transform.GetChild(i).gameObject);
+        }
         _rowNumber = 6;
         _row = new List<int>() { 1 };
         symbol.transform.localScale = new Vector3(_size, _size, 0);
@@ -228,14 +232,10 @@ public class ReplacementPuzzle3 : MonoBehaviour
                 }
 
             }
-            if (CheckWin())
+            if (CheckWin() && !tutorial.inactive)
             {
-                griphoton.SetActive(true);
-                player.SetActive(true);
-                player.GetComponent<Player>().SwitchCams();
-                player.GetComponent<Player>().Unpause();
-                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
-                this.transform.parent.transform.parent.gameObject.SetActive(false);
+                tutorial.inactive = true;
+                tutorial.WonPuzzle();
             }
 
         }

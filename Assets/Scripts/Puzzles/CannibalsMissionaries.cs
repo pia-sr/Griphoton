@@ -198,14 +198,10 @@ public class CannibalsMissionaries : MonoBehaviour
             messageLost.text = "Game over! \nDo you want to try again?";
         }
         //if the player has won the game, they will leave the house and the puzzle will be set as solved
-        else if (CheckWin())
+        else if (CheckWin() && !tutorial.inactive)
         {
-            griphoton.SetActive(true);
-            player.SetActive(true);
-            player.GetComponent<Player>().SwitchCams();
-            player.GetComponent<Player>().Unpause();
-            griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
-            this.transform.parent.transform.parent.gameObject.SetActive(false);
+            tutorial.inactive = true;
+            tutorial.WonPuzzle();
         }
     }
 

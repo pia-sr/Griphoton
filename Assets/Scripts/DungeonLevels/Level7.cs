@@ -12,13 +12,17 @@ public class Level7 : MonoBehaviour
     public GameObject floorTile;
     public GameObject door;
     public GameObject spikes;
-    public Game data;
 
     //private variables
+    private Game data;
     private float size;
     private GameObject exitDoor;
 
 
+    private void Awake()
+    {
+        data = GameObject.Find("GameData").GetComponent<Game>();
+    }
     //Function to set level back to its original state
     private void SetUp()
     {
@@ -46,18 +50,6 @@ public class Level7 : MonoBehaviour
         grid.SetSpikesCustom(grid.grid[1, middleY - 1], 31, 2);
         grid.SetSpikesCustom(grid.grid[middleX - 1, 1], 2, 15);
         size = 2 * grid.nodeRadius;
-        foreach (Node node in grid.grid)
-        {
-            if (node.onTop == "Spikes")
-            {
-                Instantiate(spikes, node.worldPosition + new Vector3(0, 0, -0.1f), Quaternion.identity, prefabManager.transform);
-            }
-            else if (node == grid.grid[middleX, 0] && node.onTop == "Exit")
-            {
-                door.transform.localScale = new Vector3(2.75f, 1.85f, 0);
-                Instantiate(door, node.worldPosition + new Vector3(0, 0, -0.1f), Quaternion.identity, prefabManager.transform);
-            }
-        }
         foreach (Node node in grid.grid)
         {
             foreach (Node neighbour in grid.GetNodeNeighboursDiagonal(node))
@@ -90,7 +82,7 @@ public class Level7 : MonoBehaviour
         }
         foreach (Node node in grid.grid)
         {
-            if (node.onTop == null || node.onTop == "Entrance" || node.onTop == "ExitOpen")
+            if (node.onTop == null || node.onTop == "Entrance" || node.onTop == "ExitOpen" || node.onTop == "Spikes")
             {
                 if (node.onTop == null)
                 {
@@ -100,6 +92,18 @@ public class Level7 : MonoBehaviour
                 floorTile.transform.localScale = new Vector3(1.1f, 1.1f, 0);
                 Instantiate(floorTile, node.worldPosition, Quaternion.identity, prefabManager.transform);
 
+            }
+        }
+        foreach (Node node in grid.grid)
+        {
+            if (node.onTop == "Spikes")
+            {
+                Instantiate(spikes, node.worldPosition + new Vector3(0, 0, -0.1f), Quaternion.identity, prefabManager.transform);
+            }
+            else if (node == grid.grid[middleX, 0] && node.onTop == "Exit")
+            {
+                door.transform.localScale = new Vector3(2.75f, 1.85f, 0);
+                exitDoor = Instantiate(door, node.worldPosition + new Vector3(0, 0, -0.1f), Quaternion.identity, prefabManager.transform);
             }
         }
     }

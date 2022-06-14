@@ -223,14 +223,10 @@ public class CannibalsMissionaries2 : MonoBehaviour
         }
 
         //if the player has won the game, they will leave the house and the puzzle will be set as solved
-        else if (CheckWon())
+        else if (CheckWin() && !tutorial.inactive)
         {
-            griphoton.SetActive(true);
-            player.SetActive(true);
-            player.GetComponent<Player>().SwitchCams();
-            player.GetComponent<Player>().Unpause();
-            griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
-            this.transform.parent.transform.parent.gameObject.SetActive(false);
+            tutorial.inactive = true;
+            tutorial.WonPuzzle();
         }
     }
     //Function to set up the puzzle
@@ -422,6 +418,10 @@ public class CannibalsMissionaries2 : MonoBehaviour
                 {
                     return true;
                 }
+                else if(cabbageCounter != 0 && wolfCounter > cabbageCounter)
+                {
+                    return true;
+                }
             }
 
         }
@@ -430,7 +430,7 @@ public class CannibalsMissionaries2 : MonoBehaviour
 
 
     //If the player has not lost and all the animals are on the right side, the player has solved the puzzle
-    private bool CheckWon()
+    private bool CheckWin()
     {
         if(_leftSide.Count == 0 && _onBoat.Count == 0)
         {

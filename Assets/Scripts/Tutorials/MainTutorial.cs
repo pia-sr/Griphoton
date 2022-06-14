@@ -72,7 +72,6 @@ public class MainTutorial : MonoBehaviour
         //if the user has already opened the app at least once
         else
         {
-            data.tutorial = false;
             _running = false;
             string firstSentence = "Welcome back, "+ data.namePlayer + "!";
             StartCoroutine(WordbyWord(firstSentence));

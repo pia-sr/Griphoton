@@ -104,14 +104,10 @@ public class RedPointPuzzle2 : MonoBehaviour
                 }
 
             }
-            if (CheckWin())
+            if (CheckWin() && !tutorial.inactive)
             {
-                griphoton.SetActive(true);
-                player.SetActive(true);
-                player.GetComponent<Player>().SwitchCams();
-                player.GetComponent<Player>().Unpause();
-                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.transform.parent.tag);
-                this.transform.parent.transform.parent.gameObject.SetActive(false);
+                tutorial.inactive = true;
+                tutorial.WonPuzzle();
             }
 
         }

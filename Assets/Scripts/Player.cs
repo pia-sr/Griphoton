@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
     private List<Node> _path;
     private float _strength;
     private bool _blockBool;
+    private bool heal;
     private Node _targetNode;
     private bool _foundPos;
     private bool _coroutineStart;
@@ -84,6 +85,7 @@ public class Player : MonoBehaviour
 
         animator.SetFloat("XInput", _xInput);
         animator.SetFloat("YInput", _yInput);
+        heal = true;
     }
 
     // Update is called once per frame
@@ -143,6 +145,11 @@ public class Player : MonoBehaviour
                 puzzleSound.Pause();
             }
         }
+        else if (!upperWorld && heal)
+        {
+            heal = false;
+            StartCoroutine(SelfHeal());
+        }
         //After dungeon lost to find their position
         RestartLevel();
         if (!_foundPos)
@@ -193,6 +200,7 @@ public class Player : MonoBehaviour
                 }
                 else
                 {
+                    message2Options.transform.parent.parent.gameObject.SetActive(true);
                     message2Options.text = "You still have " + unsolvedPuzzles + " unsolved Puzzles left. \n Do you want to stay and solve them or do you want to leave?";
                 }
             }
@@ -333,6 +341,7 @@ public class Player : MonoBehaviour
             _chooseExit = true;
             StartCoroutine(Wait());
             Unpause();
+            _foundPos = false;
         }
     }
 
@@ -357,6 +366,7 @@ public class Player : MonoBehaviour
             levels.transform.GetChild(levelNr + 1).gameObject.SetActive(true);
             StartCoroutine(Wait());
             Unpause();
+            _foundPos = false;
         }
     }
     
@@ -441,6 +451,7 @@ public class Player : MonoBehaviour
             _strength = _fullHealth;
             StartCoroutine(Wait());
             Unpause();
+            _foundPos = false;
         }
     }
 
@@ -513,7 +524,6 @@ public class Player : MonoBehaviour
     IEnumerator Wait()
     {
         yield return new WaitForSeconds(0.1f);
-        _foundPos = false;
         leaveLevel = false;
     }
 
@@ -589,5 +599,50 @@ public class Player : MonoBehaviour
     {
         playerCam.SetActive(!playerCam.activeSelf);
         centerCam.SetActive(!centerCam.activeSelf);
+    }
+
+
+    public List<string> WonSentences()
+    {
+
+        List<string> sentences = new List<string>()
+        {
+            "Congratulations! \nYou solved the puzzle!",
+            "Thank you so much for your help, " + _data.namePlayer + "!",
+            "Goodbye, " + _data.namePlayer + ".\nGood luck with the dungeon!",
+            "Brilliant! \nI knew you could help me.",
+            "Now I can finally pass on. \nThank you, " + _data.namePlayer + "!"
+
+        };
+
+        return sentences;
+
+    }
+
+    IEnumerator SelfHeal()
+    {
+        yield return new WaitForSeconds(4);
+        float hit;
+        if(_strength + 5 <= _fullHealth)
+        {
+            hit = 5;
+        }
+        else
+        {
+            hit = _fullHealth - _strength;
+        }
+        float healthReduc = hit / _fullHealth;
+
+        _strength += hit;
+        healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() + healthReduc);
+        heal = true;
+
+    }
+
+    public void Stay()
+    {
+
+        message2Options.transform.parent.parent.gameObject.SetActive(false);
+        Unpause();
     }
 }

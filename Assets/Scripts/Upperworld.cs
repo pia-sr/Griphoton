@@ -24,9 +24,6 @@ public class Upperworld : MonoBehaviour
     public GameObject pathEnd;
     public GameObject map;
 
-    //private list for the sentences after the user has solved the game
-    private List<string> _wonSentences;
-
     
 
 
@@ -192,17 +189,6 @@ public class Upperworld : MonoBehaviour
             CreatingPath();
 
         }
-
-        
-        _wonSentences = new List<string>()
-        {
-            "Congratulations! \nYou solved the puzzle!",
-            "Thank you so much for your help, " + data.namePlayer + "!",
-            "Goodbye, " + data.namePlayer + ".\nGood luck with the dungeon!",
-            "Brilliant! \nI knew you could help me.",
-            "Now I can finally pass on. \nThank you, " + data.namePlayer + "!"
-
-        };
     }
 
     //Function to build a house at a given node
@@ -221,7 +207,6 @@ public class Upperworld : MonoBehaviour
         {
             if(node.onTop == houseName)
             {
-                int randIndex = Random.Range(0, _wonSentences.Count);
                 grid.SetHouseSolved(node);
                 GameObject house = GameObject.Find(houseName);
                 house.SetActive(false);
@@ -229,8 +214,6 @@ public class Upperworld : MonoBehaviour
                 grid.grid[node.gridX, node.gridY - 2].mapTag = "Solved";
                 GameObject solvedHouse = Instantiate(moudField, node.worldPosition + new Vector3(0,0,1), Quaternion.identity, houses.transform);
                 solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 1);
-                messageSimple.transform.parent.parent.gameObject.SetActive(true);
-                messageSimple.text = _wonSentences[randIndex];
             }
         }
     }

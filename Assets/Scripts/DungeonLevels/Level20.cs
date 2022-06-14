@@ -38,7 +38,7 @@ public class Level20 : MonoBehaviour
         }
         else
         {
-            exit = "ExitOpen";
+            exit = "Portal";
             transform.GetChild(0).gameObject.SetActive(false);
 
         }

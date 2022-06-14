@@ -22,6 +22,7 @@ public class MatchstickTutorial1 : MonoBehaviour
     public Player player;
     public Game data;
     public bool inactive;
+    public GameObject griphoton;
 
     //private variables for the tutorial flow
     private int _counter;
@@ -76,6 +77,15 @@ public class MatchstickTutorial1 : MonoBehaviour
             }
             touchAni.SetActive(false);
             _start = true;
+            if (_counter > 6)
+            {
+                griphoton.SetActive(true);
+                player.gameObject.SetActive(true);
+                player.SwitchCams();
+                player.Unpause();
+                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.gameObject.tag);
+                this.transform.parent.gameObject.SetActive(false);
+            }
         }
 
         //Text sequences
@@ -112,6 +122,7 @@ public class MatchstickTutorial1 : MonoBehaviour
                     inactive = false;
                     this.gameObject.SetActive(false);
                     puzzleSound.Play();
+                    _counter++;
                     break;
             }
         }
@@ -148,6 +159,7 @@ public class MatchstickTutorial1 : MonoBehaviour
     //Function to skip the tutorial
     public void skipTutorial()
     {
+        _counter = 6;
         this.transform.parent.GetChild(0).gameObject.SetActive(true);
         this.transform.parent.GetChild(1).gameObject.SetActive(true);
         options.SetActive(true);
@@ -227,5 +239,16 @@ public class MatchstickTutorial1 : MonoBehaviour
         options.SetActive(false);
         inactive = true;
         questions.SetActive(true);
+    }
+
+
+    public void WonPuzzle()
+    {
+        this.gameObject.SetActive(true);
+        skipButton.SetActive(false);
+        ghost.SetActive(false);
+        int randIndex = Random.Range(0, player.WonSentences().Count);
+        StartCoroutine(WordbyWord(player.WonSentences()[randIndex]));
+
     }
 }

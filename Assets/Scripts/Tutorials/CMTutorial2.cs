@@ -22,6 +22,7 @@ public class CMTutorial2 : MonoBehaviour
     public Player player;
     public Game data;
     public bool inactive;
+    public GameObject griphoton;
 
     //private variables for the tutorial flow
     private int _counter;
@@ -76,6 +77,15 @@ public class CMTutorial2 : MonoBehaviour
             }
             touchAni.SetActive(false);
             _start = true;
+            if (_counter > 10)
+            {
+                griphoton.SetActive(true);
+                player.gameObject.SetActive(true);
+                player.SwitchCams();
+                player.Unpause();
+                griphoton.GetComponent<Upperworld>().SetHouseSolved(this.transform.parent.gameObject.tag);
+                this.transform.parent.gameObject.SetActive(false);
+            }
         }
 
         //Text sequences
@@ -91,11 +101,11 @@ public class CMTutorial2 : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "The problem is that if there are more wolves than snakes on either side, the wolves will eat the snakes.| And of course, if there are more snakes than mice on either side, the snakes will eat the mice.";
+                    sentence = "The problem is that if there are more wolves than snakes on either side, the wolves will eat the snakes.| The wolves will also eat the mice if there are more wolves than mice!" ;
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "For some reason the wolves will not eat the mice.| But that makes traveling with them a bit easier.";
+                    sentence = "And of course, if there are more snakes than mice on either side, the snakes will eat the mice.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
@@ -127,6 +137,7 @@ public class CMTutorial2 : MonoBehaviour
                     inactive = false;
                     this.gameObject.SetActive(false);
                     puzzleSound.Play();
+                    _counter++;
                     break;
             }
         }
@@ -163,6 +174,8 @@ public class CMTutorial2 : MonoBehaviour
     //Function to skip the tutorial
     public void skipTutorial()
     {
+
+        _counter = 11;
         this.transform.parent.GetChild(0).gameObject.SetActive(true);
         options.SetActive(true);
         inactive = false;ghost.SetActive(false);
@@ -180,7 +193,7 @@ public class CMTutorial2 : MonoBehaviour
         Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "What am I supposed to do again?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
-        answer.text = "You need to get all the animals on the left riverside to the right riverside. But remember: the wolves will eat the snakes if there are more wolves than snakes. And the snakes will eat the mice if there are more snakes than mice. Also, the boat can cross the river only 13 times.";
+        answer.text = "You need to get all the animals on the left riverside to the right riverside. But remember: the wolves will eat the snakes or the mice if there are more wolves than snakes or mice. And the snakes will eat the mice if there are more snakes than mice. Also, the boat can cross the river only 13 times.";
     }
     public void Question2()
     {
@@ -189,7 +202,7 @@ public class CMTutorial2 : MonoBehaviour
         Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "Who wants to eat who again?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
-        answer.text = "The wolves will eat the snakes, but only if there are more wolves than snakes on the river bank. And the snakes will eat the mice, if there are more snakes than mice on the riverbank. Luckly, the wolves will not eat the mice, no matter how many wolves or mice are on the same riverbank.";
+        answer.text = "The wolves will eat the snakes or the mice, but only if there are more wolves than snakes or more wolves than mice on the river bank. And the snakes will eat the mice, if there are more snakes than mice on the riverbank.";
     }
     public void Question3()
     {
@@ -280,5 +293,14 @@ public class CMTutorial2 : MonoBehaviour
         options.SetActive(false);
         inactive = true;
         questions.SetActive(true);
+    }
+
+    public void WonPuzzle()
+    {
+        this.gameObject.SetActive(true);
+        skipButton.SetActive(false);
+        int randIndex = Random.Range(0, player.WonSentences().Count);
+        StartCoroutine(WordbyWord(player.WonSentences()[randIndex]));
+
     }
 }
