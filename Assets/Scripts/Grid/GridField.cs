@@ -43,6 +43,7 @@ public class GridField : MonoBehaviour
         CreateGrid();
     }
     /*
+    
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector2(gridWorldSize.x, gridWorldSize.y));

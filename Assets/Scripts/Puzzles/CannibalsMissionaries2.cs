@@ -475,6 +475,7 @@ public class CannibalsMissionaries2 : MonoBehaviour
         tutorial.gameObject.SetActive(true);
         griphoton.SetActive(true);
         player.SetActive(true);
+        player.GetComponent<Player>().Unpause();
         player.GetComponent<Player>().SwitchCams();
         messageExit.SetActive(false);
     }

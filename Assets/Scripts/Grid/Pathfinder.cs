@@ -229,7 +229,7 @@ public class Pathfinder : MonoBehaviour
         int distanceX = Mathf.Abs(to.gridX - from.gridX);
         int distanceY = Mathf.Abs(to.gridY - from.gridY);
 
-        return distanceX > distanceY ? 14*distanceY + 10 * distanceX : 14* distanceX + 10 * distanceY;
+        return distanceX > distanceY ? 14*distanceY + 11 * distanceX : 14* distanceX + 11 * distanceY;
     }
 
     //finds the node on which the player is currently standing on
