@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PolyAdd1 : MonoBehaviour
 {
@@ -8,24 +9,17 @@ public class PolyAdd1 : MonoBehaviour
     public List<GameObject> shapes;
     public GameObject shapeEq1;
     public GameObject shapeEq2;
-    public GameObject rotateButton;
-    public GameObject mirrorButton;
     public GameObject messageExit;
     public GridField grid;
 
     //public variables to communicate with other scripts
     public GameObject griphoton;
     public GameObject player;
-    public RegionDivisionTutorial tutorial;
+    public PolyAddTutorial tutorial;
 
     //private variables
     private GameObject _selectedShape;
     private bool _selected;
-    private bool _activeMove;
-    private Vector2 _distStick;
-    private Vector2 _distRotate;
-    private Vector2 _distMove;
-    private bool _moveStick;
     private List<Vector3> _positions;
     private List<Node> _selectedNodesLeft;
     private List<Node> _selectedNodesRight;
@@ -41,7 +35,7 @@ public class PolyAdd1 : MonoBehaviour
         _squareCount = _selectedNodesLeft.Count;
         foreach(GameObject shape in shapes)
         {
-            _positions.Add(shape.transform.localPosition);
+            _positions.Add(shape.transform.position);
         }
         SetUp();
     }
@@ -49,16 +43,14 @@ public class PolyAdd1 : MonoBehaviour
     //Function to set matchsticks to original position and rotation
     private void SetUp()
     {
-        mirrorButton.SetActive(false);
-        rotateButton.SetActive(false);
         _selectedShape = null;
         _selected = false;
-        _moveStick = false;
         int counter = 0;
         foreach(GameObject shape in shapes)
         {
             //shape.transform.localPosition = _positions[counter];
             shape.transform.localRotation = Quaternion.Euler(Vector3.zero);
+            shape.transform.GetChild(0).gameObject.SetActive(false);
             counter++;
         }
 
@@ -67,33 +59,15 @@ public class PolyAdd1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0))
-        //if (Input.touchCount > 0 && !tutorial.inactive)
+        //if (Input.GetMouseButton(0))
+        if (Input.touchCount > 0 && !tutorial.inactive)
         {
 
-            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //Touch touch = Input.GetTouch(0);
-            //Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-            //if the user touches the move button the matchstick moves with the user's touch
-            if (_moveStick)
-            {
-                if (!_activeMove)
-                {
-                    _distStick.x = touchPosition.x - _selectedShape.transform.localPosition.x;
-                    _distStick.y = touchPosition.y - _selectedShape.transform.localPosition.y;
-                    _distRotate.x = touchPosition.x - rotateButton.transform.localPosition.x;
-                    _distRotate.y = touchPosition.y - rotateButton.transform.localPosition.y;
-                    _distMove.x = touchPosition.x - mirrorButton.transform.localPosition.x;
-                    _distMove.y = touchPosition.y - mirrorButton.transform.localPosition.y;
-                }
-                _activeMove = true;
-                mirrorButton.transform.localPosition = touchPosition - _distMove;
-                _selectedShape.transform.localPosition = touchPosition - _distStick;
-                rotateButton.transform.localPosition = touchPosition - _distRotate;
-            }
-            //waits for user to either select or rotate a matchstick
-            else if (Input.GetMouseButtonDown(0))
-            //else if (touch.phase == TouchPhase.Began)
+            //Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Touch touch = Input.GetTouch(0);
+            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+            //if (Input.GetMouseButtonDown(0))
+            if (touch.phase == TouchPhase.Began)
             {
                 if (!_selected)
                 {
@@ -103,11 +77,8 @@ public class PolyAdd1 : MonoBehaviour
                         if (bounds.Contains(touchPosition))
                         {
                             _selected = true;
-                            rotateButton.SetActive(true);
-                            rotateButton.transform.localPosition = shape.transform.position + new Vector3(-1.5f, 0, 0);
-                            mirrorButton.SetActive(true);
-                            mirrorButton.transform.localPosition = shape.transform.position + new Vector3(1.5f, 0, 0);
                             _selectedShape = shape;
+                            shape.transform.GetChild(0).gameObject.SetActive(true);
 
                         }
 
@@ -116,64 +87,25 @@ public class PolyAdd1 : MonoBehaviour
 
                 else
                 {
-
-                    if (rotateButton.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
+                    if(EventSystem.current.currentSelectedGameObject == null)
                     {
-                        var rotation = _selectedShape.transform.localRotation.eulerAngles;
-                        float rotationZ = rotation.z;
-                        rotationZ += 90;
-
-                        rotation.z = rotationZ;
-                        _selectedShape.transform.localRotation = Quaternion.Euler(rotation);
-
-                    }
-                    else if (mirrorButton.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
-                    {
-
-                        var rotation = _selectedShape.transform.localRotation.eulerAngles;
-                        float rotationY = rotation.y;
-                        rotationY += 180;
-                        rotation.y = rotationY;
-                        _selectedShape.transform.localRotation = Quaternion.Euler(rotation);
-                    }
-                    else if(_selectedShape.GetComponent<SpriteRenderer>().bounds.Contains(touchPosition))
-                    {
-                        _moveStick = true;
-                    }
-                    else
-                    {
-                        mirrorButton.SetActive(false);
-                        rotateButton.SetActive(false);
                         _selected = false;
+                        _selectedShape.transform.GetChild(0).gameObject.SetActive(false);
                         _selectedShape = null;
-
                     }
                 
 
                 }
 
-            }/*
-            if (Input.GetMouseButtonUp(0))
-            //if (touch.phase == TouchPhase.Ended)
-            {
-                _activeMove = false;
-                _moveStick = false;
-            }*/
+            }
 
 
 
         }
-        if (CheckWin() && !tutorial.inactive)
+        if (CheckWin())
         {
-            Debug.Log("Won!");
-            //tutorial.inactive = true;
-           //tutorial.WonPuzzle();
-        }
-        if (Input.GetMouseButtonUp(0))
-        //if (touch.phase == TouchPhase.Ended)
-        {
-            _activeMove = false;
-            _moveStick = false;
+            tutorial.inactive = true;
+            tutorial.WonPuzzle();
         }
     }
 
@@ -181,7 +113,7 @@ public class PolyAdd1 : MonoBehaviour
     private bool CheckWin()
     {
         GetNodes();
-        if(_selectedNodesLeft.Count != _squareCount || _selectedNodesRight.Count != _squareCount)
+        if (_selectedNodesLeft.Count != _squareCount || _selectedNodesRight.Count != _squareCount)
         {
             return false;
         }
@@ -243,18 +175,28 @@ public class PolyAdd1 : MonoBehaviour
         _selectedNodesRight = new List<Node>();
         foreach (GameObject shape in shapes)
         {
-            for (int i = 0; i < shape.GetComponent<PolygonCollider2D>().GetTotalPointCount(); i++)
+            for (int i = 0; i < shape.GetComponent<EdgeCollider2D>().pointCount; i++)
             {
-                Vector2 pos = new Vector2(shape.transform.position.x, shape.transform.position.y) - shape.GetComponent<PolygonCollider2D>().points[i];
+                
+                Vector2 point = shape.GetComponent<EdgeCollider2D>().points[i];
+                Vector2 pos = shape.transform.TransformPoint(point);
                 Node node = grid.GetNodeFromWorldPos(pos);
                 grid.GetNodeFromWorldPos(pos).onTop = shape.name;
                 if (node.onTop.Contains("L"))
                 {
-                    _selectedNodesLeft.Add(node);
+                    if (!_selectedNodesLeft.Contains(node))
+                    {
+                        _selectedNodesLeft.Add(node);
+
+                    }
                 }
                 else
                 {
-                    _selectedNodesRight.Add(node);
+                    if (!_selectedNodesRight.Contains(node))
+                    {
+                        _selectedNodesRight.Add(node);
+                    }
+                    
                 }
             }
 
@@ -264,11 +206,18 @@ public class PolyAdd1 : MonoBehaviour
 
     private bool SameShape()
     {
+        SortList(_selectedNodesLeft);
+        SortList(_selectedNodesRight);
         int difx = _selectedNodesLeft[0].gridX - _selectedNodesRight[0].gridX;
         int dify = _selectedNodesLeft[0].gridY - _selectedNodesRight[0].gridY;
 
         for(int i = 0; i < _selectedNodesRight.Count; i++)
         {
+            if(_selectedNodesRight[i].gridX + difx < 0 || _selectedNodesRight[i].gridX + difx > grid.GetGridSizeX()-1 || _selectedNodesRight[i].gridY + dify < 0 ||
+                _selectedNodesRight[i].gridY + dify > grid.GetGridSizeY() - 1)
+            {
+                return false;
+            }
             Node node = grid.grid[_selectedNodesRight[i].gridX + difx, _selectedNodesRight[i].gridY + dify];
             if(node != _selectedNodesLeft[i])
             {
@@ -280,21 +229,159 @@ public class PolyAdd1 : MonoBehaviour
 
     private void ShapePos()
     {
-        int counter = 1;
+        int counter = 0;
         foreach(GameObject shape in shapes)
         {
-            if (shape.name.Contains("1"))
+            
+            
+            if (shape.name.Contains("L"))
             {
 
-                shape.transform.position = grid.grid[0 + (counter-1* counter-1), 10].worldPosition;
+                //shape.transform.position = grid.grid[(1+counter * 2 + (int)(counter / 2)), 10].worldPosition;
+                shape.transform.position = grid.grid[(1+counter * 3), 10].worldPosition;
 
             }
             else
             {
-                shape.transform.position = grid.grid[0, 10].worldPosition;
+
+                //shape.transform.position = grid.grid[(2+counter * 3 - (int)(counter / 2)), 10].worldPosition;
+                shape.transform.position = grid.grid[(1+counter * 3), 10].worldPosition;
+            }
+            
+            counter++;
+        }
+    }
+
+    public void ButtonDown()
+    {
+        if (_selected)
+        {
+            Node node = grid.GetNodeFromWorldPos(_selectedShape.transform.position);
+            if (node.gridY - 1 > 0)
+            {
+                Vector3 target = grid.grid[node.gridX, node.gridY - 1].worldPosition;
+                _selectedShape.transform.position = target;
 
             }
-            counter++;
+        }
+    }
+    public void ButtonUp()
+    {
+        if (_selected)
+        {
+            Node node = grid.GetNodeFromWorldPos(_selectedShape.transform.position);
+            if (node.gridY + 1 < grid.GetGridSizeY() - 1)
+            {
+                Vector3 target = grid.grid[node.gridX, node.gridY + 1].worldPosition;
+                _selectedShape.transform.position = Vector2.MoveTowards(_selectedShape.transform.position, target, 1f);
+
+            }
+        }
+    }
+    public void ButtonLeft()
+    {
+        if (_selected)
+        {
+            Node node = grid.GetNodeFromWorldPos(_selectedShape.transform.position);
+            if (_selectedShape.name.Contains("L"))
+            {
+                if (node.gridX - 1 > 0)
+                {
+                    Vector3 target = grid.grid[node.gridX - 1, node.gridY].worldPosition;
+                    _selectedShape.transform.position = Vector2.MoveTowards(_selectedShape.transform.position, target, 1f);
+
+                }
+
+            }
+            else
+            {
+                if (node.gridX - 1 > 9)
+                {
+                    Vector3 target = grid.grid[node.gridX - 1, node.gridY].worldPosition;
+                    _selectedShape.transform.position = Vector2.MoveTowards(_selectedShape.transform.position, target, 1f);
+
+                }
+            }
+        }
+    }
+    public void ButtonRight()
+    {
+        if (_selected)
+        {
+            Node node = grid.GetNodeFromWorldPos(_selectedShape.transform.position);
+            if (_selectedShape.name.Contains("L"))
+            {
+                if (node.gridX + 1 < 8)
+                {
+                    Vector3 target = grid.grid[node.gridX + 1, node.gridY].worldPosition;
+                    _selectedShape.transform.position = Vector2.MoveTowards(_selectedShape.transform.position, target, 1f);
+
+                }
+
+            }
+            else
+            {
+                if (node.gridX + 1 < grid.GetGridSizeX() - 1)
+                {
+                    Vector3 target = grid.grid[node.gridX + 1, node.gridY].worldPosition;
+                    _selectedShape.transform.position = Vector2.MoveTowards(_selectedShape.transform.position, target, 1f);
+
+                }
+            }
+        }
+    }
+
+    public void ButtonRotate()
+    {
+        if (_selected)
+        {
+            var rotation = _selectedShape.transform.localRotation.eulerAngles;
+            float rotationZ = rotation.z;
+            rotationZ += 90;
+
+            rotation.z = rotationZ;
+            _selectedShape.transform.localRotation = Quaternion.Euler(rotation);
+
+        }
+        
+    }
+
+    public void ButtonMirror()
+    {
+        if (_selected)
+        {
+            var rotation = _selectedShape.transform.localRotation.eulerAngles;
+            float rotationY = rotation.y;
+            rotationY += 180;
+            rotation.y = rotationY;
+            _selectedShape.transform.localRotation = Quaternion.Euler(rotation);
+        }
+        
+    }
+
+    private void SortList(List<Node> list)
+    {
+        for(int i = 0; i < list.Count; i++)
+        {
+            for(int j = 0; j < list.Count-i-1; j++)
+            {
+                if(list[j].gridX > list[j+1].gridX)
+                {
+                    Node node = list[j+1];
+                    list[j+1] = list[j];
+                    list[j] = node;
+                }
+                else if (list[j + 1].gridX == list[j].gridX)
+                {
+                    if (list[j].gridY > list[j + 1].gridY)
+                    {
+                        Node node = list[j + 1];
+                        list[j + 1] = list[j];
+                        list[j] = node;
+
+                    }
+                }
+            }
         }
     }
 }

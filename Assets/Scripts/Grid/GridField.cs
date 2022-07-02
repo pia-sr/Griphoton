@@ -42,8 +42,8 @@ public class GridField : MonoBehaviour
         _gridSizeY = Mathf.RoundToInt(gridWorldSize.y / _nodeDiameter);
         CreateGrid();
     }
-    /*
     
+    /*
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector2(gridWorldSize.x, gridWorldSize.y));
@@ -51,6 +51,7 @@ public class GridField : MonoBehaviour
         
         foreach(Node node in grid)
         {
+            Gizmos.DrawWireCube(node.worldPosition, new Vector3(1, 1, 1) * (_nodeDiameter - 0.05f));
             
             if (node == grid[GetGridSizeX()/2, GetGridSizeY()/2])
             {
@@ -352,7 +353,14 @@ public class GridField : MonoBehaviour
             "Brennan",
             "Erin",
             "Kaden",
-            "Payton"
+            "Payton",
+            "Harper",
+            "Jace",
+            "Kane",
+            "Kennedy",
+            "Brook",
+            "River",
+            "Clarke"
         };
         return names;
     }
