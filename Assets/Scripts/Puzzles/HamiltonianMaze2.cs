@@ -61,7 +61,7 @@ public class HamiltonianMaze2 : MonoBehaviour
             {
                 if (!_noThere.Contains(node))
                 {
-                    tile.transform.localScale = new Vector3(size*5, size*5, 0);
+                    tile.transform.localScale = new Vector3(size*5.5f, size*5.5f, 0);
                     tile.GetComponent<SpriteRenderer>().color = Color.grey;
                     Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
 
@@ -134,14 +134,14 @@ public class HamiltonianMaze2 : MonoBehaviour
                 if (_lineRend.GetPosition(0).x == _lineRend.GetPosition(_lineRend.positionCount - 1).x)
                 {
                     _horizontal = false;
-                    x = 0.2f;
+                    x = 0.3f;
                     y = dify;
                 }
                 else
                 {
                     _horizontal = true;
                     x = difx;
-                    y = 0.2f;
+                    y = 0.3f;
                 }
 
                 Bounds realBounds = new Bounds(_lineRend.GetPosition(0) + new Vector3(difx / 2, dify / 2, 0), new Vector3(x, y, 2));

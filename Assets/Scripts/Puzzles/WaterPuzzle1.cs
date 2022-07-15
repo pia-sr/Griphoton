@@ -10,11 +10,12 @@ public class WaterPuzzle1 : MonoBehaviour
     public List<GameObject> glasses;
     public Text counterText;
     public List<Text> litres;
+    public Text message;
 
     //public variables to communicate with other scripts
     public GameObject griphoton;
     public GameObject player;
-    public PolyAddTutorial tutorial;
+    public WaterTutorial1 tutorial;
 
     private int[] maxValue;
     private int[] currentValue;
@@ -50,29 +51,29 @@ public class WaterPuzzle1 : MonoBehaviour
         {
             positions.Add( glass.transform.position);
         }
-        steps = new List<float>() { 0.01f, 0.014f, 0.025f };
+        steps = new List<float>() { 0.008f, 0.014f, 0.025f };
         SetUp();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButton(0))
-        //if (Input.touchCount > 0 && !tutorial.inactive)
+        //if (Input.GetMouseButton(0) && !tutorial.inactive)
+        if (Input.touchCount > 0 && !tutorial.inactive)
         {
 
-            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //Touch touch = Input.GetTouch(0);
-            //Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-            if (Input.GetMouseButtonDown(0))
-            //if (touch.phase == TouchPhase.Began)
+            //Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Touch touch = Input.GetTouch(0);
+            Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+            //if (Input.GetMouseButtonDown(0))
+            if (touch.phase == TouchPhase.Began)
             {
                 if(glassesInUse.Count == 0)
                 {
                     foreach (GameObject glass in glasses)
                     {
                         var bounds = glass.GetComponent<SpriteRenderer>().bounds;
-                        if (bounds.Contains(touchPosition))
+                        if (bounds.Contains(touchPosition) && !CheckLost())
                         {
                             glassesInUse.Add(glass);
                             StartCoroutine(MoveUp(glass));
@@ -121,9 +122,9 @@ public class WaterPuzzle1 : MonoBehaviour
         }
         if (CheckWin() && glassesInUse.Count == 0)
         {
-            Debug.Log("Won");
-            //tutorial.inactive = true;
-            //tutorial.WonPuzzle();
+            //Debug.Log("Won");
+            tutorial.inactive = true;
+            tutorial.WonPuzzle();
         }
 
         
@@ -197,7 +198,7 @@ public class WaterPuzzle1 : MonoBehaviour
                 int addUp = dif; 
                 spill.SetActive(true);
                 float result = (float) addUp / maxValue[index1];
-                StartCoroutine(glassFill1.DryUp(1 - result, steps[index1]));
+                StartCoroutine(glassFill1.DryUp(glassFill1.GetGlassValue() - result, steps[index1]));
                 StartCoroutine(glassFill2.FillUp(1, steps[index2]));
                 currentValue[index1] = currentValue[index1] - addUp;
                 currentValue[index2] = currentValue[index2] + addUp;
@@ -262,7 +263,6 @@ public class WaterPuzzle1 : MonoBehaviour
             glass.transform.position = pos;
             yield return null;
         }
-        glassesInUse.Clear();
         StartCoroutine(MoveDown(glass));
     }
 
@@ -277,13 +277,22 @@ public class WaterPuzzle1 : MonoBehaviour
         }
         glassesInUse.Clear();
     }
+    private bool CheckLost()
+    {
+        if (counterMovements == 7)
+        {
+            tutorial.inactive = true;
+            message.transform.parent.transform.parent.gameObject.SetActive(true);
+            message.text = "You reached the movement limit!\n If you want to try again, press the reset button.";
+            return true;
+        }
+        return false;
+    }
+
 
     private bool CheckWin()
     {
-        if(counterMovements > 7)
-        {
-            return false;
-        }
+        
         int counter = 0;
         foreach(int value in currentValue)
         {
@@ -338,5 +347,12 @@ public class WaterPuzzle1 : MonoBehaviour
     {
         tutorial.inactive = false;
         messageExit.SetActive(false);
+    }
+
+    //Function to close the message after user violated one of the rules
+    public void close()
+    {
+        message.transform.parent.transform.parent.gameObject.SetActive(false);
+        tutorial.inactive = false;
     }
 }

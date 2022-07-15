@@ -76,12 +76,14 @@ public class GlassFill : MonoBehaviour
     {
         GlassImage.fillMethod = Image.FillMethod.Radial90;
         GlassImage.fillOrigin = (int)Image.Origin90.TopRight;
+        GlassImage.fillClockwise = true;
     }
 
     public void Rotate90()
     {
         GlassImage.fillMethod = Image.FillMethod.Radial90;
-        GlassImage.fillOrigin = (int)Image.Origin90.BottomRight;
+        GlassImage.fillOrigin = (int)Image.Origin90.TopLeft;
+        GlassImage.fillClockwise = false;
 
     }
     public void RotateOriginal()
@@ -89,5 +91,6 @@ public class GlassFill : MonoBehaviour
 
         GlassImage.fillMethod = Image.FillMethod.Vertical;
         GlassImage.fillOrigin = (int)Image.OriginVertical.Bottom;
+        GlassImage.fillClockwise = true;
     }
 }

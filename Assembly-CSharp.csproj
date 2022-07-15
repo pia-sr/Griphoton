@@ -120,6 +120,7 @@
     <Compile Include="Assets\Scripts\Save\SaveSystem.cs" />
     <Compile Include="Assets\Scripts\Puzzles\PiecesOf8_2.cs" />
     <Compile Include="Assets\Scripts\Grid\IHeapItem.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\WaterTutorial1.cs" />
     <Compile Include="Assets\Scripts\Puzzles\RoomPuzzle2.cs" />
     <Compile Include="Assets\Scripts\Puzzles\MatchstickPuzzle1.cs" />
     <Compile Include="Assets\Scripts\Tutorials\CMTutorial2.cs" />
@@ -139,6 +140,11 @@
     <Compile Include="Assets\Scripts\DungeonLevels\Level5.cs" />
     <Compile Include="Assets\Scripts\Tutorials\MirrorTutorial.cs" />
     <Compile Include="Assets\Scripts\Enemies\EvilGhost1.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\WaterPuzzle2.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\WaterTutorial2.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\LightsOut.cs" />
+    <Compile Include="Assets\Scripts\BookAnimation.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\LightsOutTutorial.cs" />
     <None Include="Assets\ProjectSettings\ProjectVersion.txt" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.0f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

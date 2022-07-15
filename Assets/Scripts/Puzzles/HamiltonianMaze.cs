@@ -59,7 +59,7 @@ public class HamiltonianMaze : MonoBehaviour
             {
                 if (!_noThere.Contains(node))
                 {
-                    tile.transform.localScale = new Vector3(size * 5, size * 5, 0);
+                    tile.transform.localScale = new Vector3(size * 5.5f, size * 5.5f, 0);
                     tile.GetComponent<SpriteRenderer>().color = Color.grey;
                     Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
 
