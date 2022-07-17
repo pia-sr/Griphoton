@@ -140,6 +140,7 @@ public class WaterTutorial2 : MonoBehaviour
                 case 11:
                     inactive = false;
                     this.gameObject.SetActive(false);
+                    this.transform.parent.GetChild(1).gameObject.SetActive(true);
                     puzzleSound.Play();
                     _counter++;
                     break;
@@ -179,6 +180,7 @@ public class WaterTutorial2 : MonoBehaviour
     {
         _counter = 11;
         this.transform.parent.GetChild(0).gameObject.SetActive(true);
+        this.transform.parent.GetChild(1).gameObject.SetActive(true);
         options.SetActive(true);
         inactive = false;
         this.gameObject.SetActive(false);
@@ -272,6 +274,9 @@ public class WaterTutorial2 : MonoBehaviour
     {
         this.gameObject.SetActive(true);
         skipButton.SetActive(false);
+        ghost.SetActive(true);
+        ghost.transform.localPosition = new Vector3(-5, 1, 0);
+        this.transform.parent.GetChild(1).gameObject.SetActive(false);
         int randIndex = Random.Range(0, player.WonSentences().Count);
         StartCoroutine(WordbyWord(player.WonSentences()[randIndex]));
 

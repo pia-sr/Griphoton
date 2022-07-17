@@ -112,6 +112,7 @@ public class DungeonTutorial : MonoBehaviour
                     skipButton.SetActive(true);
                     dungeon.SetActive(true);
                     player.SetActive(true);
+                    player.GetComponent<Player>().Pause();
                     player.GetComponent<Player>().PlayerInvisiable();
                     string sentence = "This here is the first room of the dungeon.| To go to the next room, you first need to defeat all the monsters in the room.";
                     StartCoroutine(WordbyWord(sentence));
@@ -139,7 +140,6 @@ public class DungeonTutorial : MonoBehaviour
                     break;
                 case 7:
                     player.GetComponent<Player>().PlayerVisiable();
-                    player.GetComponent<Player>().Pause();
                     player.GetComponent<Player>().Unpause();
                     this.transform.parent.parent.gameObject.SetActive(false);
                     _running = true;

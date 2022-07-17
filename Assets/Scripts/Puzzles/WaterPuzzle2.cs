@@ -26,6 +26,7 @@ public class WaterPuzzle2 : MonoBehaviour
 
     public void SetUp()
     {
+        StopAllCoroutines();
         maxValue = new int[] { 7, 4, 3 };
         currentValue = new int[] { 7, 0, 0 };
         glassesInUse = new List<GameObject>();
@@ -36,7 +37,15 @@ public class WaterPuzzle2 : MonoBehaviour
         {
             GlassFill glassfill = glass.GetComponent<GlassFill>();
             glassfill.SetGlassValue(currentValue[counter] / maxValue[counter]);
-            glassfill.RotateOriginal();
+            glassfill.RotateOriginal(); 
+            if (glass.transform.GetChild(1).name.Contains("Water") && glass.transform.GetChild(1).gameObject.activeSelf)
+            {
+                glass.transform.GetChild(1).gameObject.SetActive(false);
+            }
+            if (glass.transform.GetChild(0).name.Contains("Water") && glass.transform.GetChild(0).gameObject.activeSelf)
+            {
+                glass.transform.GetChild(0).gameObject.SetActive(false);
+            }
             glass.transform.localRotation = Quaternion.Euler(Vector3.zero);
             glass.transform.position = positions[counter];
             litres[counter].text = currentValue[counter].ToString();
@@ -51,7 +60,7 @@ public class WaterPuzzle2 : MonoBehaviour
         {
             positions.Add( glass.transform.position);
         }
-        steps = new List<float>() { 0.01f, 0.017f, 0.02f };
+        steps = new List<float>() { 0.01f, 0.017f, 0.021f };
         SetUp();
     }
 
@@ -116,7 +125,7 @@ public class WaterPuzzle2 : MonoBehaviour
             glassesInUse[1].GetComponent<GlassFill>().done = false;
             StartCoroutine(RotateBack(glassesInUse[0]));
         }
-        if (CheckWin() && glassesInUse.Count == 0)
+        if (CheckWin() && glassesInUse.Count == 0 && !tutorial.inactive)
         {
             tutorial.inactive = true;
             tutorial.WonPuzzle();

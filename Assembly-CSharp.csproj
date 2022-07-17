@@ -59,6 +59,7 @@
     <Compile Include="Assets\Scripts\DungeonLevels\Level12.cs" />
     <Compile Include="Assets\Scripts\Puzzles\WaterPuzzle1.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level4.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\LightsOutTutorial.cs" />
     <Compile Include="Assets\Scripts\Enemies\EvilGhost2.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level6.cs" />
     <Compile Include="Assets\Scripts\Tutorials\PieceOf8Tutorial.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Assets\Scripts\Puzzles\RegionDivision2.cs" />
     <Compile Include="Assets\Scripts\Tutorials\MovementSim.cs" />
     <Compile Include="Assets\Scripts\Upperworld.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\WaterPuzzle2.cs" />
     <Compile Include="Assets\Scripts\Puzzles\HamiltonianMaze.cs" />
     <Compile Include="Assets\Scripts\Puzzles\GapPuzzle2.cs" />
     <Compile Include="Assets\Scripts\Puzzles\PiecesOf8.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="Assets\Scripts\DungeonLevels\Level16.cs" />
     <Compile Include="Assets\Scripts\Map.cs" />
     <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle.cs" />
+    <Compile Include="Assets\Scripts\BookAnimation.cs" />
     <Compile Include="Assets\Scripts\Tutorials\RoomTutorial.cs" />
     <Compile Include="Assets\Scripts\Tutorials\MatchstickTutorial1.cs" />
     <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle3.cs" />
@@ -105,12 +108,15 @@
     <Compile Include="Assets\Scripts\Puzzles\RedPointPuzzle2.cs" />
     <Compile Include="Assets\Scripts\Puzzles\HamiltonianMaze2.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level3.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\LightsOut.cs" />
     <Compile Include="Assets\Scripts\Tutorials\CMTutorial.cs" />
     <Compile Include="Assets\Scripts\Spikes.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\WaterTutorial2.cs" />
     <Compile Include="Assets\Scripts\Grid\Pathfinder.cs" />
     <Compile Include="Assets\Scripts\Puzzles\MatchstickPuzzle2.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries2.cs" />
     <Compile Include="Assets\Scripts\Enemies\Skeleton1.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\ZebraPuzzle.cs" />
     <Compile Include="Assets\Scripts\Tutorials\PolyAddTutorial.cs" />
     <Compile Include="Assets\Scripts\Tutorials\DungeonTutorial.cs" />
     <Compile Include="Assets\Scripts\Puzzles\RedPointPuzzle1.cs" />
@@ -140,11 +146,7 @@
     <Compile Include="Assets\Scripts\DungeonLevels\Level5.cs" />
     <Compile Include="Assets\Scripts\Tutorials\MirrorTutorial.cs" />
     <Compile Include="Assets\Scripts\Enemies\EvilGhost1.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\WaterPuzzle2.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\WaterTutorial2.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\LightsOut.cs" />
-    <Compile Include="Assets\Scripts\BookAnimation.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\LightsOutTutorial.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\ZebraTutorial.cs" />
     <None Include="Assets\ProjectSettings\ProjectVersion.txt" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.0f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

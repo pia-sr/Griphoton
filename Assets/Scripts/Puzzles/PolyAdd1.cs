@@ -48,7 +48,7 @@ public class PolyAdd1 : MonoBehaviour
         int counter = 0;
         foreach(GameObject shape in shapes)
         {
-            //shape.transform.localPosition = _positions[counter];
+            shape.transform.localPosition = _positions[counter];
             shape.transform.localRotation = Quaternion.Euler(Vector3.zero);
             shape.transform.GetChild(0).gameObject.SetActive(false);
             counter++;
@@ -102,7 +102,7 @@ public class PolyAdd1 : MonoBehaviour
 
 
         }
-        if (CheckWin())
+        if (CheckWin() && !tutorial.inactive)
         {
             tutorial.inactive = true;
             tutorial.WonPuzzle();

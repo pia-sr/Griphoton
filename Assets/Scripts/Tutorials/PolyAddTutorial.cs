@@ -275,6 +275,9 @@ public class PolyAddTutorial : MonoBehaviour
     {
         this.gameObject.SetActive(true);
         skipButton.SetActive(false);
+        ghost.SetActive(true);
+        ghost.transform.localPosition = new Vector3(-5, 1, 0);
+        this.transform.parent.GetChild(1).gameObject.SetActive(false);
         int randIndex = Random.Range(0, player.WonSentences().Count);
         StartCoroutine(WordbyWord(player.WonSentences()[randIndex]));
 
