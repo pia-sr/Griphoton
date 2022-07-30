@@ -117,6 +117,7 @@ MonoBehaviour:
   pathFinder: {fileID: 0}
   hitValue: 0
   animator: {fileID: 3130415438860011896}
+  hintKey: {fileID: 6054849726773188678, guid: 4afb9766b60810e468882e7750603bf0, type: 3}
 --- !u!95 &3130415438860011896
 Animator:
   serializedVersion: 3

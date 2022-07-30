@@ -382,6 +382,20 @@ public class Upperworld : MonoBehaviour
                     {
                         return true;
                     }
+                    foreach (Node neighbour4 in grid.GetNodeNeighboursDiagonal(neighbour3))
+                    {
+                        if (neighbour4.onTop == "House" || grid.ghostNames().Contains(neighbour4.onTop) || neighbour4.onTop == "Dungeon")
+                        {
+                            return true;
+                        }
+                        foreach (Node neighbour5 in grid.GetNodeNeighboursDiagonal(neighbour4))
+                        {
+                            if (neighbour5.onTop == "House" || grid.ghostNames().Contains(neighbour5.onTop) || neighbour5.onTop == "Dungeon")
+                            {
+                                return true;
+                            }
+                        }
+                    }
                 }
             }
         }

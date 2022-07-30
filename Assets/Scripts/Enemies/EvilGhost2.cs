@@ -11,6 +11,7 @@ public class EvilGhost2 : MonoBehaviour
     public Pathfinder pathFinder;
     public float hitValue;
     public Animator animator;
+    public GameObject hintKey;
 
     //private variables
     private float healthValue;
@@ -60,7 +61,17 @@ public class EvilGhost2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (xInput == 0 && yInput == 0)
+        if (healthValue <= 0)
+        {
+            Hint();
+            this.gameObject.SetActive(false);
+        }
+
+        else if (player.GetComponent<Player>().leaveLevel)
+        {
+            SetUp();
+        }
+        else if (xInput == 0 && yInput == 0)
         {
 
             xInput = 0;
@@ -70,14 +81,10 @@ public class EvilGhost2 : MonoBehaviour
             animator.SetFloat("XInput", xInput);
             animator.SetFloat("YInput", yInput);
         }
-        if (targetNode == null)
+        else if (targetNode == null)
         {
 
             animator.SetBool("isWalking", false);
-        }
-        if (player.GetComponent<Player>().leaveLevel)
-        {
-            SetUp();
         }
         if (grid.GetNodeFromWorldPos(this.gameObject.transform.position) == playerPos)
         {
@@ -92,7 +99,7 @@ public class EvilGhost2 : MonoBehaviour
             if (!stay)
             {
                 stay = true;
-                hitValue = 100 + (10 * hitSpeed);
+                hitValue = 100 + (5 * hitSpeed);
 
                 if (player.GetComponent<Player>().blockEnemy)
                 {
@@ -111,10 +118,6 @@ public class EvilGhost2 : MonoBehaviour
                 float playerHitvalue = player.GetComponent<Player>().hitValue;
                 float healthReduc = playerHitvalue / 100;
                 healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
-                if (healthValue <= 0)
-                {
-                    this.gameObject.SetActive(false);
-                }
             }
 
         }
@@ -254,5 +257,14 @@ public class EvilGhost2 : MonoBehaviour
         }
         playerPos = targetNode;
         stay = false;
+    }
+
+    private void Hint()
+    {
+        int rand = Random.Range(0, 10);
+        if (rand == 7)
+        {
+            Instantiate(hintKey, transform.position, Quaternion.identity, transform.parent.parent);
+        }
     }
 }

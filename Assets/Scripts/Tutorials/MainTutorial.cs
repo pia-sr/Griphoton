@@ -24,6 +24,7 @@ public class MainTutorial : MonoBehaviour
     public Sprite soundOn;
     public Sprite soundOff;
     public GameObject Ghost;
+    public Text hintCount;
     
     //sounds
     public AudioSource typewriter;
@@ -67,6 +68,11 @@ public class MainTutorial : MonoBehaviour
             StartCoroutine(WordbyWord(firstSentence));
             data.activeLevel = 1;
             data.tutorial = true;
+            data.hintKeys = 0;
+            for(int i = 0; i < 30; i++)
+            {
+                data.usedKeys[i] = 0;
+            }
 
         }
         //if the user has already opened the app at least once
@@ -378,6 +384,7 @@ public class MainTutorial : MonoBehaviour
     public void Settings()
     {
         options.SetActive(false);
+        hintCount.text = data.hintKeys.ToString();
         player.GetComponent<Player>().Pause();
         settings.SetActive(true);
         player.GetComponent<Player>().DoNotShowOptions = true;

@@ -13,6 +13,7 @@ public class LightsOutTutorial : MonoBehaviour
     public GameObject options;
     public GameObject questions;
     public GameObject ghost;
+    public GameObject hints;
 
     //Sounds
     public AudioSource typewriter;
@@ -258,5 +259,20 @@ public class LightsOutTutorial : MonoBehaviour
         int randIndex = Random.Range(0, player.WonSentences().Count);
         StartCoroutine(WordbyWord(player.WonSentences()[randIndex]));
 
+    }
+
+
+    public void OpenHints()
+    {
+        options.SetActive(false);
+        inactive = true;
+        hints.SetActive(true);
+    }
+
+    public void CloseHints()
+    {
+        options.SetActive(true);
+        inactive = false;
+        hints.SetActive(false);
     }
 }

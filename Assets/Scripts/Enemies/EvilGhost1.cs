@@ -11,6 +11,7 @@ public class EvilGhost1 : MonoBehaviour
     public Pathfinder pathFinder;
     public float hitValue;
     public Animator animator;
+    public GameObject hintKey;
 
     //private variables
     private List<Node> path2Player;
@@ -59,8 +60,19 @@ public class EvilGhost1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (player.GetComponent<Player>().leaveLevel)
+        {
+            SetUp();
+        }
+        else if (healthValue <= 0)
+        {
+            Hint();
+            this.gameObject.SetActive(false);
+        }
 
-        if (xInput == 0 && yInput == 0)
+        
+
+        else if (xInput == 0 && yInput == 0)
         {
 
             xInput = 0;
@@ -70,7 +82,7 @@ public class EvilGhost1 : MonoBehaviour
             animator.SetFloat("XInput", xInput);
             animator.SetFloat("YInput", yInput);
         }
-        if (targetNode == null)
+        else if (targetNode == null)
         {
 
             animator.SetBool("isWalking", false);
@@ -82,7 +94,7 @@ public class EvilGhost1 : MonoBehaviour
             if (!stay)
             {
                 stay = true;
-                hitValue = 50 + (10 * hitSpeed);
+                hitValue = 30 + (5 * hitSpeed);
 
                 if (player.GetComponent<Player>().blockEnemy)
                 {
@@ -101,10 +113,7 @@ public class EvilGhost1 : MonoBehaviour
                 float playerHitvalue = player.GetComponent<Player>().hitValue;
                 float healthReduc = playerHitvalue / 100;
                 healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
-                if (healthValue <= 0)
-                {
-                    this.gameObject.SetActive(false);
-                }
+                
             }
 
         }
@@ -257,5 +266,14 @@ public class EvilGhost1 : MonoBehaviour
             targetNode = grid.grid[Random.Range(0, grid.GetGridSizeX() - 1), Random.Range(0, grid.GetGridSizeY() - 1)];
         }
         stay = false;
+    }
+
+    private void Hint()
+    {
+        int rand = Random.Range(0, 7);
+        if(rand == 5)
+        {
+            Instantiate(hintKey, transform.position, Quaternion.identity, transform.parent.parent);
+        }
     }
 }

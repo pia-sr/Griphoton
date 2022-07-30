@@ -152,23 +152,7 @@ public class Player : MonoBehaviour
         }
         //After dungeon lost to find their position
         RestartLevel();
-        if (!_foundPos)
-        {
-            if (!upperWorld)
-            {
-                if (!_chooseExit)
-                {
-
-                    EntranceLevel();
-                }
-                else
-                {
-                    _chooseExit = false;
-                    ExitLevel();
-                }
-            }
-        }
-        else if (_targetNode != null)
+        if (_targetNode != null)
         {
             _path = pathFinder.FindPathPlayer(transform.position, _targetNode.worldPosition);
             if (_path.Count > 1)
@@ -312,7 +296,7 @@ public class Player : MonoBehaviour
                 entraceNodes.Add(node);
             }
         }
-        if (entraceNodes.Count != 0)
+        if (entraceNodes.Count == 3)
         {
             transform.position = entraceNodes[1].worldPosition - new Vector3(0, 0, 1);
             _foundPos = true;
@@ -393,7 +377,7 @@ public class Player : MonoBehaviour
             goal = _path[1].worldPosition.y;
             while (pos.y != goal)
             {
-                pos.y = Mathf.MoveTowards(pos.y, goal, 2.5f * Time.deltaTime);
+                pos.y = Mathf.MoveTowards(pos.y, goal, 2.75f * Time.deltaTime);
                 transform.localPosition = pos;
                 yield return null;
             }
@@ -404,7 +388,7 @@ public class Player : MonoBehaviour
 
             while (pos.x != goal)
             {
-                pos.x = Mathf.MoveTowards(pos.x, goal, 2.5f * Time.deltaTime);
+                pos.x = Mathf.MoveTowards(pos.x, goal, 2.75f * Time.deltaTime);
                 transform.localPosition = pos;
                 yield return null;
             }
@@ -504,6 +488,7 @@ public class Player : MonoBehaviour
     //Function to make the player wait until he can attack again
     IEnumerator WaitToAttack()
     {
+        yield return new WaitForEndOfFrame();
         _attackBool = true;
         enemyHit = true;
         yield return new WaitForSeconds(1);
@@ -524,7 +509,17 @@ public class Player : MonoBehaviour
     IEnumerator Wait()
     {
         yield return new WaitForSeconds(0.1f);
-        leaveLevel = false;
+        leaveLevel = false; 
+        if (!_chooseExit)
+        {
+
+            EntranceLevel();
+        }
+        else
+        {
+            _chooseExit = false;
+            ExitLevel();
+        }
     }
 
     //Function to find a puzzle by its tag
@@ -545,8 +540,8 @@ public class Player : MonoBehaviour
     public void Pause()
     {
         StopAllCoroutines();
-        _targetNode = null;
         _coroutineStart = true;
+        _targetNode = null;
         animator.SetBool("isWalking", false);
     }
 
@@ -622,12 +617,8 @@ public class Player : MonoBehaviour
     IEnumerator SelfHeal()
     {
         yield return new WaitForSeconds(4);
-        float hit;
-        if(_strength + 5 <= _fullHealth)
-        {
-            hit = 5;
-        }
-        else
+        float hit = (_fullHealth / 100) * 3;
+        if(_strength + hit >_fullHealth)
         {
             hit = _fullHealth - _strength;
         }
@@ -644,5 +635,26 @@ public class Player : MonoBehaviour
 
         message2Options.transform.parent.parent.gameObject.SetActive(false);
         Unpause();
+    }
+
+    private void OnApplicationFocus(bool focus)
+    {
+        if (upperWorld)
+        {
+            _data.xPos = grid.GetNodeFromWorldPos(transform.position).gridX;
+            _data.yPos = grid.GetNodeFromWorldPos(transform.position).gridY;
+
+        }
+        _data.SaveGame();
+    }
+    private void OnApplicationPause(bool pause)
+    {
+        if (upperWorld)
+        {
+            _data.xPos = grid.GetNodeFromWorldPos(transform.position).gridX;
+            _data.yPos = grid.GetNodeFromWorldPos(transform.position).gridY;
+
+        }
+        _data.SaveGame();
     }
 }

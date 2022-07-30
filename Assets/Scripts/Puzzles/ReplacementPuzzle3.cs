@@ -237,6 +237,13 @@ public class ReplacementPuzzle3 : MonoBehaviour
                 tutorial.inactive = true;
                 tutorial.WonPuzzle();
             }
+            else if (_rowNumber == 0)
+            {
+                tutorial.inactive = true;
+                message.transform.parent.transform.parent.gameObject.SetActive(true);
+                message.text = "You did not reach the goal! \nYou can try again by clicking on the restart button.";
+
+            }
 
         }
     }

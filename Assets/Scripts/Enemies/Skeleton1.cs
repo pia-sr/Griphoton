@@ -12,6 +12,7 @@ public class Skeleton1 : MonoBehaviour
     public Pathfinder pathFinder;
     public Animator animator;
     public float hitValue = 25;
+    public GameObject hintKey;
 
     //private variables
     private List<Node> path2Player;
@@ -97,6 +98,7 @@ public class Skeleton1 : MonoBehaviour
                 healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
                 if (healthValue <= 0)
                 {
+                    Hint();
                     this.gameObject.SetActive(false);
                 }
             }
@@ -243,5 +245,17 @@ public class Skeleton1 : MonoBehaviour
             }
         }
         currentNode.SetItemOnTop("Enemy");
+    }
+
+
+    private void Hint()
+    {
+        Instantiate(hintKey, transform.position, Quaternion.identity, transform.parent.parent);
+        /*
+        int rand = Random.Range(0, 3);
+        if (rand == 1)
+        {
+            Instantiate(hintKey, transform.position, Quaternion.identity, transform.parent.parent);
+        }*/
     }
 }

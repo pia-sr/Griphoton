@@ -86,6 +86,7 @@
     <Compile Include="Assets\Scripts\FollowPlayer.cs" />
     <Compile Include="Assets\Scripts\Puzzles\GapPuzzle.cs" />
     <Compile Include="Assets\Scripts\HealthBar.cs" />
+    <Compile Include="Assets\Scripts\HintCards.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CornerMaze.cs" />
     <Compile Include="Assets\Scripts\Grid\Node.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Assets\Scripts\Enemies\Skeleton1.cs" />
     <Compile Include="Assets\Scripts\Puzzles\ZebraPuzzle.cs" />
     <Compile Include="Assets\Scripts\Tutorials\PolyAddTutorial.cs" />
+    <Compile Include="Assets\Scripts\Key.cs" />
     <Compile Include="Assets\Scripts\Tutorials\DungeonTutorial.cs" />
     <Compile Include="Assets\Scripts\Puzzles\RedPointPuzzle1.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level14.cs" />
@@ -139,6 +141,7 @@
     <Compile Include="Assets\Scripts\Puzzles\MirrorPuzzle.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level8.cs" />
     <Compile Include="Assets\Scripts\Tutorials\ReplacementTutorial.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\ZebraTutorial.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level17.cs" />
     <Compile Include="Assets\Scripts\Puzzles\PolyAdd1.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level9.cs" />
@@ -146,7 +149,6 @@
     <Compile Include="Assets\Scripts\DungeonLevels\Level5.cs" />
     <Compile Include="Assets\Scripts\Tutorials\MirrorTutorial.cs" />
     <Compile Include="Assets\Scripts\Enemies\EvilGhost1.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\ZebraTutorial.cs" />
     <None Include="Assets\ProjectSettings\ProjectVersion.txt" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2020.3.0f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

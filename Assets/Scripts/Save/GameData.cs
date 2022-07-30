@@ -12,10 +12,12 @@ public class GameData
     public string namePlayer;
     public string[] nodeTags;
     public string[] mapTags;
+    public int[] usedKeys;
     public bool sound;
     public int strenghtMultiplier;
     public int xPos;
     public int yPos;
+    public int hintKeys;
 
     public GameData(Game game)
     {
@@ -28,5 +30,7 @@ public class GameData
         strenghtMultiplier = game.strenghtMultiplier;
         xPos = game.xPos;
         yPos = game.yPos;
+        hintKeys = game.hintKeys;
+        usedKeys = game.usedKeys;
     }
 }

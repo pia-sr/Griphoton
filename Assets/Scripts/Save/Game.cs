@@ -12,6 +12,8 @@ public class Game : MonoBehaviour
     public bool sound;
     public int xPos;
     public int yPos;
+    public int hintKeys;
+    public int[] usedKeys;
 
     public string[] mapTags;
 
@@ -63,6 +65,7 @@ public class Game : MonoBehaviour
         return tags;
     }
 
+
     //Function to create an array of all the tags in the grid in Griphoton
     public string[] getMap()
     {
@@ -102,7 +105,8 @@ public class Game : MonoBehaviour
         strenghtMultiplier = data.strenghtMultiplier;
         xPos = data.xPos;
         yPos = data.yPos;
-
+        hintKeys = data.hintKeys;
+        usedKeys = data.usedKeys;
     }
     private void Start()
     {

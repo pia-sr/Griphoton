@@ -50,7 +50,6 @@ public class Map : MonoBehaviour
 
     public void drawMap()
     {
-        //text.fontSize = 100;
         house.transform.localScale = new Vector3(grid.nodeRadius * 8, grid.nodeRadius * 8, 0);
         update = false;
         int counter = 0;
@@ -62,7 +61,6 @@ public class Map : MonoBehaviour
                 newHouse.name = _data.mapTags[counter] + "Map";
                 newHouse.transform.GetChild(0).GetComponent<Canvas>().worldCamera = camera;
                 newHouse.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _data.mapTags[counter];
-
             }
             counter++;
 
@@ -122,6 +120,5 @@ public class Map : MonoBehaviour
         }
         return false;
     }
-
 
 }

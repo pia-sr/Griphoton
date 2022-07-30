@@ -137,7 +137,7 @@ public class RedPointPuzzle1 : MonoBehaviour
                 {
                     if(nextDot != node)
                     {
-                        float dist = Vector2.Distance(nextDot.worldPosition, node.worldPosition);
+                        float dist = CalcDist(node, nextDot);
                         if (!distances.Contains(dist))
                         {
                             distances.Add(dist);
@@ -192,5 +192,25 @@ public class RedPointPuzzle1 : MonoBehaviour
     {
         tutorial.inactive = false;
         message.SetActive(false);
+    }
+
+    private float CalcDist(Node node1, Node node2)
+    {
+        float dis;
+        if(node1.gridX == node2.gridX)
+        {
+            dis = Mathf.Abs(node1.gridY - node2.gridY);
+        }
+        else if(node1.gridY == node2.gridY)
+        {
+            dis = Mathf.Abs(node1.gridX - node2.gridX);
+        }
+        else
+        {
+            dis = Mathf.Pow(node1.gridX - node2.gridX, 2) + Mathf.Pow(node1.gridY - node2.gridY, 2);
+            dis = Mathf.Sqrt(dis);
+        }
+
+        return dis;
     }
 }
