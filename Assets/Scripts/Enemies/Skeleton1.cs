@@ -250,12 +250,10 @@ public class Skeleton1 : MonoBehaviour
 
     private void Hint()
     {
-        Instantiate(hintKey, transform.position, Quaternion.identity, transform.parent.parent);
-        /*
         int rand = Random.Range(0, 3);
         if (rand == 1)
         {
             Instantiate(hintKey, transform.position, Quaternion.identity, transform.parent.parent);
-        }*/
+        }
     }
 }

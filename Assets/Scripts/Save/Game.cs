@@ -65,7 +65,25 @@ public class Game : MonoBehaviour
         return tags;
     }
 
+    public int[] getKeys()
+    {
+        int[] keys;
+        if (usedKeys.Length != 30)
+        {
+            keys = new int[30];
+            for(int i = 0; i < 30; i++)
+            {
+                keys[i] = 0;
+            }
+            
+        }
+        else
+        {
+            keys = usedKeys;
+        }
+        return keys;
 
+    }
     //Function to create an array of all the tags in the grid in Griphoton
     public string[] getMap()
     {
@@ -111,5 +129,20 @@ public class Game : MonoBehaviour
     private void Start()
     {
         DontDestroyOnLoad(this.gameObject);
+    }
+
+    public void KeyIncrease()
+    {
+        this.hintKeys++;
+    }
+
+    public void KeyDecrease()
+    {
+        this.hintKeys--;
+    }
+
+    public void ChangeUsedKeys(int index)
+    {
+        this.usedKeys[index] = this.usedKeys[index] + 1;
     }
 }

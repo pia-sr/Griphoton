@@ -69,15 +69,16 @@ public class Player : MonoBehaviour
         if (!upperWorld)
         {
             healthBar.SetHealthBarValue(1);
-            _chooseExit = false;
+            _foundPos = false;
             dungeonSound.Play();
+            _attackBool = false;
         }
         else
         {
             //griphotonSound.Play();
             transform.position = grid.grid[_data.xPos, _data.yPos].worldPosition;
 
-            _foundPos = true;
+            
         }
         _xInput = 0;
         _yInput = -1;
@@ -91,6 +92,11 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(!upperWorld && !_foundPos)
+        {
+            _foundPos = true;
+            EntranceLevel();
+        }
         //The player looks downwards if they do not have a direction
         if(_xInput == 0 && _yInput == 0)
         {
@@ -177,7 +183,7 @@ public class Player : MonoBehaviour
             else if (_targetNode.onTop == "Portal")
             {
                 Pause();
-                int unsolvedPuzzles = 23 - _data.strenghtMultiplier;
+                int unsolvedPuzzles = 30 - _data.strenghtMultiplier;
                 if (unsolvedPuzzles == 0)
                 {
                     messageSimple.SetActive(true);
@@ -281,7 +287,6 @@ public class Player : MonoBehaviour
         if (entraceNodes.Count == 3)
         {
             transform.position = entraceNodes[1].worldPosition - new Vector3(0, 0, 1);
-            _foundPos = true;
         }
     }
 
@@ -299,7 +304,6 @@ public class Player : MonoBehaviour
         if (entraceNodes.Count == 3)
         {
             transform.position = entraceNodes[1].worldPosition - new Vector3(0, 0, 1);
-            _foundPos = true;
         }
     }
 
@@ -325,7 +329,6 @@ public class Player : MonoBehaviour
             _chooseExit = true;
             StartCoroutine(Wait());
             Unpause();
-            _foundPos = false;
         }
     }
 
@@ -350,7 +353,6 @@ public class Player : MonoBehaviour
             levels.transform.GetChild(levelNr + 1).gameObject.SetActive(true);
             StartCoroutine(Wait());
             Unpause();
-            _foundPos = false;
         }
     }
     
@@ -359,7 +361,7 @@ public class Player : MonoBehaviour
     private IEnumerator Move()
     {
 
-        animator.SetBool("isWalking", true);
+        
         if (_existingTarget == null)
         {
             _existingTarget = _targetNode;
@@ -371,6 +373,7 @@ public class Player : MonoBehaviour
         
         animator.SetFloat("XInput", _xInput);
         animator.SetFloat("YInput", _yInput);
+        animator.SetBool("isWalking", true);
         float goal;
         if (pos.x == _path[1].worldPosition.x)
         {

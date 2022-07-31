@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -24,7 +25,6 @@ public class MainTutorial : MonoBehaviour
     public Sprite soundOn;
     public Sprite soundOff;
     public GameObject Ghost;
-    public Text hintCount;
     
     //sounds
     public AudioSource typewriter;
@@ -69,10 +69,6 @@ public class MainTutorial : MonoBehaviour
             data.activeLevel = 1;
             data.tutorial = true;
             data.hintKeys = 0;
-            for(int i = 0; i < 30; i++)
-            {
-                data.usedKeys[i] = 0;
-            }
 
         }
         //if the user has already opened the app at least once
@@ -263,7 +259,7 @@ public class MainTutorial : MonoBehaviour
     }
     public void enter()
     {
-        if(name.Length != 0)
+        if(_playerName.Length > 0)
         {
             griphoton.GetComponent<Upperworld>().playerName = _playerName;
             namePanel.SetActive(false);
@@ -384,7 +380,6 @@ public class MainTutorial : MonoBehaviour
     public void Settings()
     {
         options.SetActive(false);
-        hintCount.text = data.hintKeys.ToString();
         player.GetComponent<Player>().Pause();
         settings.SetActive(true);
         player.GetComponent<Player>().DoNotShowOptions = true;

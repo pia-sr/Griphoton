@@ -31,6 +31,6 @@ public class GameData
         xPos = game.xPos;
         yPos = game.yPos;
         hintKeys = game.hintKeys;
-        usedKeys = game.usedKeys;
+        usedKeys = game.getKeys();
     }
 }

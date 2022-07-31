@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HintCards : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class HintCards : MonoBehaviour
     private int puzzleIndex;
 
     public GameObject message;
+    public Text keyCount;
     // Start is called before the first frame update
     void Awake()
     {
@@ -17,8 +19,9 @@ public class HintCards : MonoBehaviour
         puzzleIndex = transform.parent.GetSiblingIndex();
         if(_data.usedKeys[puzzleIndex] > 0)
         {
-            SetLock(false);
+            RemoveLock();
         }
+        keyCount.text = _data.hintKeys.ToString();
     }
 
     // Update is called once per frame
@@ -28,25 +31,27 @@ public class HintCards : MonoBehaviour
         {
             _clickIndex = 0;
         }
+        if(keyCount.text != _data.hintKeys.ToString())
+        {
+            keyCount.text = _data.hintKeys.ToString();
+        }
     }
     //Function of the next button in the monster overview to go to the next monster
     public void Next()
     {
-        this.transform.GetChild(0).GetChild(0).GetChild(_clickIndex).gameObject.SetActive(false);
         if(_clickIndex < _data.usedKeys[puzzleIndex])
         {
+            this.transform.GetChild(0).GetChild(0).GetChild(_clickIndex).gameObject.SetActive(false);
             _clickIndex++;
             this.transform.GetChild(0).GetChild(0).GetChild(_clickIndex).gameObject.SetActive(true);
             if(_clickIndex < _data.usedKeys[puzzleIndex])
             {
-                SetLock(false);
+                RemoveLock();
             }
         }
         else if(_data.hintKeys > 0)
         {
             message.SetActive(true);
-            _clickIndex++;
-            this.transform.GetChild(0).GetChild(0).GetChild(_clickIndex).gameObject.SetActive(true);
         }
     }
 
@@ -62,9 +67,10 @@ public class HintCards : MonoBehaviour
     {
         message.SetActive(false);
 
-        _data.hintKeys--;
-        _data.usedKeys[puzzleIndex]++;
-        SetLock(false);
+        _data.KeyDecrease();
+        _data.ChangeUsedKeys(puzzleIndex);
+        keyCount.text = _data.hintKeys.ToString();
+        RemoveLock();
     }
 
     public void No()
@@ -72,10 +78,10 @@ public class HintCards : MonoBehaviour
         message.SetActive(false);
     }
 
-    private void SetLock(bool active)
+    private void RemoveLock()
     {
         int index = this.transform.GetChild(0).GetChild(0).GetChild(_clickIndex).childCount - 1;
-        this.transform.GetChild(0).GetChild(0).GetChild(_clickIndex).GetChild(index).GetChild(0).gameObject.SetActive(active);
+        this.transform.GetChild(0).GetChild(0).GetChild(_clickIndex).GetChild(index).GetChild(0).gameObject.SetActive(false);
 
     }
 }

@@ -20,7 +20,7 @@ public class Key : MonoBehaviour
         if (GetComponent<SpriteRenderer>().bounds.Contains(player.transform.position))
         {
             Destroy(this.gameObject);
-            data.hintKeys++;
+            data.KeyIncrease();
         }
     }
 }

@@ -109,8 +109,8 @@ public class DungeonTutorial : MonoBehaviour
             {
                 case 1:
                     ghost.SetActive(false);
-                    skipButton.SetActive(true);
                     dungeon.SetActive(true);
+                    skipButton.SetActive(true);
                     player.SetActive(true);
                     player.GetComponent<Player>().Pause();
                     player.GetComponent<Player>().PlayerInvisiable();
@@ -182,6 +182,7 @@ public class DungeonTutorial : MonoBehaviour
     public void skipTutorial()
     {
         options.SetActive(true);
+        StopAllCoroutines();
         this.transform.parent.parent.gameObject.SetActive(false);
         player.GetComponent<Player>().PlayerVisiable();
         player.GetComponent<Player>().Pause();

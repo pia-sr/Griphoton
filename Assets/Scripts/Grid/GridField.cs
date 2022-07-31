@@ -175,6 +175,37 @@ public class GridField : MonoBehaviour
         }
         return neighbours;
     }
+    
+    //Returns a list of nodes which are all next to the given node
+    public List<Node> GetNodeNeighbourhood(Node node, int size)
+    {
+        List<Node> neighbours = new List<Node>();
+        for (int x = -size; x <= size; x++)
+        {
+            for (int y = -size; y <= size; y++)
+            {
+                if (x == 0 && y == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    int neighbourX = node.gridX + x;
+                    int neighbourY = node.gridY + y;
+
+                    if (neighbourX >= 0 && neighbourX < _gridSizeX && neighbourY >= 0 && neighbourY < _gridSizeY)
+                    {
+                        neighbours.Add(grid[neighbourX, neighbourY]);
+                    }
+
+
+                }
+
+
+            }
+        }
+        return neighbours;
+    }
 
 
     //Creates the grid based on the gridworldsize

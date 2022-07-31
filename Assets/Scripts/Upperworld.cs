@@ -363,40 +363,11 @@ public class Upperworld : MonoBehaviour
     //Function to check if another house is nearby so that the houses are not build so close to each other
     private bool HouseNearby(Node node)
     {
-        foreach(Node neighbour1 in grid.GetNodeNeighboursDiagonal(node))
+        foreach(Node neighbour in grid.GetNodeNeighbourhood(node, 10))
         {
-            if (neighbour1.onTop == "House" || grid.ghostNames().Contains(neighbour1.onTop) || neighbour1.onTop == "Dungeon")
+            if (neighbour.onTop == "House" || grid.ghostNames().Contains(neighbour.onTop) || neighbour.onTop == "Dungeon")
             {
                 return true;
-            }
-            foreach (Node neighbour2 in grid.GetNodeNeighboursDiagonal(neighbour1))
-            {
-                if(neighbour2.onTop == "House" || grid.ghostNames().Contains(neighbour2.onTop) || neighbour2.onTop == "Dungeon")
-                {
-                    return true;
-                    
-                }
-                foreach (Node neighbour3 in grid.GetNodeNeighboursDiagonal(neighbour2))
-                {
-                    if (neighbour3.onTop == "House" || grid.ghostNames().Contains(neighbour3.onTop) || neighbour3.onTop == "Dungeon")
-                    {
-                        return true;
-                    }
-                    foreach (Node neighbour4 in grid.GetNodeNeighboursDiagonal(neighbour3))
-                    {
-                        if (neighbour4.onTop == "House" || grid.ghostNames().Contains(neighbour4.onTop) || neighbour4.onTop == "Dungeon")
-                        {
-                            return true;
-                        }
-                        foreach (Node neighbour5 in grid.GetNodeNeighboursDiagonal(neighbour4))
-                        {
-                            if (neighbour5.onTop == "House" || grid.ghostNames().Contains(neighbour5.onTop) || neighbour5.onTop == "Dungeon")
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                }
             }
         }
         return false;
