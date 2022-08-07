@@ -78,7 +78,7 @@ public class ZebraTutorial : MonoBehaviour
             }
             touchAni.SetActive(false);
             _start = true;
-            if (_counter > 15)
+            if (_counter > 16)
             {
                 griphoton.SetActive(true);
                 player.gameObject.SetActive(true);
@@ -108,7 +108,6 @@ public class ZebraTutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
-                    options.SetActive(true);
                     sentence = "Back then, my neighbours were Quinn, Kaden, Erin and Payton.| I do not know if you already have met them.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
@@ -117,16 +116,14 @@ public class ZebraTutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
-                    options.SetActive(true);
                     sentence = "Our roofs still are in the colours green, purple, yellow, pink and blue.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 7:
-                    sentence = "The types of puzzles we had in our row of houses were a hamiltonian maze, a zebra puzzle, a mirror puzzle, a matchstick puzzle and a replacement puzzle.";
+                    sentence = "The different types of puzzles were a hamiltonian maze, a zebra puzzle, a mirror puzzle, a matchstick puzzle and a replacement puzzle.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 8:
-                    options.SetActive(true);
                     sentence = " It was a really long time ago and I do not remember much.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
@@ -135,12 +132,10 @@ public class ZebraTutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 10:
-                    options.SetActive(true);
                     sentence = "If you tap on a field, a house will appear.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 11:
-                    options.SetActive(true);
                     sentence = "If you tap on the house, you can change the roof colour.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
@@ -150,15 +145,19 @@ public class ZebraTutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 13:
-                    options.SetActive(true);
-                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved! ";
+                    sentence = "If you should get stuck on the puzzle, you can try one of the hint cards.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 14:
-                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    options.SetActive(true);
+                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved!";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 15:
+                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 16:
                     inactive = false;
                     ghost.SetActive(false);
                     this.gameObject.SetActive(false);
@@ -200,7 +199,7 @@ public class ZebraTutorial : MonoBehaviour
     //Function to skip the tutorial
     public void skipTutorial()
     {
-        _counter = 15;
+        _counter = 17;
         ghost.SetActive(false);
         ruleButton.SetActive(true);
         options.SetActive(true);
@@ -290,6 +289,24 @@ public class ZebraTutorial : MonoBehaviour
         question.text = "How can I reset the puzzle?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The highst button is the reset button with which you can reset the whole puzzle.";
+    }
+    public void Question10()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "Where are the hint cards?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You open the hint cards by tapping on the button with the magnifying glass on it. Then you can unlock one of the hint cards.";
+    }
+    public void Question11()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "How can I unlock a hint card?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You can unlock a hint card with one of the keys you collected in the dungeon. If you do not have any keys, you can watch a video instead to get one.";
     }
 
 

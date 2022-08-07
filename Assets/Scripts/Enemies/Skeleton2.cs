@@ -45,14 +45,14 @@ public class Skeleton2 : MonoBehaviour
         }
         blockPlayer = false;
         hitPlayer = false;
-        hitValue = 100;
+        hitValue = 125;
         pos = new List<int[]>();
         for (int i = 0; i < xPos.Length; i++)
         {
             int[] coords = new int[] { xPos[i], yPos[i] };
             pos.Add(coords);
         }
-        healthValue = 200;
+        healthValue = 250;
         posCounter = 0;
         Node startNode = grid.grid[pos[posCounter][0], pos[posCounter][1]];
         transform.position = startNode.worldPosition - new Vector3(0, 0, 1);
@@ -100,10 +100,11 @@ public class Skeleton2 : MonoBehaviour
                     player.GetComponent<Player>().enemyHit = false;
                     healthValue -= player.GetComponent<Player>().hitValue;
                     float playerHitvalue = player.GetComponent<Player>().hitValue;
-                    float healthReduc = playerHitvalue / 100;
+                    float healthReduc = playerHitvalue / 250;
                     healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
                     if (healthValue <= 0)
                     {
+                        StopAllCoroutines();
                         Hint();
                         this.gameObject.SetActive(false);
                     }

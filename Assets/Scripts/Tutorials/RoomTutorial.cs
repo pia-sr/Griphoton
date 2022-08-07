@@ -75,7 +75,7 @@ public class RoomTutorial : MonoBehaviour
             }
             touchAni.SetActive(false);
             _start = true;
-            if (_counter > 6)
+            if (_counter > 11)
             {
                 griphoton.SetActive(true);
                 player.gameObject.SetActive(true);
@@ -95,27 +95,47 @@ public class RoomTutorial : MonoBehaviour
                 case 1:
                     ghost.transform.localPosition = new Vector3(-5, 1, 0);
                     this.transform.parent.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "I have this shape which I need to colour in 3 different colours.| \nThere should be exact 12 squares in the same colour and all the same coloured squares need to be next to each other. ";
+                    string sentence = "I have this shape which I need to colour in 3 different colours.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "Some squares have numbers on them.| \nThese numbers indicate how many same coloured squared can be seen horizontally and vertically from that square.";
+                    sentence = "There should be exact 12 squares in the same colour and all the same coloured squares need to be next to each other. ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "You can select the colour with the button on the left side of the shape.| If you tap or swipe over the shape, the selected squares will be coloured in the same colour as the button.| But you cannot use the same colour in two separate areas of the shape!";
+                    sentence = "Some squares have numbers on them.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
-                    options.SetActive(true);
-                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved! ";
+                    sentence = "These numbers indicate how many same coloured squared can be seen horizontally and vertically from that square.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 5:
-                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    sentence = "You can select the colour with the button on the left side of the shape.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
+                    sentence = "If you tap or swipe over the shape, the selected squares will be coloured in the same colour as the button.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 7:
+                    sentence = "But you cannot use the same colour in two separate areas of the shape!";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 8:
+                    sentence = "If you should get stuck on the puzzle, you can try one of the hint cards.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 9:
+                    options.SetActive(true);
+                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved!";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 10:
+                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 11:
                     this.transform.parent.GetChild(1).gameObject.SetActive(true);
                     inactive = false;
                     this.gameObject.SetActive(false);
@@ -157,7 +177,7 @@ public class RoomTutorial : MonoBehaviour
     //Function to skip the tutorial
     public void skipTutorial()
     {
-        _counter = 6;
+        _counter = 12;
         this.transform.parent.GetChild(0).gameObject.SetActive(true);
         this.transform.parent.GetChild(1).gameObject.SetActive(true);
         options.SetActive(true);
@@ -202,6 +222,24 @@ public class RoomTutorial : MonoBehaviour
         question.text = "How can I reset the puzzle?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The highst button is the reset button with which you can reset the whole puzzle.";
+    }
+    public void Question5()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "Where are the hint cards?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You open the hint cards by tapping on the button with the magnifying glass on it. Then you can unlock one of the hint cards.";
+    }
+    public void Question6()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "How can I unlock a hint card?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You can unlock a hint card with one of the keys you collected in the dungeon. If you do not have any keys, you can watch a video instead to get one.";
     }
 
     //close function for either closing a specific question or the question overview

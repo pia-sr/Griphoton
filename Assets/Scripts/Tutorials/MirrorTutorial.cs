@@ -75,7 +75,7 @@ public class MirrorTutorial : MonoBehaviour
             }
             touchAni.SetActive(false);
             _start = true;
-            if (_counter > 8)
+            if (_counter > 13)
             {
                 griphoton.SetActive(true);
                 player.gameObject.SetActive(true);
@@ -95,35 +95,55 @@ public class MirrorTutorial : MonoBehaviour
                 case 1:
                     ghost.transform.localPosition = new Vector3(-5, 1, 0);
                     this.transform.parent.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "I want to build a room full of mirrors as an attraction.| Other ghosts and maybe even you who visit my room, wait no| let's call it my hall of mirrors, need to find the way out of the room without running into mirrors.";
+                    string sentence = "I want to build a room full of mirrors as an attraction. Other ghosts and maybe even you who visit my room, wait no";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "I made some kind of blueprint for the hall, but I forgot to put in some important parts.| \nCan you maybe help me to get the full design for my hall of mirrors?";
+                    sentence = "Let's call it my hall of mirrors, need to find the way out of the room without running into mirrors.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "I divided the room into squares.| On every square should either be a ghost lost in my hall of mirrors or a diagonal mirror. ";
+                    sentence = "I made some kind of blueprint for the hall, but I forgot to put in some important parts.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
-                    sentence = "The numbers next to the room indicate how many ghosts can be seen from that position.| And before you ask: yes, ghosts have a reflection.| So do not forget the refections.";
+                    sentence = "Can you maybe help me to get the full design for my hall of mirrors?";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 5:
-                    sentence = "If you tap on a square, I will put a ghost on that square.| If you tap on that square again, I will put one of the diagonal mirrors on it.| If you tap another time, the other diagonal mirror will appear.| If you tap one last time all the symbols will disappear on that square.";
+                    sentence = "I divided the room into squares.| On every square should either be a ghost lost in my hall of mirrors or a diagonal mirror. ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
+                    sentence = "The numbers next to the room indicate how many ghosts can be seen from that position.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 7:
+                    sentence = "And before you ask: yes, ghosts have a reflection.| So do not forget the refections.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 8:
+                    sentence = "If you tap on a square, I will put a ghost on that square.| If you tap on that square again, I will put one of the diagonal mirrors on it.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 9:
+                    sentence = "If you tap another time, the other diagonal mirror will appear.| If you tap one last time all the symbols will disappear on that square.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 10:
+                    sentence = "If you should get stuck on the puzzle, you can try one of the hint cards.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 11:
                     options.SetActive(true);
                     sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved! ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
-                case 7:
+                case 12:
                     sentence = "If you have any questions, just tap on the icon with the question mark.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
-                case 8:
+                case 13:
                     this.transform.parent.GetChild(1).gameObject.SetActive(true);
                     inactive = false;
                     this.gameObject.SetActive(false);
@@ -166,7 +186,7 @@ public class MirrorTutorial : MonoBehaviour
     //Function to skip the tutorial
     public void skipTutorial()
     {
-        _counter = 8;
+        _counter = 14;
         this.transform.parent.GetChild(0).gameObject.SetActive(true);
         this.transform.parent.GetChild(1).gameObject.SetActive(true);
         options.SetActive(true);
@@ -220,6 +240,24 @@ public class MirrorTutorial : MonoBehaviour
         question.text = "How can I reset the puzzle?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The highst button is the reset button with which you can reset the whole puzzle.";
+    }
+    public void Question6()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "Where are the hint cards?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You open the hint cards by tapping on the button with the magnifying glass on it. Then you can unlock one of the hint cards.";
+    }
+    public void Question7()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "How can I unlock a hint card?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You can unlock a hint card with one of the keys you collected in the dungeon. If you do not have any keys, you can watch a video instead to get one.";
     }
 
     //close function for either closing a specific question or the question overview

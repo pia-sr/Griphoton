@@ -39,10 +39,11 @@ public class EvilGhost1 : MonoBehaviour
     //Function to bring the ghost to their start position
     private void SetUp()
     {
+        StopAllCoroutines();
         moveAway = false;
         stay = false;
         attackPlayer = false;
-        healthValue = 300;
+        healthValue = 500;
         Node startNode = grid.grid[startPos[0], startPos[1]];
         transform.position = startNode.worldPosition - new Vector3(0, 0, 1);
         targetNode = startNode;
@@ -64,11 +65,6 @@ public class EvilGhost1 : MonoBehaviour
         {
             SetUp();
         }
-        else if (healthValue <= 0)
-        {
-            Hint();
-            this.gameObject.SetActive(false);
-        }
 
         
 
@@ -88,13 +84,13 @@ public class EvilGhost1 : MonoBehaviour
             animator.SetBool("isWalking", false);
         }
         path2Player = pathFinder.FindPathEnemies(transform.position, player.transform.position);
-        if (Next2Player() && !moveAway)
+        if (Next2Player() && !moveAway && (int)healthValue > 0)
         {
             attackPlayer = false;
             if (!stay)
             {
                 stay = true;
-                hitValue = 30 + (5 * hitSpeed);
+                hitValue = 50 + (7.5f * hitSpeed);
 
                 if (player.GetComponent<Player>().blockEnemy)
                 {
@@ -111,9 +107,14 @@ public class EvilGhost1 : MonoBehaviour
                 player.GetComponent<Player>().enemyHit = false;
                 healthValue -= player.GetComponent<Player>().hitValue;
                 float playerHitvalue = player.GetComponent<Player>().hitValue;
-                float healthReduc = playerHitvalue / 100;
+                float healthReduc = playerHitvalue / 500;
                 healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
-                
+                if ((int)healthValue <= 0)
+                {
+                    StopAllCoroutines();
+                    Hint();
+                    this.gameObject.SetActive(false);
+                }
             }
 
         }
@@ -270,8 +271,8 @@ public class EvilGhost1 : MonoBehaviour
 
     private void Hint()
     {
-        int rand = Random.Range(0, 7);
-        if(rand == 5)
+        int rand = Random.Range(0, 5);
+        if(rand == 3)
         {
             Instantiate(hintKey, transform.position, Quaternion.identity, transform.parent.parent);
         }

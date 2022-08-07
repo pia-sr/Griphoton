@@ -40,11 +40,12 @@ public class EvilGhost2 : MonoBehaviour
     //Function to bring the ghost to their start position
     private void SetUp()
     {
+        StopAllCoroutines();
         moveAway = false;
         stay = false;
         attackPlayer = false;
         coroutineStart = false;
-        healthValue = 400;
+        healthValue = 750;
         Node startNode = grid.grid[startPos[0], startPos[1]];
         transform.position = startNode.worldPosition - new Vector3(0, 0, 1);
         targetNode = startNode;
@@ -61,13 +62,7 @@ public class EvilGhost2 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (healthValue <= 0)
-        {
-            Hint();
-            this.gameObject.SetActive(false);
-        }
-
-        else if (player.GetComponent<Player>().leaveLevel)
+        if (player.GetComponent<Player>().leaveLevel)
         {
             SetUp();
         }
@@ -86,20 +81,20 @@ public class EvilGhost2 : MonoBehaviour
 
             animator.SetBool("isWalking", false);
         }
-        if (grid.GetNodeFromWorldPos(this.gameObject.transform.position) == playerPos)
+        else if (grid.GetNodeFromWorldPos(this.gameObject.transform.position) == playerPos)
         {
             moveAway = false;
         }
 
         path2Player = pathFinder.FindPathEnemies(transform.position, player.transform.position);
-        if (Next2Player() && !moveAway)
+        if (Next2Player() && !moveAway && (int)healthValue > 0)
         {
             animator.SetBool("isWalking", true);
             attackPlayer = false;
             if (!stay)
             {
                 stay = true;
-                hitValue = 100 + (5 * hitSpeed);
+                hitValue = 75 + (7.5f * hitSpeed);
 
                 if (player.GetComponent<Player>().blockEnemy)
                 {
@@ -116,8 +111,14 @@ public class EvilGhost2 : MonoBehaviour
                 player.GetComponent<Player>().enemyHit = false;
                 healthValue -= player.GetComponent<Player>().hitValue;
                 float playerHitvalue = player.GetComponent<Player>().hitValue;
-                float healthReduc = playerHitvalue / 100;
+                float healthReduc = playerHitvalue / 750;
                 healthBar.SetHealthBarValue(healthBar.GetHealthBarValue() - healthReduc);
+                if ((int)healthValue <= 0)
+                {
+                    StopAllCoroutines();
+                    Hint();
+                    this.gameObject.SetActive(false);
+                }
             }
 
         }
@@ -261,8 +262,8 @@ public class EvilGhost2 : MonoBehaviour
 
     private void Hint()
     {
-        int rand = Random.Range(0, 10);
-        if (rand == 7)
+        int rand = Random.Range(0, 7);
+        if (rand == 3)
         {
             Instantiate(hintKey, transform.position, Quaternion.identity, transform.parent.parent);
         }

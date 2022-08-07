@@ -16,6 +16,7 @@ public class Game : MonoBehaviour
     public int[] usedKeys;
 
     public string[] mapTags;
+    public string[] mapStatus;
 
     public string[] nodeTags;
     public int strenghtMultiplier;
@@ -84,6 +85,7 @@ public class Game : MonoBehaviour
         return keys;
 
     }
+
     //Function to create an array of all the tags in the grid in Griphoton
     public string[] getMap()
     {
@@ -109,6 +111,31 @@ public class Game : MonoBehaviour
         return tags;
     }
 
+    //Function to create an array of all the tags in the grid in Griphoton
+    public string[] getStatus()
+    {
+        string[] tags;
+        Player player = GameObject.Find("Player").GetComponent<Player>();
+        if (player.upperWorld)
+        {
+
+            GridField grid = GameObject.Find("Grid").GetComponent<GridField>();
+            tags = new string[grid.GetMaxGridSize];
+            int counter = 0;
+            foreach (Node node in grid.grid)
+            {
+                tags[counter] = node.status;
+                counter++;
+            }
+
+        }
+        else
+        {
+            tags = mapStatus;
+        }
+        return tags;
+    }
+
     //Function to get the read variables
     public void loadGame()
     {
@@ -119,6 +146,7 @@ public class Game : MonoBehaviour
         namePlayer = data.namePlayer;
         nodeTags = data.nodeTags;
         mapTags = data.mapTags;
+        mapStatus = data.mapStatus;
         sound = data.sound;
         strenghtMultiplier = data.strenghtMultiplier;
         xPos = data.xPos;

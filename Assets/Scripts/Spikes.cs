@@ -11,6 +11,7 @@ public class Spikes : MonoBehaviour
     private bool _corountineStart;
     private bool _attackBool;
     public Animator animator;
+    private float _hitValue;
 
 
     // Start is called before the first frame update
@@ -20,6 +21,7 @@ public class Spikes : MonoBehaviour
         _corountineStart = false;
         _grid = GameObject.Find("Background").GetComponent<GridField>();
         _player = GameObject.Find("Player").GetComponent<Player>();
+        _hitValue = 7.5f * (int.Parse(this.transform.parent.parent.tag) - 1);
     }
 
     // Update is called once per frame
@@ -54,7 +56,7 @@ public class Spikes : MonoBehaviour
         if (_grid.GetNodeFromWorldPos(_player.gameObject.transform.position) == _grid.GetNodeFromWorldPos(this.transform.localPosition) && _active)
         {
 
-            _player.GetComponent<Player>().ReduceStrength(10);
+            _player.GetComponent<Player>().ReduceStrength(_hitValue);
             yield return new WaitForSeconds(0.75f);
         }
         

@@ -74,7 +74,7 @@ public class RedPointTutorial : MonoBehaviour
             }
             touchAni.SetActive(false);
             _start = true;
-            if (_counter > 6)
+            if (_counter > 8)
             {
                 griphoton.SetActive(true);
                 player.gameObject.SetActive(true);
@@ -94,27 +94,35 @@ public class RedPointTutorial : MonoBehaviour
                 case 1:
                     ghost.transform.localPosition = new Vector3(-5, 1, 0);
                     this.transform.parent.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "I have a collection of point and I want to colour in 5 of them.| The pairwise distances between every coloured-in points should all be different. ";
+                    string sentence = "I have a collection of point and I want to colour in 5 of them.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "Can you colour in those points for me?";
+                    sentence = "The pairwise distances between every coloured-in points should all be different.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "Tap on the point you want to select and it will be coloured in. ";
+                    sentence = "Can you colour in those points for me?";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
-                    options.SetActive(true);
-                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved! ";
+                    sentence = "Tap on the point you want to select and it will be coloured in.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 5:
-                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    sentence = "If you should get stuck on the puzzle, you can try one of the hint cards.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
+                    options.SetActive(true);
+                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved!";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 7:
+                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 8:
                     this.transform.parent.GetChild(1).gameObject.SetActive(true);
                     inactive = false;
                     this.gameObject.SetActive(false);
@@ -156,7 +164,7 @@ public class RedPointTutorial : MonoBehaviour
     //Function to skip the tutorial
     public void skipTutorial()
     {
-        _counter = 6;
+        _counter = 9;
         this.transform.parent.GetChild(0).gameObject.SetActive(true);
         this.transform.parent.GetChild(1).gameObject.SetActive(true);
         options.SetActive(true);
@@ -202,6 +210,24 @@ public class RedPointTutorial : MonoBehaviour
         question.text = "How can I reset the puzzle?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The highst button is the reset button with which you can reset the whole puzzle.";
+    }
+    public void Question5()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "Where are the hint cards?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You open the hint cards by tapping on the button with the magnifying glass on it. Then you can unlock one of the hint cards.";
+    }
+    public void Question6()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "How can I unlock a hint card?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You can unlock a hint card with one of the keys you collected in the dungeon. If you do not have any keys, you can watch a video instead to get one.";
     }
 
 

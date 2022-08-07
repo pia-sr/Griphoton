@@ -142,6 +142,7 @@ public class Upperworld : MonoBehaviour
 
             //saving everything
             grid.grid[center.gridX, center.gridY-2].mapTag = "Dungeon";
+            grid.grid[center.gridX, center.gridY - 2].status = "Dungeon";
             data.xPos = center.gridX;
             data.yPos = center.gridY - 2;
             data.namePlayer = playerName;
@@ -211,7 +212,7 @@ public class Upperworld : MonoBehaviour
                 GameObject house = GameObject.Find(houseName);
                 house.SetActive(false);
                 map.GetComponent<Map>().SetSolvedTag(houseName);
-                grid.grid[node.gridX, node.gridY - 2].mapTag = "Solved";
+                grid.grid[node.gridX, node.gridY - 2].status = "solved";
                 GameObject solvedHouse = Instantiate(moudField, node.worldPosition + new Vector3(0,0,1), Quaternion.identity, houses.transform);
                 solvedHouse.transform.localScale = new Vector3(grid.nodeRadius * 7, grid.nodeRadius * 7, 1);
             }
@@ -363,7 +364,7 @@ public class Upperworld : MonoBehaviour
     //Function to check if another house is nearby so that the houses are not build so close to each other
     private bool HouseNearby(Node node)
     {
-        foreach(Node neighbour in grid.GetNodeNeighbourhood(node, 10))
+        foreach(Node neighbour in grid.GetNodeNeighbourhood(node, 30))
         {
             if (neighbour.onTop == "House" || grid.ghostNames().Contains(neighbour.onTop) || neighbour.onTop == "Dungeon")
             {

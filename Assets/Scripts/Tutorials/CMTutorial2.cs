@@ -38,7 +38,6 @@ public class CMTutorial2 : MonoBehaviour
         options.SetActive(false);
         ghost.SetActive(true);
         ghost.transform.localPosition = Vector3.up;
-        ghost.transform.localPosition = Vector3.zero;
         inactive = true;
         _running = false;
         _counter = 0;
@@ -78,7 +77,7 @@ public class CMTutorial2 : MonoBehaviour
             }
             touchAni.SetActive(false);
             _start = true;
-            if (_counter > 10)
+            if (_counter > 15)
             {
                 griphoton.SetActive(true);
                 player.gameObject.SetActive(true);
@@ -98,43 +97,63 @@ public class CMTutorial2 : MonoBehaviour
                 case 1:
                     ghost.SetActive(false);
                     this.transform.parent.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "I have three wolves, three snakes and three mice and I need to get all of them across the river.| I can only carry three animals with me on the boat.";
+                    string sentence = "I have three wolves, three snakes and three mice and I need to get all of them across the river.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "The problem is that if there are more wolves than snakes on either side, the wolves will eat the snakes.| The wolves will also eat the mice if there are more wolves than mice!" ;
+                    sentence = "I can only carry three animals with me on the boat.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "And of course, if there are more snakes than mice on either side, the snakes will eat the mice.";
+                    sentence = "The problem is that if there are more wolves than snakes on either side, the wolves will eat the snakes." ;
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
-                    sentence = "Another problem is that the boat is not the best and can only go across the river 13 times.";
+                    sentence = "The wolves will also eat the mice if there are more wolves than mice!" ;
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 5:
-                    sentence = "Can you help me get all the animals across the river?";
+                    sentence = "And of course, if there are more snakes than mice on either side, the snakes will eat the mice.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
-                    sentence = "Just tap on the animal which you want to have on the boat.| If you want to remove an animal from the boat, just tap on that animal and it will be put back on the riverbank.";
+                    sentence = "Another problem is that the boat is not the best and can only go across the river 13 times.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 7:
-                    sentence = "If there are at least two animals in the boat, you can press the button at the bottom middle of your screen to make the boat move.| At the top of your screen, you see how many times the boat has crossed the river. ";
+                    sentence = "Can you help me get all the animals across the river?";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 8:
-                    options.SetActive(true);
-                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved! ";
+                    sentence = "Just tap on the animal which you want to have on the boat.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 9:
-                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    sentence = "If you want to remove an animal from the boat, just tap on that animal and it will be put back on the riverbank.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 10:
+                    sentence = "If there are at least two animals in the boat, you can press the button at the bottom middle of your screen to make the boat move.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 11:
+                    sentence = "At the top of your screen, you see how many times the boat has crossed the river. ";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 12:
+                    sentence = "If you should get stuck on the puzzle, you can try one of the hint cards.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 13:
+                    options.SetActive(true);
+                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved!";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 14:
+                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 15:
                     inactive = false;
                     this.gameObject.SetActive(false);
                     puzzleSound.Play();
@@ -176,7 +195,7 @@ public class CMTutorial2 : MonoBehaviour
     public void skipTutorial()
     {
 
-        _counter = 11;
+        _counter = 16;
         this.transform.parent.GetChild(0).gameObject.SetActive(true);
         options.SetActive(true);
         inactive = false;ghost.SetActive(false);
@@ -203,7 +222,7 @@ public class CMTutorial2 : MonoBehaviour
         Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "Who wants to eat who again?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
-        answer.text = "The wolves will eat the snakes or the mice, but only if there are more wolves than snakes or more wolves than mice on the river bank. And the snakes will eat the mice, if there are more snakes than mice on the riverbank.";
+        answer.text = "The wolves will eat the snakes or the mice, but only if there are more wolves than snakes or more wolves than mice on the river bank. And the snakes will eat the mice if there are more snakes than mice on the riverbank.";
     }
     public void Question3()
     {
@@ -267,6 +286,24 @@ public class CMTutorial2 : MonoBehaviour
         question.text = "How can I reset the puzzle?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The highst button is the reset button with which you can reset the whole puzzle.";
+    }
+    public void Question10()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "Where are the hint cards?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You open the hint cards by tapping on the button with the magnifying glass on it. Then you can unlock one of the hint cards.";
+    }
+    public void Question11()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "How can I unlock a hint card?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You can unlock a hint card with one of the keys you collected in the dungeon. If you do not have any keys, you can watch a video instead to get one.";
     }
 
 

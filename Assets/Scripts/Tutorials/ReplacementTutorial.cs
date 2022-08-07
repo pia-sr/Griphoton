@@ -74,7 +74,7 @@ public class ReplacementTutorial : MonoBehaviour
             }
             touchAni.SetActive(false);
             _start = true;
-            if (_counter > 7)
+            if (_counter > 11)
             {
                 griphoton.SetActive(true);
                 player.gameObject.SetActive(true);
@@ -94,32 +94,47 @@ public class ReplacementTutorial : MonoBehaviour
                 case 1:
                     ghost.SetActive(false);
                     this.transform.parent.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "I have this pattern of symbols and I am only allowed six moves to reach my goal pattern.| There are three rules with which I can achieve that final pattern.";
+                    string sentence = "I have this pattern of symbols and I am only allowed six moves to reach my goal pattern.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "Every rule allows me to replace a specific pattern with a new one.| One move consists of applying one of these rules.| You will find these rules on the right side of your screen. ";
+                    sentence = "There are three rules with which I can achieve that final pattern.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "Just click on the symbols you want to replace on the left side of your screen.| If you want to replace the selected symbols you need to press the button in the right bottom corner.";
+                    sentence = "Every rule allows me to replace a specific pattern with a new one.| One move consists of applying one of these rules.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
-                    options.SetActive(true);
-                    sentence = "If the pattern matches one of the rules, the selected symbols will be replaced in the next row.  ";
+                    sentence = "You will find these rules on the right side of your screen. ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 5:
-                    options.SetActive(true);
-                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved! ";
+                    sentence = "Just click on the symbols you want to replace on the left side of your screen.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
-                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    sentence = "If you want to replace the selected symbols you need to press the button in the right bottom corner.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 7:
+                    sentence = "If the pattern matches one of the rules, the selected symbols will be replaced in the next row.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 8:
+                    sentence = "If you should get stuck on the puzzle, you can try one of the hint cards.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 9:
+                    options.SetActive(true);
+                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved!";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 10:
+                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 11:
                     inactive = false;
                     this.gameObject.SetActive(false);
                     puzzleSound.Play();
@@ -160,7 +175,7 @@ public class ReplacementTutorial : MonoBehaviour
     //Function to skip the tutorial
     public void skipTutorial()
     {
-        _counter = 7;
+        _counter = 12;
         this.transform.parent.GetChild(0).gameObject.SetActive(true);
         options.SetActive(true);
         inactive = false;
@@ -222,6 +237,24 @@ public class ReplacementTutorial : MonoBehaviour
         question.text = "How can I reset the puzzle?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The highst button is the reset button with which you can reset the whole puzzle.";
+    }
+    public void Question7()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "Where are the hint cards?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You open the hint cards by tapping on the button with the magnifying glass on it. Then you can unlock one of the hint cards.";
+    }
+    public void Question8()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "How can I unlock a hint card?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You can unlock a hint card with one of the keys you collected in the dungeon. If you do not have any keys, you can watch a video instead to get one.";
     }
 
     //close function for either closing a specific question or the question overview

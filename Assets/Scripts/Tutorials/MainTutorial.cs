@@ -82,6 +82,7 @@ public class MainTutorial : MonoBehaviour
             {
                 node.SetItemOnTop(data.nodeTags[counterNode]);
                 node.mapTag = data.mapTags[counterNode];
+                node.status = data.mapStatus[counterNode];
                 counterNode++;
             } 
             if (data.sound)
@@ -126,9 +127,9 @@ public class MainTutorial : MonoBehaviour
                 player.GetComponent<Player>().Pause();
                 _running = true;
                 _start = false;
+                Ghost.SetActive(false);
                 player.GetComponent<Player>().Unpause();
                 this.transform.parent.parent.gameObject.SetActive(false);
-                Ghost.SetActive(false);
             }
         }
 
@@ -151,66 +152,101 @@ public class MainTutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "This world is not ready for you, yet.| There are still things you need to do in your world.| But don't worry, there is a way for you to go back.";
+                    sentence = "This world is not ready for you, yet.| There are still things you need to do in your world.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
-                    sentence = "My house has a portal that leads to your world.| However, this portal is at the end of a dungeon full of monsters.| You will have to fight them to reach it.";
+                    sentence = "But don't worry, there is a way for you to go back. | My house has a portal that leads to your world.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 5:
-                    sentence = "Hmm, it looks like you are not armed.| You will not come far in the dungeon without a sword.";
+                    sentence = "However, this portal is at the end of a dungeon full of monsters.| You will have to fight them to reach it.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
-                    sentence = "Lucky for you, I have a spare.| It is even magical!";
+                    sentence = "Hmm, it looks like you are not armed.| You won't come far in the dungeon without a sword.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 7:
-                    sentence = "What is so magical about it, you ask?";
+                    sentence = "Lucky for you, I have a spare.| It is even magical!";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 8:
-                    sentence = "You see, this world is a place where souls go who still have unsolved puzzles from their previous life.| These souls can strengthen this sword when you help them solve their puzzle.";
+                    sentence = "What is so magical about it, you ask?";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 9:
-                    sentence = "Every soul has their own house here in Griphoton.| \nJust drop by their houses, and they will explain their puzzle.";
+                    sentence = "You see, this world is a place where souls go who still have unsolved puzzles from their previous life.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 10:
-                    Ghost.SetActive(false);
-                    movement.SetActive(true);
-                    sentence = "Let me show you how you walk in this world.| \nSimply tap on the place where you want to go and that's it!";
+                    sentence = "These souls can strengthen this sword when you help them solve their puzzle.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 11:
-                    sentence = "You can also hold down your touch and you will walk continuosly into one direction.";
+                    sentence = "Every soul has their own house here in Griphoton.| Just drop by their houses, and they will explain their puzzle.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 12:
-                    movement.SetActive(false);
-                    griphoton.SetActive(true);
-                    sentence = "This here is my house.| You can recognise it by its black roof.| You can always return to my house if you press on 'Dungeon' in the settings.";
+                    Ghost.SetActive(false);
+                    movement.SetActive(true);
+                    sentence = "Let me show you how you walk in this world.| Simply tap on the place where you want to go and that's it!";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 13:
-                    movement.SetActive(false);
-                    griphoton.SetActive(true);
-                    sentence = "If you tap on my house, you can enter the dungeon.| I will explain more about the dungeon once you drop by.| But for now, I will let you explore Griphoton a bit. ";
+                    sentence = "You can also hold down your touch and you will walk continuosly towards one direction.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 14:
-                    options.SetActive(true);
-                    sentence = "If you have any questions, there is a help button in the settings| \nYou can also access the setting by tapping the setting icon.";
+                    movement.SetActive(false);
+                    griphoton.SetActive(true);
+                    sentence = "This here is my house.| You can recognise it by its black roof.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 15:
-                    options.SetActive(true);
-                    sentence = "You can leave the game by pressing the button with the house icon underneath the settings button.| \nGood luck, " + _playerName + "!";
+                    sentence = "You can always return to my house if you press on 'Dungeon' in the settings.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 16:
+                    sentence = "If you tap on my house, you can enter the dungeon.| I will explain more about the dungeon once you drop by.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 17:
+                    sentence = "But for now, I will let you explore Griphoton a bit. ";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 18:
+                    options.SetActive(true);
+                    sentence = "If you tap on the menu icon in the top right corner of your screen, three new icons will appear.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 19:
+                    Menu();
+                    sentence = "One icon is the settings icon through which you access the settings.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 20:
+                    sentence = "There you can turn off the music, access a Q&A to answer all your questions and more.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 21:
+                    sentence = "The other icon is the compass icon through which a map of Griphoton will appear.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 22:
+                    sentence = "It is a magical map and currently empty except for the dungeon.| Once you have visited a house, it will appear on the map.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 23:
+                    sentence = "You can leave the game by pressing the button with the house icon underneath the settings button.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 24:
+                    Menu();
+                    sentence = "Good luck, " + _playerName + "!";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 25:
                     player.SetActive(true);
                     player.GetComponent<Player>().SwitchCams();
                     player.GetComponent<Player>().Pause();
@@ -304,7 +340,7 @@ public class MainTutorial : MonoBehaviour
         Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "What am I supposed to do?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
-        answer.text = "You can either go to a house to solve a puzzle, or you can go to the dungeon to fight the monsters. You could also just explore Griphoton a bit.";
+        answer.text = "You can either go to a house to solve a puzzle, or you can go to the dungeon to fight the monsters. You could also just explore Griphoton for a bit.";
     }
     public void Question3()
     {
@@ -313,7 +349,7 @@ public class MainTutorial : MonoBehaviour
         Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "Where do I find the dungeon?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
-        answer.text = "The entrance to the dungeon is in Spencer's house. Just find the house with the black roof or simply press on dungeon in the settings and you will be teleported back to Spencer's house.";
+        answer.text = "The entrance to the dungeon is in Spencer's house. Just find the house with the black roof or simply press on 'Dungeon' in the settings and you will be teleported back to Spencer's house.";
     }
     public void Question4()
     {
@@ -331,7 +367,7 @@ public class MainTutorial : MonoBehaviour
         Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "How can I leave the game?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
-        answer.text = "You can leave the game by pressing the button underneath the settings button in the right corner of your screen. You recognise the button by the house icon on top of it.";
+        answer.text = "Tap on the menu button on the top right corner of your screen and three new buttons will appear. You can leave the game by pressing the button underneath the settings button in the right corner of your screen. You recognise the button by the house icon on top of it.";
     }
     public void Question6()
     {
@@ -340,7 +376,25 @@ public class MainTutorial : MonoBehaviour
         Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "Where can I find the settings?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
-        answer.text = "When you close the question overview, by tapping on the X in the right corner, you go back to the game. There you will see on the right of your screen the settings icon. Just tap on it to access the settings.";
+        answer.text = "If you close the question overview by tapping on the X in the right corner, you will go back to the settings.";
+    }
+    public void Question7()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "How can I access the map of Griphoton?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "One of the three buttons underneath the menu button in Griphoton is a button with a compass on it. If tap on the button, a map will open. The names of the houses will only appear on the map once you have visited the house.";
+    }
+    public void Question8()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "Why are there no names on the map?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "The names of the houses in Griphoton will only appear on the map once you visit them. If you solve a puzzle, the name will still be on the map but crossed out.";
     }
 
 
@@ -520,10 +574,11 @@ public class MainTutorial : MonoBehaviour
 
         data.xPos = grid.GetNodeFromWorldPos(player.transform.position).gridX;
         data.yPos = grid.GetNodeFromWorldPos(player.transform.position).gridY;
-        GameObject.Find("Map").GetComponent<Map>().update = true;
+        
         options.SetActive(false);
         player.GetComponent<Player>().Pause();
         map.SetActive(true);
+        GameObject.Find("Map").GetComponent<Map>().update = true;
         player.GetComponent<Player>().DoNotShowOptions = true;
     }
 
@@ -531,8 +586,8 @@ public class MainTutorial : MonoBehaviour
     {
 
         options.SetActive(true);
-        player.GetComponent<Player>().Unpause();
         map.SetActive(false);
+        player.GetComponent<Player>().Unpause();
         player.GetComponent<Player>().DoNotShowOptions = false;
     }
 

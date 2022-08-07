@@ -24,7 +24,6 @@ public class Player : MonoBehaviour
     public bool enemyHit;
     public bool blockEnemy = false;
     public bool leaveLevel;
-    public float speed;
     public GameObject messageSimple;
     public Text message2Options;
     public Animator animator;
@@ -48,6 +47,8 @@ public class Player : MonoBehaviour
     private bool _attackBool;
     private int _xInput;
     private int _yInput;
+    private float _speed;
+    private bool _ready2Go;
 
     //On awke the player looks for the game data
     private void Awake()
@@ -64,20 +65,21 @@ public class Player : MonoBehaviour
         hitValue = 25 + (15 * _data.strenghtMultiplier);
         _targetNode = null;
         _existingTarget = null;
-        _strength = 100 + (100 * _data.strenghtMultiplier);
+        _strength = 100 + (65 * _data.strenghtMultiplier);
         _fullHealth = _strength;
         if (!upperWorld)
         {
+            _chooseExit = false;
             healthBar.SetHealthBarValue(1);
-            _foundPos = false;
+            StartCoroutine(Wait(1));
             dungeonSound.Play();
             _attackBool = false;
+            _speed = 2.4f;
         }
         else
         {
-            //griphotonSound.Play();
             transform.position = grid.grid[_data.xPos, _data.yPos].worldPosition;
-
+            _speed = 2.75f;
             
         }
         _xInput = 0;
@@ -221,6 +223,8 @@ public class Player : MonoBehaviour
                 if(grid.grid[_path[0].gridX, _path[0].gridY].mapTag != ghostName)
                 {
                     grid.grid[_path[0].gridX, _path[0].gridY].mapTag = ghostName;
+                    grid.grid[_path[0].gridX, _path[0].gridY].status = "unsolved";
+                    
                     GameObject.Find("Map").GetComponent<Map>().AddTag(_path[0].gridX, _path[0].gridY, ghostName);
 
                 }
@@ -250,7 +254,7 @@ public class Player : MonoBehaviour
             }
         }
         //waits for user input to find target
-        if (Input.touchCount > 0 && EventSystem.current.currentSelectedGameObject == null)
+        if (Input.touchCount > 0 && EventSystem.current.currentSelectedGameObject == null && _ready2Go)
         {
             Touch touch = Input.GetTouch(0);
             Vector2 touchPosition = Camera.current.ScreenToWorldPoint(Input.GetTouch(0).position);
@@ -321,14 +325,14 @@ public class Player : MonoBehaviour
         }
         if (levelNr != -1)
         {
+            
             leaveLevel = true;
+            _chooseExit = true;
             SetAllBoolsFalse();
             Pause();
             levels.transform.GetChild(levelNr).gameObject.SetActive(false);
             levels.transform.GetChild(levelNr - 1).gameObject.SetActive(true);
-            _chooseExit = true;
-            StartCoroutine(Wait());
-            Unpause();
+            StartCoroutine(Wait(levelNr -1));
         }
     }
 
@@ -351,8 +355,7 @@ public class Player : MonoBehaviour
             Pause();
             levels.transform.GetChild(levelNr).gameObject.SetActive(false);
             levels.transform.GetChild(levelNr + 1).gameObject.SetActive(true);
-            StartCoroutine(Wait());
-            Unpause();
+            StartCoroutine(Wait(levelNr + 1));
         }
     }
     
@@ -369,18 +372,21 @@ public class Player : MonoBehaviour
         Vector3 pos = transform.position;
         _xInput = _path[1].gridX - grid.GetNodeFromWorldPos(pos).gridX;
         _yInput = _path[1].gridY - grid.GetNodeFromWorldPos(pos).gridY;
+        if(!(_xInput == 0 && _yInput == 0) && pos != _path[1].worldPosition)
+        {
+            animator.SetFloat("XInput", _xInput);
+            animator.SetFloat("YInput", _yInput);
+            animator.SetBool("isWalking", true);
 
+        }
         
-        animator.SetFloat("XInput", _xInput);
-        animator.SetFloat("YInput", _yInput);
-        animator.SetBool("isWalking", true);
         float goal;
         if (pos.x == _path[1].worldPosition.x)
         {
             goal = _path[1].worldPosition.y;
             while (pos.y != goal)
             {
-                pos.y = Mathf.MoveTowards(pos.y, goal, 2.75f * Time.deltaTime);
+                pos.y = Mathf.MoveTowards(pos.y, goal, _speed * Time.deltaTime);
                 transform.localPosition = pos;
                 yield return null;
             }
@@ -391,7 +397,7 @@ public class Player : MonoBehaviour
 
             while (pos.x != goal)
             {
-                pos.x = Mathf.MoveTowards(pos.x, goal, 2.75f * Time.deltaTime);
+                pos.x = Mathf.MoveTowards(pos.x, goal, _speed * Time.deltaTime);
                 transform.localPosition = pos;
                 yield return null;
             }
@@ -421,24 +427,32 @@ public class Player : MonoBehaviour
     {
         if (lost)
         {
-            Pause();
             lost = false;
-            GameObject levels = GameObject.FindWithTag("Levels");
-            _targetNode = null;
-            StopAllCoroutines();
-            SetAllBoolsFalse();
-
-            if(_data.activeLevel != 1) 
-            { 
-                levels.transform.GetChild(_data.activeLevel-1).gameObject.SetActive(false);
-                levels.transform.GetChild(_data.activeLevel-2).gameObject.SetActive(true);
-            }
-            leaveLevel = true;
             healthBar.SetHealthBarValue(1);
             _strength = _fullHealth;
-            StartCoroutine(Wait());
-            Unpause();
-            _foundPos = false;
+            heal = true; int levelNr = -1;
+            GameObject levels = GameObject.FindWithTag("Levels");
+            for (int i = 1; i < levels.transform.childCount; i++)
+            {
+                if (levels.transform.GetChild(i).gameObject.activeSelf)
+                {
+                    levelNr = i;
+                }
+            }
+            if (levelNr != -1)
+            {
+
+                leaveLevel = true;
+                SetAllBoolsFalse();
+                Pause();
+                if(levelNr != 1)
+                {
+
+                    levels.transform.GetChild(levelNr).gameObject.SetActive(false);
+                    levels.transform.GetChild(levelNr - 1).gameObject.SetActive(true);
+                }
+                StartCoroutine(Wait(levelNr-1));
+            }
         }
     }
 
@@ -509,10 +523,10 @@ public class Player : MonoBehaviour
         _blockBool = false;
     }
     //Function to wait
-    IEnumerator Wait()
+    IEnumerator Wait(int levelNr)
     {
-        yield return new WaitForSeconds(0.1f);
-        leaveLevel = false; 
+        GameObject level = GameObject.FindWithTag("Levels").transform.GetChild(levelNr).gameObject;
+        yield return new WaitUntil(() => level.activeSelf);
         if (!_chooseExit)
         {
 
@@ -523,6 +537,11 @@ public class Player : MonoBehaviour
             _chooseExit = false;
             ExitLevel();
         }
+        yield return new WaitForSeconds(0.1f);
+        leaveLevel = false;
+        Unpause();
+        //yield return new WaitForEndOfFrame();
+        
     }
 
     //Function to find a puzzle by its tag
@@ -543,6 +562,7 @@ public class Player : MonoBehaviour
     public void Pause()
     {
         StopAllCoroutines();
+        _ready2Go = false;
         _coroutineStart = true;
         _targetNode = null;
         animator.SetBool("isWalking", false);
@@ -560,16 +580,18 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
-        _targetNode = null;
         _coroutineStart = false;
+        _targetNode = null;
+        _ready2Go = true;
+        heal = true;
 
     }
 
     //Function for the restart button to restart the whole game
     public void Restart()
     {
-        _data.namePlayer = null;
-        _data.SaveGame();
+        string path = Application.persistentDataPath + "/gameData.game";
+        File.Delete(path);
         Application.Quit();
     }
 
@@ -609,7 +631,9 @@ public class Player : MonoBehaviour
             "Thank you so much for your help, " + _data.namePlayer + "!",
             "Goodbye, " + _data.namePlayer + ".\nGood luck with the dungeon!",
             "Brilliant! \nI knew you could help me.",
-            "Now I can finally pass on. \nThank you, " + _data.namePlayer + "!"
+            "Now I can finally pass on. \nThank you, " + _data.namePlayer + "!",
+            "You did it! \nI cound not have done it without you",
+            "Oh, so that is how you solve it. \nThanks" + _data.namePlayer + "!",
 
         };
 

@@ -60,7 +60,7 @@ public class WaterPuzzle1 : MonoBehaviour
         {
             positions.Add( glass.transform.position);
         }
-        steps = new List<float>() { 0.008f, 0.014f, 0.025f };
+        steps = new List<float>() { 0.009f, 0.014f, 0.025f };
         SetUp();
     }
 

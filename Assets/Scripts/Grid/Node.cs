@@ -18,6 +18,7 @@ public class Node : IHeapItem<Node>
     public string onTop;
 
     public string mapTag;
+    public string status;
 
     //value of a tile on that node
     public int tileValue;
@@ -55,6 +56,7 @@ public class Node : IHeapItem<Node>
         selected = false;
         onTop = null;
         mapTag = null;
+        status = null;
     }
 
     //Function to set a tag and if the node is walkable

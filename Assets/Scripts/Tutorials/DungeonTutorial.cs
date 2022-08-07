@@ -122,23 +122,39 @@ public class DungeonTutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "To attack the monsters with your sword, you need to get close to them and then press the button in the right corner of your screen.| You can also try to block their attacks by pressing the button in the left corner.";
+                    sentence = "To attack the monsters with your sword, you need to get close to them and then press the sword in the right corner of your screen.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
-                    sentence = "You see here a Guardian of Answers.| They are the most harmless monster down here.";
+                    sentence = "You can also try to block their attacks by pressing the shield in the left corner.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 5:
-                    options.SetActive(true);
-                    sentence = "If you want to know more about the monsters in the dungeon or if you have any questions, just press the button with the question mark.| You can leave the dungeon at any time by pressing the exit button.";
+                    sentence = "You see here a Guardian of Answers.| They are the most harmless monster down here.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
-                    sentence = "Oh, before I forget: Beware of the spikes!";
+                    options.SetActive(true);
+                    sentence = "If you want to know more about the monsters in the dungeon or if you have any questions, just press the button with the question mark.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 7:
+                    sentence = "Sometimes after you defeated a monster, they will drop a key.| These keys are hint-keys.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 8:
+                    sentence = "They can unlock hint cards to help you solve puzzles.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 9:
+                    sentence = "You can leave the dungeon at any time by pressing the exit button.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 10:
+                    sentence = "Oh, before I forget: Beware of the spikes!";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 11:
                     player.GetComponent<Player>().PlayerVisiable();
                     player.GetComponent<Player>().Unpause();
                     this.transform.parent.parent.gameObject.SetActive(false);
@@ -209,7 +225,7 @@ public class DungeonTutorial : MonoBehaviour
         Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "What am I supposed to do?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
-        answer.text = "You need to fight the monsters to reach the end of the dungeon with the portal back to your world. ";
+        answer.text = "You need to fight the monsters to reach the end of the dungeon with the portal that will take you back to your world.";
     }
     public void Question3()
     {
@@ -218,7 +234,7 @@ public class DungeonTutorial : MonoBehaviour
         Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "How can I get stronger?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
-        answer.text = "Your sword can get stronger by solving the puzzles of Griphoton's residents. you can leave the dungeon at any time to solve a puzzle.";
+        answer.text = "Your sword can get stronger by solving the puzzles of Griphoton's residents. You can leave the dungeon at any time to solve a puzzle.";
     }
     public void Question4()
     {
@@ -227,7 +243,7 @@ public class DungeonTutorial : MonoBehaviour
         Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "How do I fight again?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
-        answer.text = "You need to get close to the monster you want to fight and then press the button in the right corner of your screen to attack them. The button only works if you are standing next to a monster.";
+        answer.text = "You need to get close to the monster you want to fight and then press the sword in the right corner of your screen to attack them. The sword only works if you are standing next to a monster.";
     }
     public void Question5()
     {
@@ -236,7 +252,7 @@ public class DungeonTutorial : MonoBehaviour
         Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
         question.text = "Can I block the monster's attack?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
-        answer.text = "Yes, you can try blocking them by pressing the button in the left corner of the screen. The button only works if you are standing next to a monster.";
+        answer.text = "Yes, you can try blocking them by pressing the shield in the left corner of the screen. The shield only works if you are standing next to a monster.";
     }
     public void Question6()
     {
@@ -246,6 +262,15 @@ public class DungeonTutorial : MonoBehaviour
         question.text = "How do I leave the dungeon?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "When you close the question overview, by tapping on the X in the right corner, you will go back to the game. There you will see on the right of your screen the exit icon. Just tap on it to leave the dungeon.";
+    }
+    public void Question9()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "What are the keys that some monsters drop after being defeated?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "Those keys are hint keys. With them, you can unlock hint cards in the houses in Griphoton if you should ever get stuck on a puzzle.";
     }
     public void Question7()
     {

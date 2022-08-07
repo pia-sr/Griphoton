@@ -56,102 +56,124 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\DungeonLevels\Level12.cs" />
     <Compile Include="Assets\Scripts\Puzzles\WaterPuzzle1.cs" />
-    <Compile Include="Assets\Scripts\DungeonLevels\Level4.cs" />
     <Compile Include="Assets\Scripts\Tutorials\LightsOutTutorial.cs" />
-    <Compile Include="Assets\Scripts\Enemies\EvilGhost2.cs" />
-    <Compile Include="Assets\Scripts\DungeonLevels\Level6.cs" />
     <Compile Include="Assets\Scripts\Tutorials\PieceOf8Tutorial.cs" />
-    <Compile Include="Assets\Scripts\DungeonLevels\Level2.cs" />
-    <Compile Include="Assets\Scripts\Grid\Heap.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\RoomPuzzle.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\RegionDivision2.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\MovementSim.cs" />
     <Compile Include="Assets\Scripts\Upperworld.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\WaterPuzzle2.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\HamiltonianMaze.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\GapPuzzle2.cs" />
     <Compile Include="Assets\Scripts\Puzzles\PiecesOf8.cs" />
-    <Compile Include="Assets\Scripts\Save\GameData.cs" />
     <Compile Include="Assets\Scripts\Enemies\Skeleton2.cs" />
-    <Compile Include="Assets\Scripts\Enemies\Reaper.cs" />
     <Compile Include="Assets\Scripts\Tutorials\RedPointTutorial.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\GapPuzzleTutorial.cs" />
-    <Compile Include="Assets\Scripts\GlassFill.cs" />
     <Compile Include="Assets\Scripts\Save\Game.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level1.cs" />
-    <Compile Include="Assets\Scripts\DungeonLevels\Level10.cs" />
     <Compile Include="Assets\Scripts\Tutorials\HamiltonianTutorial.cs" />
     <Compile Include="Assets\Scripts\FollowPlayer.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\GapPuzzle.cs" />
-    <Compile Include="Assets\Scripts\HealthBar.cs" />
-    <Compile Include="Assets\Scripts\HintCards.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Puzzles\CornerMaze.cs" />
     <Compile Include="Assets\Scripts\Grid\Node.cs" />
     <Compile Include="Assets\Scripts\Tutorials\CornerTutorial.cs" />
-    <Compile Include="Assets\Scripts\DungeonLevels\Level18.cs" />
-    <Compile Include="Assets\Scripts\DungeonLevels\Level15.cs" />
-    <Compile Include="Assets\Scripts\Circle.cs" />
-    <Compile Include="Assets\Scripts\DungeonLevels\Level20.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle2.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level11.cs" />
-    <Compile Include="Assets\Scripts\DungeonLevels\Level16.cs" />
-    <Compile Include="Assets\Scripts\Map.cs" />
     <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle.cs" />
     <Compile Include="Assets\Scripts\BookAnimation.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\RoomTutorial.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\MatchstickTutorial1.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle3.cs" />
     <Compile Include="Assets\Scripts\Tutorials\MainTutorial.cs" />
-    <Compile Include="Assets\Scripts\TouchAnimation.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\RedPointPuzzle2.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\HamiltonianMaze2.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level3.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\LightsOut.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\CMTutorial.cs" />
-    <Compile Include="Assets\Scripts\Spikes.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\WaterTutorial2.cs" />
-    <Compile Include="Assets\Scripts\Grid\Pathfinder.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\MatchstickPuzzle2.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries2.cs" />
-    <Compile Include="Assets\Scripts\Enemies\Skeleton1.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\ZebraPuzzle.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\PolyAddTutorial.cs" />
-    <Compile Include="Assets\Scripts\Key.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\DungeonTutorial.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\RedPointPuzzle1.cs" />
-    <Compile Include="Assets\Scripts\DungeonLevels\Level14.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\CornerMaze2.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level7.cs" />
-    <Compile Include="Assets\Scripts\Save\SaveSystem.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\PiecesOf8_2.cs" />
-    <Compile Include="Assets\Scripts\Grid\IHeapItem.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\WaterTutorial1.cs" />
     <Compile Include="Assets\Scripts\Puzzles\RoomPuzzle2.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\MatchstickPuzzle1.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\CMTutorial2.cs" />
     <Compile Include="Assets\Scripts\Puzzles\RegionDivision.cs" />
-    <Compile Include="Assets\Scripts\DungeonLevels\Level13.cs" />
     <Compile Include="Assets\Scripts\Tutorials\MatchstickTutorial2.cs" />
-    <Compile Include="Assets\Scripts\DungeonLevels\Level19.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\RegionDivisionTutorial.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries.cs" />
-    <Compile Include="Assets\Scripts\Puzzles\MirrorPuzzle.cs" />
-    <Compile Include="Assets\Scripts\DungeonLevels\Level8.cs" />
-    <Compile Include="Assets\Scripts\Tutorials\ReplacementTutorial.cs" />
     <Compile Include="Assets\Scripts\Tutorials\ZebraTutorial.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level17.cs" />
     <Compile Include="Assets\Scripts\Puzzles\PolyAdd1.cs" />
-    <Compile Include="Assets\Scripts\DungeonLevels\Level9.cs" />
     <Compile Include="Assets\Scripts\Grid\GridField.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level2.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\MovementSim.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\WaterPuzzle2.cs" />
+    <Compile Include="Assets\Scripts\Save\GameData.cs" />
+    <Compile Include="Assets\Scripts\HintCards.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level18.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level15.cs" />
+    <Compile Include="Assets\Scripts\Map.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\RedPointPuzzle2.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\LightsOut.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\CMTutorial.cs" />
+    <Compile Include="Assets\Scripts\Spikes.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Skeleton1.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\ZebraPuzzle.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\RedPointPuzzle1.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level14.cs" />
+    <Compile Include="Assets\Scripts\Save\SaveSystem.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\CMTutorial2.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\ReplacementTutorial.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level5.cs" />
     <Compile Include="Assets\Scripts\Tutorials\MirrorTutorial.cs" />
     <Compile Include="Assets\Scripts\Enemies\EvilGhost1.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level4.cs" />
+    <Compile Include="Assets\Scripts\Enemies\EvilGhost2.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level6.cs" />
+    <Compile Include="Assets\Scripts\Grid\Heap.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\RoomPuzzle.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\RegionDivision2.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\GapPuzzle2.cs" />
+    <Compile Include="Assets\Scripts\Enemies\Reaper.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\GapPuzzleTutorial.cs" />
+    <Compile Include="Assets\Scripts\GlassFill.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level10.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\GapPuzzle.cs" />
+    <Compile Include="Assets\Scripts\HealthBar.cs" />
+    <Compile Include="Assets\Scripts\Circle.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level16.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\RoomTutorial.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\MatchstickTutorial1.cs" />
+    <Compile Include="Assets\Scripts\TouchAnimation.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\HamiltonianMaze2.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\MatchstickPuzzle2.cs" />
+    <Compile Include="Assets\Scripts\Grid\IHeapItem.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\WaterTutorial1.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\MatchstickPuzzle1.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level19.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\RegionDivisionTutorial.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level8.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level12.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\HamiltonianMaze.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level20.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle2.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle3.cs" />
+    <Compile Include="Assets\Scripts\Grid\Pathfinder.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries2.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\WaterTutorial2.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\PolyAddTutorial.cs" />
+    <Compile Include="Assets\Scripts\Key.cs" />
+    <Compile Include="Assets\Scripts\Tutorials\DungeonTutorial.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\CornerMaze2.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\PiecesOf8_2.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level13.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries.cs" />
+    <Compile Include="Assets\Scripts\Puzzles\MirrorPuzzle.cs" />
+    <Compile Include="Assets\Scripts\DungeonLevels\Level9.cs" />
+    <Compile Include="Assets\Scripts\RewardedAdsButton.cs" />
   </ItemGroup>
   <ItemGroup>
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
+     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
+     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
+     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
      <None Include="Assets\ProjectSettings\ProjectVersion.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
+     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.0f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -710,8 +732,53 @@
     <Reference Include="System.Xml.Serialization">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.3.0f1\Editor\Data\NetStandard\compat\2.0.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.2D.Animation.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InternalAPIEngineBridge.001">
+      <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.001.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VSCode.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.PixelPerfect">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.PixelPerfect.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Notifications">
+      <HintPath>Library\ScriptAssemblies\Unity.Notifications.dll</HintPath>
+    </Reference>
+    <Reference Include="PsdPlugin">
+      <HintPath>Library\ScriptAssemblies\PsdPlugin.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualStudio.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Timeline">
+      <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Advertisements">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.Advertisements.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.IK.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.IK.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Psdimporter.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Psdimporter.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Path.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Path.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.InternalAPIEditorBridge.001">
+      <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
@@ -719,107 +786,62 @@
     <Reference Include="UnityEditor.UI">
       <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.IK.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.IK.Editor.dll</HintPath>
+    <Reference Include="Unity.InputSystem">
+      <HintPath>Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.2D.Common.Runtime">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Timeline">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Psdimporter.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Psdimporter.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VSCode.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Notifications">
-      <HintPath>Library\ScriptAssemblies\Unity.Notifications.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.IK.Runtime">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.IK.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.PixelPerfect.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.PixelPerfect.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Timeline.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Animation.Runtime">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Animation.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.InternalAPIEngineBridge.001">
-      <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.001.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.InputSystem">
-      <HintPath>Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualStudio.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Mobile.AndroidLogcat.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Mobile.AndroidLogcat.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.InternalAPIEditorBridge.001">
-      <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Notifications.iOS">
       <HintPath>Library\ScriptAssemblies\Unity.Notifications.iOS.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Advertisements.Editor">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.Advertisements.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Mathematics.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.SpriteShape.Runtime">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.SpriteShape.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.PixelPerfect">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.PixelPerfect.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Path.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Path.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Monetization">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.Monetization.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Animation.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Mathematics">
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.2D.Common.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="PsdPlugin">
-      <HintPath>Library\ScriptAssemblies\PsdPlugin.dll</HintPath>
+    <Reference Include="Unity.2D.IK.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.IK.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Animation.Triangle.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Animation.Triangle.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Notifications.Android">
-      <HintPath>Library\ScriptAssemblies\Unity.Notifications.Android.dll</HintPath>
+    <Reference Include="Unity.2D.Animation.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Animation.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.PixelPerfect.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.PixelPerfect.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mobile.AndroidLogcat.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Mobile.AndroidLogcat.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Timeline.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Common.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Monetization">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.Monetization.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.SpriteShape.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.SpriteShape.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Notifications.Android">
+      <HintPath>Library\ScriptAssemblies\Unity.Notifications.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Common.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Advertisements.Editor">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.Advertisements.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.SpriteShape.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.SpriteShape.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

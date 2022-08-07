@@ -31,6 +31,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
     private List<List<int>> _inputSymbols;
     private List<List<int>> _outputSymbols;
     private Color _buttonColour;
+    private bool _messageSeen;
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +49,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
     //Sets up the first row with symbols
     private void SetUp()
     {
+        _messageSeen = false;
         _size = grid.nodeRadius * 1.25f;
         _selected = new List<GameObject>();
         for (int i = 0; i < symbolManager.transform.childCount; i++)
@@ -237,10 +239,11 @@ public class ReplacementPuzzle3 : MonoBehaviour
                 tutorial.inactive = true;
                 tutorial.WonPuzzle();
             }
-            else if (_rowNumber == 0)
+            else if (_rowNumber == 0 && !_messageSeen)
             {
+                _messageSeen = true;
                 tutorial.inactive = true;
-                message.transform.parent.transform.parent.gameObject.SetActive(true);
+                message.transform.parent.parent.gameObject.SetActive(true);
                 message.text = "You did not reach the goal! \nYou can try again by clicking on the restart button.";
 
             }
@@ -397,7 +400,7 @@ public class ReplacementPuzzle3 : MonoBehaviour
     public void close()
     {
         tutorial.inactive = false;
-        message.transform.parent.transform.parent.gameObject.SetActive(false);
+        message.transform.parent.parent.gameObject.SetActive(false);
     }
 
 }

@@ -8,6 +8,7 @@ public class HintCards : MonoBehaviour
     private int _clickIndex;
     private Game _data;
     private int puzzleIndex;
+    public GameObject adMessage;
 
     public GameObject message;
     public Text keyCount;
@@ -53,6 +54,10 @@ public class HintCards : MonoBehaviour
         {
             message.SetActive(true);
         }
+        else
+        {
+            adMessage.SetActive(true);
+        }
     }
 
     //Function of the previous button in the monster overview to go to the previous monster
@@ -83,5 +88,10 @@ public class HintCards : MonoBehaviour
         int index = this.transform.GetChild(0).GetChild(0).GetChild(_clickIndex).childCount - 1;
         this.transform.GetChild(0).GetChild(0).GetChild(_clickIndex).GetChild(index).GetChild(0).gameObject.SetActive(false);
 
+    }
+
+    public void CloseAdMessage()
+    {
+        adMessage.SetActive(false);
     }
 }

@@ -146,6 +146,7 @@ public class Level5 : MonoBehaviour
         if (GameObject.Find("Player").GetComponent<Player>().leaveLevel)
         {
             SetUp();
+            GameObject.Find("Player").GetComponent<Player>().leaveLevel = false;
         }
     }
 

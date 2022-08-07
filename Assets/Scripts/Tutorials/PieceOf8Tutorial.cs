@@ -75,7 +75,7 @@ public class PieceOf8Tutorial : MonoBehaviour
             }
             touchAni.SetActive(false);
             _start = true;
-            if (_counter > 8)
+            if (_counter > 12)
             {
                 griphoton.SetActive(true);
                 player.gameObject.SetActive(true);
@@ -99,31 +99,47 @@ public class PieceOf8Tutorial : MonoBehaviour
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "I need to fill it with numbers from 1 to 8.| There need to be one 1, two 2s, three 3s and so on...| All the twos need to be next to each other, so do the threes and the fours,... ";
+                    sentence = "I need to fill it with numbers from 1 to 8.| There need to be one 1, two 2s, three 3s and so on...";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "But I cannot put these numbers down randomly.| \nThe numbers which are in a row or column with a number on the side need to be added up to that exact number.";
+                    sentence = "All the twos need to be next to each other, so do the threes and the fours,... ";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
-                    sentence = "Next to the field is the button with which you can change the number. The number on top of the button indicates which number you currently use. If you press the button it will change to the next number.";
+                    sentence = "But I cannot put these numbers down randomly.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 5:
-                    sentence = "To put a number onto the field, just tap on the square where the number should be.";
+                    sentence = "The numbers which are in a row or column with a number on the side need to be added up to that exact number.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
-                    options.SetActive(true);
-                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved! ";
+                    sentence = "Next to the field is the button with which you can change the number.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 7:
-                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    sentence = "The number on top of the button indicates which number you currently use.| If you press the button it will change to the next number.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 8:
+                    sentence = "To put a number onto the field, just tap on the square where the number should be.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 9:
+                    sentence = "If you should get stuck on the puzzle, you can try one of the hint cards.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 10:
+                    options.SetActive(true);
+                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved!";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 11:
+                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 12:
                     this.transform.parent.GetChild(1).gameObject.SetActive(true);
                     inactive = false;
                     this.gameObject.SetActive(false);
@@ -165,7 +181,7 @@ public class PieceOf8Tutorial : MonoBehaviour
     //Function to skip the tutorial
     public void skipTutorial()
     {
-        _counter = 8;
+        _counter = 13;
         this.transform.parent.GetChild(0).gameObject.SetActive(true);
         this.transform.parent.GetChild(1).gameObject.SetActive(true);
         options.SetActive(true);
@@ -219,6 +235,24 @@ public class PieceOf8Tutorial : MonoBehaviour
         question.text = "How can I reset the puzzle?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The highst button is the reset button with which you can reset the whole puzzle.";
+    }
+    public void Question6()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "Where are the hint cards?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You open the hint cards by tapping on the button with the magnifying glass on it. Then you can unlock one of the hint cards.";
+    }
+    public void Question7()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "How can I unlock a hint card?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You can unlock a hint card with one of the keys you collected in the dungeon. If you do not have any keys, you can watch a video instead to get one.";
     }
 
     //close function for either closing a specific question or the question overview

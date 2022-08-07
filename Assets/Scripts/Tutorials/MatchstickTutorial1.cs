@@ -78,7 +78,7 @@ public class MatchstickTutorial1 : MonoBehaviour
             }
             touchAni.SetActive(false);
             _start = true;
-            if (_counter > 6)
+            if (_counter > 9)
             {
                 griphoton.SetActive(true);
                 player.gameObject.SetActive(true);
@@ -98,27 +98,39 @@ public class MatchstickTutorial1 : MonoBehaviour
                 case 1:
                     ghost.SetActive(false);
                     this.transform.parent.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "I have six matchsticks and, apparently, if I move one, I can get 4 triangles.| But I do not know how.| \nCan you help me?";
+                    string sentence = "I have six matchsticks and, apparently, if I move one, I can get 4 triangles.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "If you tap on a matchstick, an icon for rotating and moving will appear.| You can use those to rotate and move the matchstick.";
+                    sentence = "But I do not know how.| \nCan you help me?";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "Once you move a matchstick, you cannot put it back.| \nBut you can use the reset button if you change your mind and want to use a different matchstick.";
+                    sentence = "If you tap on a matchstick, an icon for rotating and moving will appear.| You can use those to rotate and move the matchstick.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
-                    options.SetActive(true);
-                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved! ";
+                    sentence = "Once you move a matchstick, you cannot put it back.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 5:
-                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    sentence = "But you can use the reset button if you change your mind and want to use a different matchstick.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
+                    sentence = "If you should get stuck on the puzzle, you can try one of the hint cards.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 7:
+                    options.SetActive(true);
+                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved!";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 8:
+                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 9:
                     this.transform.parent.GetChild(1).gameObject.SetActive(true);
                     inactive = false;
                     this.gameObject.SetActive(false);
@@ -160,7 +172,7 @@ public class MatchstickTutorial1 : MonoBehaviour
     //Function to skip the tutorial
     public void skipTutorial()
     {
-        _counter = 6;
+        _counter = 10;
         this.transform.parent.GetChild(0).gameObject.SetActive(true);
         this.transform.parent.GetChild(1).gameObject.SetActive(true);
         options.SetActive(true);
@@ -214,6 +226,24 @@ public class MatchstickTutorial1 : MonoBehaviour
         question.text = "How can I reset the puzzle?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The highst button is the reset button with which you can reset the whole puzzle.";
+    }
+    public void Question6()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "Where are the hint cards?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You open the hint cards by tapping on the button with the magnifying glass on it. Then you can unlock one of the hint cards.";
+    }
+    public void Question7()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "How can I unlock a hint card?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You can unlock a hint card with one of the keys you collected in the dungeon. If you do not have any keys, you can watch a video instead to get one.";
     }
 
 

@@ -38,8 +38,6 @@ public class MirrorPuzzle : MonoBehaviour
         }
         
 
-        mirror.transform.localScale = new Vector3(grid.nodeRadius * 2, 0.05f, 0);
-        mirror.GetComponent<SpriteRenderer>().color = Color.blue;
         tile.transform.localScale = new Vector3(grid.nodeRadius * 2, grid.nodeRadius * 2, 0);
         foreach (Node node in grid.grid)
         {
@@ -92,9 +90,9 @@ public class MirrorPuzzle : MonoBehaviour
                         if (oldSymbol != null)
                         {
                             Destroy(oldSymbol);
-                            GameObject currentMirror = Instantiate(mirror, node.worldPosition + new Vector3(0, 0, -1), Quaternion.identity, symbolManager.transform);
+                            GameObject currentMirror = Instantiate(mirror, node.worldPosition, Quaternion.identity, symbolManager.transform);
                             var rotation = currentMirror.transform.localRotation.eulerAngles;
-                            rotation.z = 315;
+                            rotation.z = 90;
                             currentMirror.transform.localRotation = Quaternion.Euler(rotation);
                             node.onTop = "LeftRight";
                         }
@@ -114,10 +112,7 @@ public class MirrorPuzzle : MonoBehaviour
                         if(oldSymbol != null)
                         {
                             Destroy(oldSymbol);
-                            GameObject currentMirror = Instantiate(mirror, node.worldPosition + new Vector3(0, 0, -1), Quaternion.identity, symbolManager.transform);
-                            var rotation = currentMirror.transform.localRotation.eulerAngles;
-                            rotation.z = 45;
-                            currentMirror.transform.localRotation = Quaternion.Euler(rotation);
+                            GameObject currentMirror = Instantiate(mirror, node.worldPosition, Quaternion.identity, symbolManager.transform);
                             node.onTop = "RightLeft";
                         }
                     }

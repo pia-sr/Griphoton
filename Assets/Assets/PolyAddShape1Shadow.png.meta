@@ -133,10 +133,10 @@ TextureImporter:
       name: PolyAddShape1Shadow_0
       rect:
         serializedVersion: 2
-        x: 57
-        y: 38
-        width: 102
-        height: 153
+        x: 53
+        y: 34
+        width: 110
+        height: 161
       alignment: 9
       pivot: {x: 0.25, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

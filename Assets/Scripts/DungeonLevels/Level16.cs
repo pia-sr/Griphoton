@@ -45,7 +45,7 @@ public class Level16 : MonoBehaviour
 
         int middleX = Mathf.RoundToInt(grid.GetGridSizeX() / 2);
         int middleY = Mathf.RoundToInt(grid.GetGridSizeY() / 2);
-        grid.SetDoors(grid.grid[grid.GetGridSizeX() - 1, grid.GetGridSizeY() - 5], "vertical", exit);
+        grid.SetDoors(grid.grid[grid.GetGridSizeX() - 1, grid.GetGridSizeY() - 6], "vertical", exit);
         grid.SetDoors(grid.grid[middleX, 0], "horizontal", "Entrance");
         grid.SetSpikesLager(grid.grid[3, middleY - 2], 2);
         grid.SetSpikesCustom(grid.grid[1, 1], middleX, 3);
@@ -58,7 +58,7 @@ public class Level16 : MonoBehaviour
             {
                 Instantiate(spikes, node.worldPosition + new Vector3(0, 0, -0.1f), Quaternion.identity, prefabManager.transform);
             }
-            else if (node == grid.grid[grid.GetGridSizeX() - 1, grid.GetGridSizeY() - 5] && node.onTop == "Exit")
+            else if (node == grid.grid[grid.GetGridSizeX() - 1, grid.GetGridSizeY() - 6] && node.onTop == "Exit")
             {
                 door.transform.localScale = new Vector3(2.75f, 1.85f, 0);
                 exitDoor = Instantiate(door, node.worldPosition + new Vector3(0, 0, -0.1f), Quaternion.identity, prefabManager.transform);

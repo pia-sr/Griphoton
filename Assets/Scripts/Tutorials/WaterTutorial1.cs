@@ -78,7 +78,7 @@ public class WaterTutorial1 : MonoBehaviour
             touchAni.SetActive(false);
             _start = true;
 
-            if (_counter > 11)
+            if (_counter > 14)
             {
                 griphoton.SetActive(true);
                 player.gameObject.SetActive(true);
@@ -98,47 +98,59 @@ public class WaterTutorial1 : MonoBehaviour
                 case 1:
                     ghost.transform.localPosition = new Vector3(-5, 1, 0);
                     this.transform.parent.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "You see, I have three glasses of water and I know for a fact that one glass has a capacity of 8 litres, one has a capacity of 5 litres and the last one has a capacity of 3 litres. ";
+                    string sentence = "You see, I have three glasses of water and I know for a fact that one glass has a capacity of 8 litres,";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "The 8-litre glass is filled to the brink, but the other two are empty.| I want to use those three glasses to get exactly 4 litres in two glasses. ";
+                    sentence = "One has a capacity of 5 litres and the last one has a capacity of 3 litres.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "There is a number underneath each glass to show how much litre is the glass.";
+                    sentence = "The 8-litre glass is filled to the brink, but the other two are empty.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
-                    sentence = "Just tap on the glass with water and then tap on a glass that you want to fill with the water from the first glass.";
+                    sentence = "I want to use those three glasses to get exactly 4 litres in two glasses.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 5:
-                    sentence = "Once the water from the first glass pours into the second one, it will only stop when the second glass is full or when the first glass is empty.";
+                    sentence = "There is a number underneath each glass to show how much litre is the glass.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
-                    sentence = "The catch is that there is a limit on how many times you can pour water into a glass.| You need to get the two 4 litres in 7 moves.";
+                    sentence = "Just tap on the glass with water and then tap on a glass that you want to fill with the water from the first glass.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 7:
-                    sentence = "If you choose a glass and it moves up, but you change your mind and you put it down again, it does not count as a move. ";
+                    sentence = "Once the water from the first glass pours into the second one, it will only stop when the second glass is full or when the first glass is empty.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 8:
-                    sentence = "However, if you use an empty glass to attempt to pour water into another one, it will count as a move.";
+                    sentence = "The catch is that there is a limit on how many times you can pour water into a glass.| You need to get the two 4 litres in 7 moves.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 9:
-                    options.SetActive(true);
-                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved! ";
+                    sentence = "If you choose a glass and it moves up, but you change your mind and you put it down again, it does not count as a move.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 10:
-                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    sentence = "However, if you use an empty glass to attempt to pour water into another one, it will count as a move.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 11:
+                    sentence = "If you should get stuck on the puzzle, you can try one of the hint cards.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 12:
+                    options.SetActive(true);
+                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved!";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 13:
+                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 14:
                     inactive = false;
                     this.transform.parent.GetChild(1).gameObject.SetActive(true);
                     this.gameObject.SetActive(false);
@@ -179,7 +191,7 @@ public class WaterTutorial1 : MonoBehaviour
     //Function to skip the tutorial
     public void skipTutorial()
     {
-        _counter = 11;
+        _counter = 15;
         this.transform.parent.GetChild(0).gameObject.SetActive(true);
         this.transform.parent.GetChild(1).gameObject.SetActive(true);
         options.SetActive(true);
@@ -244,6 +256,24 @@ public class WaterTutorial1 : MonoBehaviour
         question.text = "How can I reset the puzzle?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The highst button is the reset button with which you can reset the whole puzzle.";
+    }
+    public void Question7()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "Where are the hint cards?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You open the hint cards by tapping on the button with the magnifying glass on it. Then you can unlock one of the hint cards.";
+    }
+    public void Question8()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "How can I unlock a hint card?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You can unlock a hint card with one of the keys you collected in the dungeon. If you do not have any keys, you can watch a video instead to get one.";
     }
 
     //close function for either closing a specific question or the question overview

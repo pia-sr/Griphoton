@@ -78,7 +78,7 @@ public class GapPuzzleTutorial : MonoBehaviour
             }
             touchAni.SetActive(false);
             _start = true;
-            if (_counter > 6)
+            if (_counter > 9)
             {
                 griphoton.SetActive(true);
                 player.gameObject.SetActive(true);
@@ -98,27 +98,39 @@ public class GapPuzzleTutorial : MonoBehaviour
                 case 1:
                     ghost.transform.localPosition = new Vector3(-5, 1, 0);
                     this.transform.parent.GetChild(0).gameObject.SetActive(true);
-                    string sentence = "I have this 9x9 field of squares and I need to colour in two squares in every row and column.| These coloured-in squares are not allowed to touch each other, not even at corners!";
+                    string sentence = "I have this 9x9 field of squares and I need to colour in two squares in every row and column.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 2:
-                    sentence = "There are some numbers on the sides of the field to help me.| These numbers indicate how many squares should be between the two coloured-in squares in that specific column or row.";
+                    sentence = "These coloured-in squares are not allowed to touch each other, not even at corners!";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 3:
-                    sentence = "You can just tap on the square and I can change its colour.";
+                    sentence = "There are some numbers on the sides of the field to help me.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 4:
-                    options.SetActive(true);
-                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved! ";
+                    sentence = "These numbers indicate how many squares should be between the two coloured-in squares in that specific column or row.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 5:
-                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    sentence = "You can just tap on the square and I can change its colour.";
                     StartCoroutine(WordbyWord(sentence));
                     break;
                 case 6:
+                    sentence = "If you should get stuck on the puzzle, you can try one of the hint cards.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 7:
+                    options.SetActive(true);
+                    sentence = "You can press the exit button to leave my house.| \nBut remember: your process will not be saved!";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 8:
+                    sentence = "If you have any questions, just tap on the icon with the question mark.";
+                    StartCoroutine(WordbyWord(sentence));
+                    break;
+                case 9:
                     this.transform.parent.GetChild(1).gameObject.SetActive(true);
                     inactive = false;
                     this.gameObject.SetActive(false);
@@ -161,7 +173,7 @@ public class GapPuzzleTutorial : MonoBehaviour
     //Function to skip the tutorial
     public void skipTutorial()
     {
-        _counter = 6;
+        _counter = 10;
         this.transform.parent.GetChild(0).gameObject.SetActive(true);
         this.transform.parent.GetChild(1).gameObject.SetActive(true);
         options.SetActive(true);
@@ -206,6 +218,24 @@ public class GapPuzzleTutorial : MonoBehaviour
         question.text = "How can I reset the puzzle?";
         Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
         answer.text = "Exit the question overview and go back to the puzzle. On the top right side of your screen you will find three buttons. The highst button is the reset button with which you can reset the whole puzzle.";
+    }
+    public void Question5()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "Where are the hint cards?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You open the hint cards by tapping on the button with the magnifying glass on it. Then you can unlock one of the hint cards.";
+    }
+    public void Question6()
+    {
+        questions.transform.GetChild(1).gameObject.SetActive(false);
+        questions.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+        Text question = questions.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Text>();
+        question.text = "How can I unlock a hint card?";
+        Text answer = questions.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Text>();
+        answer.text = "You can unlock a hint card with one of the keys you collected in the dungeon. If you do not have any keys, you can watch a video instead to get one.";
     }
 
     //close function for either closing a specific question or the question overview

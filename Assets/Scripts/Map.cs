@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,8 +17,6 @@ public class Map : MonoBehaviour
     public GameObject canvas;
     private GameObject playerHat;
     public Camera camera;
-    public Text text;
-    public Font font;
     public bool update;
 
 
@@ -60,7 +59,12 @@ public class Map : MonoBehaviour
                 GameObject newHouse = Instantiate(house, node.worldPosition, Quaternion.identity, tileManager.transform);
                 newHouse.name = _data.mapTags[counter] + "Map";
                 newHouse.transform.GetChild(0).GetComponent<Canvas>().worldCamera = camera;
-                newHouse.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = _data.mapTags[counter];
+                newHouse.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = _data.mapTags[counter];
+                if(_data.mapStatus[counter] == "solved")
+                {
+
+                    newHouse.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().fontStyle = FontStyles.Strikethrough;
+                }
             }
             counter++;
 
@@ -92,13 +96,13 @@ public class Map : MonoBehaviour
         GameObject newHouse = Instantiate(house, node.worldPosition, Quaternion.identity, tileManager.transform);
         newHouse.name = tag+ "Map";
         newHouse.transform.GetChild(0).GetComponent<Canvas>().worldCamera = camera;
-        newHouse.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = tag;
+        newHouse.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = tag;
     }
 
-    public void SetSolvedTag(string prevTag)
+    public void SetSolvedTag(string tag)
     {
-        GameObject solvedHouse = GameObject.Find(prevTag + "Map");
-        solvedHouse.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = "Solved";
+        GameObject solvedHouse = GameObject.Find(tag + "Map");
+        solvedHouse.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().fontStyle = FontStyles.Strikethrough;
 
     }
 
