@@ -117,7 +117,7 @@ public class Player : MonoBehaviour
             griphotonSound.Pause();
         }
         
-        //The animation of walkíng stops if the player has no target
+        //The animation of walkï¿½ng stops if the player has no target
         if(_targetNode == null)
         {
 
@@ -126,7 +126,7 @@ public class Player : MonoBehaviour
         //the user can leave the game by pressing the exit button on their phone, the player will then save their progress
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(upperWorld)
+            if(upperWorld && this.gameObject.activeSelf)
             {
                 _data.xPos = grid.GetNodeFromWorldPos(transform.position).gridX;
                 _data.yPos = grid.GetNodeFromWorldPos(transform.position).gridY;
@@ -235,7 +235,8 @@ public class Player : MonoBehaviour
                 SetAllBoolsFalse();
                 SwitchCams();
                 Pause();
-                _data.SaveGame();
+                _data.xPos = _path[0].gridX;
+                _data.yPos = _path[0].gridY;
                 this.gameObject.SetActive(false);
             }
             //if the player enters the dungeon, all the data is saved and the dungeon loaded
