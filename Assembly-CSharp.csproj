@@ -133,6 +133,7 @@
     <Compile Include="Assets\Scripts\Tutorials\RegionDivisionTutorial.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level8.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level12.cs" />
+    <Compile Include="Assets\Scripts\RewardedAdsButton.cs" />
     <Compile Include="Assets\Scripts\Puzzles\HamiltonianMaze.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level20.cs" />
     <Compile Include="Assets\Scripts\Puzzles\ReplacementPuzzle2.cs" />
@@ -149,7 +150,6 @@
     <Compile Include="Assets\Scripts\Puzzles\CannibalsMissionaries.cs" />
     <Compile Include="Assets\Scripts\Puzzles\MirrorPuzzle.cs" />
     <Compile Include="Assets\Scripts\DungeonLevels\Level9.cs" />
-    <Compile Include="Assets\Scripts\RewardedAdsButton.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

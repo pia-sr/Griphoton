@@ -36,7 +36,6 @@ public class CMTutorial : MonoBehaviour
         this.transform.parent.GetChild(0).gameObject.SetActive(false);
         this.transform.parent.GetChild(1).gameObject.SetActive(false);
         ghost.SetActive(true);
-        ghost.transform.localPosition = Vector3.up;
         options.SetActive(false);
         inactive = true;
         _running = false;

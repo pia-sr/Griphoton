@@ -235,7 +235,6 @@ public class Player : MonoBehaviour
                 SetAllBoolsFalse();
                 SwitchCams();
                 Pause();
-                _data.SaveGame();
                 this.gameObject.SetActive(false);
             }
             //if the player enters the dungeon, all the data is saved and the dungeon loaded
@@ -372,6 +371,7 @@ public class Player : MonoBehaviour
         Vector3 pos = transform.position;
         _xInput = _path[1].gridX - grid.GetNodeFromWorldPos(pos).gridX;
         _yInput = _path[1].gridY - grid.GetNodeFromWorldPos(pos).gridY;
+        Node playerPos = grid.GetNodeFromWorldPos(pos);
         if(!(_xInput == 0 && _yInput == 0) && pos != _path[1].worldPosition)
         {
             animator.SetFloat("XInput", _xInput);
@@ -381,7 +381,7 @@ public class Player : MonoBehaviour
         }
         
         float goal;
-        if (pos.x == _path[1].worldPosition.x)
+        if (playerPos.gridX == _path[1].gridX)
         {
             goal = _path[1].worldPosition.y;
             while (pos.y != goal)
@@ -391,7 +391,7 @@ public class Player : MonoBehaviour
                 yield return null;
             }
         }
-        else if(pos.y == _path[1].worldPosition.y)
+        else if(playerPos.gridY == _path[1].gridY)
         {
             goal = _path[1].worldPosition.x;
 
