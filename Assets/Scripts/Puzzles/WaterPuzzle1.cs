@@ -1,3 +1,11 @@
+/*
+ * WaterPuzzle1.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +25,7 @@ public class WaterPuzzle1 : MonoBehaviour
     public GameObject player;
     public WaterTutorial1 tutorial;
 
+    //private variabels
     private int[] maxValue;
     private int[] currentValue;
     private List<Vector3> positions;
@@ -24,6 +33,19 @@ public class WaterPuzzle1 : MonoBehaviour
     private List<float> steps;
     private int counterMovements;
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        positions = new List<Vector3>();
+        foreach(GameObject glass in glasses)
+        {
+            positions.Add( glass.transform.position);
+        }
+        steps = new List<float>() { 0.009f, 0.014f, 0.025f };
+        SetUp();
+    }
+
+    //Function to set the glasses to their original states
     public void SetUp()
     {
         StopAllCoroutines();
@@ -52,31 +74,18 @@ public class WaterPuzzle1 : MonoBehaviour
             counter++;
         }
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        positions = new List<Vector3>();
-        foreach(GameObject glass in glasses)
-        {
-            positions.Add( glass.transform.position);
-        }
-        steps = new List<float>() { 0.009f, 0.014f, 0.025f };
-        SetUp();
-    }
 
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetMouseButton(0) && !tutorial.inactive)
         if (Input.touchCount > 0 && !tutorial.inactive)
         {
-
-            //Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Touch touch = Input.GetTouch(0);
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-            //if (Input.GetMouseButtonDown(0))
+            
             if (touch.phase == TouchPhase.Began)
             {
+                //selects the first glass
                 if(glassesInUse.Count == 0)
                 {
                     foreach (GameObject glass in glasses)
@@ -91,7 +100,7 @@ public class WaterPuzzle1 : MonoBehaviour
 
                     }
                 }
-
+                //selects the second glass
                 else if(glassesInUse.Count == 1)
                 {
                     foreach (GameObject glass in glasses)
@@ -123,15 +132,16 @@ public class WaterPuzzle1 : MonoBehaviour
 
 
         }
+        //fills the second glass with the water of the first glass
         if(glassesInUse.Count == 2 && glassesInUse[0].GetComponent<GlassFill>().done == true && glassesInUse[1].GetComponent<GlassFill>().done == true)
         {
             glassesInUse[0].GetComponent<GlassFill>().done = false;
             glassesInUse[1].GetComponent<GlassFill>().done = false;
             StartCoroutine(RotateBack(glassesInUse[0]));
         }
+
         if (CheckWin() && glassesInUse.Count == 0 && !tutorial.inactive)
         {
-            //Debug.Log("Won");
             tutorial.inactive = true;
             tutorial.WonPuzzle();
         }
@@ -139,6 +149,7 @@ public class WaterPuzzle1 : MonoBehaviour
         
     }
 
+    //Moves the given glass up
     IEnumerator MoveUp(GameObject glass)
     {
         Vector3 pos = glass.transform.position;
@@ -149,6 +160,8 @@ public class WaterPuzzle1 : MonoBehaviour
             yield return null;
         }
     }
+
+    //Moves the first glass to the second glass
     IEnumerator Move2Glass()
     {
         GameObject glass = glassesInUse[0];
@@ -176,6 +189,7 @@ public class WaterPuzzle1 : MonoBehaviour
         StartCoroutine(RotateAndFill(glass, glassesInUse[1], rotationValue));
     }
 
+    //Rotates the first glass and fills the second glass with the water of the first glass
     IEnumerator RotateAndFill(GameObject glass1, GameObject glass2, float goal)
     {
         Vector3 rot = glass1.transform.localEulerAngles;
@@ -234,6 +248,7 @@ public class WaterPuzzle1 : MonoBehaviour
        
     }
 
+    //Rotates the given glass to its original orientation
     IEnumerator RotateBack(GameObject glass)
     {
         Vector3 rot = glass.transform.localEulerAngles;
@@ -275,6 +290,7 @@ public class WaterPuzzle1 : MonoBehaviour
         StartCoroutine(MoveDown(glass));
     }
 
+    //Moves the given glass down to its start position
     IEnumerator MoveDown(GameObject glass)
     {
         Vector3 pos = glass.transform.position;
@@ -286,6 +302,8 @@ public class WaterPuzzle1 : MonoBehaviour
         }
         glassesInUse.Clear();
     }
+
+    //Boolean to check if the user has lost the puzzle
     private bool CheckLost()
     {
         if (counterMovements == 7)
@@ -298,7 +316,7 @@ public class WaterPuzzle1 : MonoBehaviour
         return false;
     }
 
-
+    //Boolean to check if the user has won the puzzle
     private bool CheckWin()
     {
         

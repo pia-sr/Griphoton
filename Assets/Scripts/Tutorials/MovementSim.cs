@@ -1,3 +1,11 @@
+/*
+ * MovementSim.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,7 +32,6 @@ public class MovementSim : MonoBehaviour
             animator.SetFloat("YInput", 0);
             animator.SetFloat("XInput", 1);
             animator.SetBool("isWalking", true);
-            //player walks towards touched placed
             this.transform.localPosition = Vector2.MoveTowards(transform.localPosition, new Vector2(3.5f, 3), 2f * Time.deltaTime);
             if(transform.localPosition == new Vector3(3.5f, 3, 0))
             {
@@ -33,6 +40,7 @@ public class MovementSim : MonoBehaviour
         }
     }
 
+    //Function to wait to move 
     IEnumerator wait()
     {
         yield return new WaitForSeconds(2.5f);

@@ -1,3 +1,11 @@
+/*
+ * ReplacementPuzzle3.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -333,7 +341,6 @@ public class ReplacementPuzzle3 : MonoBehaviour
     private List<int> ReplacedList(List<int> input)
     {
         List<int> output = new List<int>();
-        int index;
         for(int i = 0; i< _inputSymbols.Count; i++)
         {
             if(input.Count == _inputSymbols[i].Count)

@@ -1,3 +1,11 @@
+/*
+ * RegionDivisionTutorial.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -260,6 +268,7 @@ public class RegionDivisionTutorial : MonoBehaviour
         questions.SetActive(true);
     }
 
+    //Function to mark the puzzle as solved and to remove the house
     public void WonPuzzle()
     {
         this.gameObject.SetActive(true);
@@ -272,6 +281,7 @@ public class RegionDivisionTutorial : MonoBehaviour
 
     }
 
+    //Function to open the hint cards
     public void OpenHints()
     {
         options.SetActive(false);
@@ -279,6 +289,7 @@ public class RegionDivisionTutorial : MonoBehaviour
         hints.SetActive(true);
     }
 
+    //Function to close the hint cards
     public void CloseHints()
     {
         options.SetActive(true);

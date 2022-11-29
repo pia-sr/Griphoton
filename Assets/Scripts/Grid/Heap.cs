@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// code based on 
+
 public class Heap<T> where T : IHeapItem<T>
 {
 

@@ -1,3 +1,11 @@
+/*
+ * CornerMaze2.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,8 +50,8 @@ public class CornerMaze2 : MonoBehaviour
         };
         foreach (Node node in grid.grid)
         {
-            tile.GetComponent<SpriteRenderer>().color = new Color(1, 0.8f, 0.65f);
             tile.transform.localScale = new Vector3(size, size, 0);
+            tile.GetComponent<SpriteRenderer>().color = new Color(1, 0.8f, 0.65f);
             Instantiate(tile, node.worldPosition, Quaternion.identity, tilemanager.transform);
 
         }
@@ -68,7 +76,6 @@ public class CornerMaze2 : MonoBehaviour
         SetUp();
     }
 
-
     //Sets up the path to the start state
     private void SetUp()
     {
@@ -79,9 +86,6 @@ public class CornerMaze2 : MonoBehaviour
         _selectedTiles.Clear();
         _selectedTiles.Add(_startTile);
     }
-
-
-
 
     // Update is called once per frame
     void Update()
@@ -139,7 +143,6 @@ public class CornerMaze2 : MonoBehaviour
     //Function to create a rectagle on top of a given object to set rectangular boundaries for that object
     private Rect Object2Rect(Transform tile)
     {
-
         Rect rect = new Rect(tile.transform.position.x - grid.nodeRadius, tile.transform.position.y - grid.nodeRadius, grid.nodeRadius * 2, grid.nodeRadius * 2);
         return rect;
     }
@@ -147,7 +150,6 @@ public class CornerMaze2 : MonoBehaviour
     //Function to create a line between the two given vectors
     private void DrawLine(Vector3 start, Vector3 end)
     {
-
         start += new Vector3(0, 0, -0.1f);
         end += new Vector3(0, 0, -0.1f);
         GameObject currentLine = Instantiate(line, start, Quaternion.identity, path.transform);
@@ -161,7 +163,6 @@ public class CornerMaze2 : MonoBehaviour
         _pathRend.positionCount = _linePath.Count;
         _pathRend.SetPositions(_linePath.ToArray());
     }
-
 
     //Function to check if the node has a corner on top of it
     private bool IsCorner(Node node)
@@ -185,6 +186,7 @@ public class CornerMaze2 : MonoBehaviour
             return true;
         }
         return false;
+
     }
 
     //Function to check if the player has solved the puzzle
@@ -192,7 +194,7 @@ public class CornerMaze2 : MonoBehaviour
     {
         foreach (Node node in grid.grid)
         {
-            if (_selectedTiles[_selectedTiles.Count - 1] != grid.grid[4, 4]) 
+            if (_selectedTiles[_selectedTiles.Count - 1] != grid.grid[4, 4])
             {
                 return false;
             }
@@ -224,7 +226,6 @@ public class CornerMaze2 : MonoBehaviour
         return true;
     }
 
-
     //Function for the restart button
     public void restart()
     {
@@ -233,7 +234,6 @@ public class CornerMaze2 : MonoBehaviour
             SetUp();
         }
     }
-
 
     //Function for the leave button
     //Open up a panel to check if the user really wants to leave

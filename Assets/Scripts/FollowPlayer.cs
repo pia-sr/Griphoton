@@ -8,20 +8,15 @@ public class FollowPlayer : MonoBehaviour
     private Transform Target;
     //camera transform
     private Transform camTransform;
-    // offset between camera and target
-    private Vector3 Offset;
     // change this value to get desired smoothness
     public float SmoothTime;
     public GridField grid;
 
-    // This value will change at the runtime depending on target movement. Initialize with zero vector.
-    private Vector3 velocity = Vector3.zero;
 
     private void Start()
     {
         camTransform = this.transform;
         Target = player.transform;
-        Offset = camTransform.position - Target.position;
     }
 
     private void LateUpdate()

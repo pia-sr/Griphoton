@@ -1,3 +1,11 @@
+/*
+ * ZebraPuzzle.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,20 +13,33 @@ using UnityEngine;
 
 public class ZebraPuzzle : MonoBehaviour
 {
+    //public field objects
     public List<GameObject> houses;
     public GameObject houseManager;
     public GameObject rules;
-    public ZebraTutorial tutorial; 
+
+    //UI
     public GameObject message;
 
     //public variables to communicate with other scripts
     public GameObject griphoton;
     public GameObject player;
+    public ZebraTutorial tutorial; 
 
+    //private list and arrays for the rooftop colours
     private List<int> coloursCurrent;
     private int[] coloursSolution;
     private string[] colours;
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        colours = new string[6] { "Nothing", "Green", "Yellow", "Blue", "Purple", "Pink" };
+        coloursSolution = new int[] { 4, 1, 5, 3, 2};
+        SetUp();
+    }
+
+    //Sets up the houses to their start state
     private void SetUp()
     {
         for(int i = 0; i < houseManager.transform.childCount; i++)
@@ -32,64 +53,55 @@ public class ZebraPuzzle : MonoBehaviour
             houseManager.transform.GetChild(i).name = colours[0];
         }
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        colours = new string[6] { "Nothing", "Green", "Yellow", "Blue", "Purple", "Pink" };
-        coloursSolution = new int[] { 4, 1, 5, 3, 2};
-        SetUp();
-    }
 
 
-    private Bounds Bounds(Vector3 pos)
-    {
-        Bounds bounds = new Bounds(pos, new Vector3(3f, 3f, 0));
-        return bounds;
-    }
+    
     // Update is called once per frame
     void Update()
     {
-
-        //if (Input.GetMouseButtonDown(0))
+        //waits for user's touch to select a house
         if (Input.touchCount > 0 && !tutorial.inactive)
         {
             for(int i = 0; i < 5; i++)
             {
-                //Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Touch touch = Input.GetTouch(0);
                 Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
 
                 Bounds bounds = Bounds(houseManager.transform.GetChild(i).position); 
-                //if (bounds.Contains(touchPosition))
+
                 if (bounds.Contains(touchPosition) && touch.phase == TouchPhase.Began)
                 {
                     int indexPos = IndexPos(houseManager.transform.GetChild(i));
                     Vector3 pos;
+
+                    //if there is no house yet, the moud field will be replaced by a house
                     if(coloursCurrent[indexPos] == 0)
                     {
                         pos = houseManager.transform.GetChild(i).position + new Vector3(0,1,0);
                         coloursCurrent[indexPos]++;
 
                     }
+                    //if there is already a house, but the roof has the last colour in the colour list
+                    //the house will be replaced by the moud field
                     else if(coloursCurrent[indexPos] == 5)
                     {
                         pos = houseManager.transform.GetChild(i).position + new Vector3(0,-1,0);
                         coloursCurrent[indexPos] = 0;
 
                     }
+                    //the colour of the roof of the selected house will change
                     else
                     {
                         pos = houseManager.transform.GetChild(i).position;
                         coloursCurrent[indexPos]++;
                     }
+
                     Destroy(houseManager.transform.GetChild(i).gameObject);
                     Instantiate(houses[coloursCurrent[indexPos]], pos, Quaternion.identity, houseManager.transform);
-
-
-
                 }
 
             }
+
             if (CheckWin() && !tutorial.inactive)
             {
                 tutorial.inactive = true;
@@ -98,7 +110,15 @@ public class ZebraPuzzle : MonoBehaviour
 
         }
     }
+    
+    //Function to create specific boundaries for a given vector
+    private Bounds Bounds(Vector3 pos)
+    {
+        Bounds bounds = new Bounds(pos, new Vector3(3f, 3f, 0));
+        return bounds;
+    }
 
+    //Function to check if the player has solved the puzzle
     private bool CheckWin()
     {
         int counter = 0;
@@ -120,6 +140,7 @@ public class ZebraPuzzle : MonoBehaviour
         return false;
     }
 
+    //function to return the position of the given object
     private int IndexPos(Transform obj)
     {
         int index = 0;
@@ -134,6 +155,7 @@ public class ZebraPuzzle : MonoBehaviour
         return index;
     }
 
+    //function for the button to open the rules of the puzzle
     public void OpenRules()
     {
         if (!tutorial.inactive)
@@ -144,6 +166,7 @@ public class ZebraPuzzle : MonoBehaviour
         }
     }
 
+    //function for the button to close the rules of the puzzles
     public void CloseRules()
     {
         rules.SetActive(false);

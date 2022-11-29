@@ -1,3 +1,11 @@
+/*
+ * MirrorTutorial.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -285,6 +293,7 @@ public class MirrorTutorial : MonoBehaviour
         questions.SetActive(true);
     }
 
+    //Function to mark the puzzle as solved and to remove the house
     public void WonPuzzle()
     {
         this.gameObject.SetActive(true);
@@ -297,6 +306,7 @@ public class MirrorTutorial : MonoBehaviour
 
     }
 
+    //Function to open the hint cards
     public void OpenHints()
     {
         options.SetActive(false);
@@ -304,6 +314,7 @@ public class MirrorTutorial : MonoBehaviour
         hints.SetActive(true);
     }
 
+    //Function to close the hint cards
     public void CloseHints()
     {
         options.SetActive(true);

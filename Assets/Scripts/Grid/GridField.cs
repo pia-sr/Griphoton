@@ -1,3 +1,11 @@
+/*
+ * GridField.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,31 +51,6 @@ public class GridField : MonoBehaviour
         CreateGrid();
     }
     
-    /*
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireCube(transform.position, new Vector2(gridWorldSize.x, gridWorldSize.y));
-
-        
-        foreach(Node node in grid)
-        {
-            Gizmos.DrawWireCube(node.worldPosition, new Vector3(1, 1, 1) * (_nodeDiameter - 0.05f));
-            
-            if (node == grid[GetGridSizeX()/2, GetGridSizeY()/2])
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawCube(node.worldPosition, new Vector3(1, 1, 1) * (_nodeDiameter - 0.05f) * 3);
-            }
-            else
-            {
-                Gizmos.color = Color.cyan;
-                Gizmos.DrawCube(node.worldPosition, new Vector3(1, 1, 1) * (_nodeDiameter - 0.05f));
-            }
-        }
-        
-    }*/
-
-
     //Getter for the total number of nodes in the grid
     public int GetMaxGridSize
     {

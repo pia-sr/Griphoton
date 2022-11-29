@@ -1,3 +1,11 @@
+/*
+ * HintCards.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +20,8 @@ public class HintCards : MonoBehaviour
 
     public GameObject message;
     public Text keyCount;
+
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -37,9 +47,11 @@ public class HintCards : MonoBehaviour
             keyCount.text = _data.hintKeys.ToString();
         }
     }
-    //Function of the next button in the monster overview to go to the next monster
+
+    //Function of the next button in the hint cards to go to the next hint card
     public void Next()
     {
+        //if the user has enough keys or has already unlocked the hint card, they can move on to the next hint card
         if(_clickIndex < _data.usedKeys[puzzleIndex])
         {
             this.transform.GetChild(0).GetChild(0).GetChild(_clickIndex).gameObject.SetActive(false);
@@ -67,7 +79,8 @@ public class HintCards : MonoBehaviour
         _clickIndex--;
         this.transform.GetChild(0).GetChild(0).GetChild(_clickIndex).gameObject.SetActive(true);
     }
-
+    
+    //function for the yes button, to unlock the next hint card
     public void Yes()
     {
         message.SetActive(false);
@@ -78,11 +91,13 @@ public class HintCards : MonoBehaviour
         RemoveLock();
     }
 
+    //function to close the message 
     public void No()
     {
         message.SetActive(false);
     }
 
+    //function to remove the lock on the next button
     private void RemoveLock()
     {
         int index = this.transform.GetChild(0).GetChild(0).GetChild(_clickIndex).childCount - 1;
@@ -90,6 +105,7 @@ public class HintCards : MonoBehaviour
 
     }
 
+    //Function to close the ad message
     public void CloseAdMessage()
     {
         adMessage.SetActive(false);

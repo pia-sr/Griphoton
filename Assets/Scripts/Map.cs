@@ -1,3 +1,11 @@
+/*
+ * Map.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,19 +14,22 @@ using UnityEngine.UI;
 
 public class Map : MonoBehaviour
 {
-
+    //public field objects
     public GridField grid;
+    public GameObject hat;
+    public GameObject house;
     public GameObject tileManager;
+    public GameObject houseManager;
+    public GameObject canvas;
+
+    //public variables to communicate with other scripts
     private Game _data;
     public GameObject player;
-    public GameObject house;
-    public GameObject houseManager;
-    public GameObject hat;
-    public GameObject canvas;
+
+    //variables for the mapp
     private GameObject playerHat;
     public Camera camera;
     public bool update;
-
 
     //On awke the player looks for the game data
     private void Awake()
@@ -26,14 +37,11 @@ public class Map : MonoBehaviour
         _data = GameObject.Find("GameData").GetComponent<Game>();
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
 
     // Update is called once per frame
     void Update()
     {
+        //if there is no icon for the player, one is created
         if(playerHat == null && player.gameObject.activeSelf)
         {
             drawMap();
@@ -47,6 +55,7 @@ public class Map : MonoBehaviour
         }
     }
 
+    //Function to draw the map with every house the player has visited to far
     public void drawMap()
     {
         house.transform.localScale = new Vector3(grid.nodeRadius * 8, grid.nodeRadius * 8, 0);
@@ -72,24 +81,7 @@ public class Map : MonoBehaviour
     }
 
 
-    private int getHouseNumber(string tag)
-    {
-        int counter = 0;
-        for(int i = 0; i < houseManager.transform.childCount; i++)
-        {
-            if(houseManager.transform.GetChild(i).name == tag)
-            {
-                break;
-            }
-            else
-            {
-                counter++;
-            }
-        }
-        return counter;
-    }
-
-
+    //Function to add a new house position to the map
     public void AddTag(int x, int y, string tag)
     {
         Node node = grid.grid[x, y];
@@ -99,30 +91,12 @@ public class Map : MonoBehaviour
         newHouse.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().text = tag;
     }
 
+    //If a house is solved, it is crossed out on the map
     public void SetSolvedTag(string tag)
     {
         GameObject solvedHouse = GameObject.Find(tag + "Map");
         solvedHouse.transform.GetChild(0).GetChild(0).GetComponent<TMP_Text>().fontStyle = FontStyles.Strikethrough;
 
-    }
-
-    private bool TouchNeigbourText(GameObject text)
-    {
-        if(canvas.transform.childCount > 1)
-        {
-            for(int i = 0; i < canvas.transform.childCount-1; i++)
-            {
-                Rect rectN = new Rect(canvas.transform.GetChild(i).transform.position.x - 40, canvas.transform.GetChild(i).transform.position.y - 10, 80, 20);
-                Rect rectT = new Rect(text.transform.position.x - 40, text.transform.position.y - 10, 80, 20);
-                if (rectN.Contains(rectT.min) || rectN.Contains(rectT.max))
-                {
-                    return true;
-                }
-            
-            }
-
-        }
-        return false;
     }
 
 }

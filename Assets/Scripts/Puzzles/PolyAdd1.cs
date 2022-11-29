@@ -1,3 +1,11 @@
+/*
+ * PolyAdd1.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -59,14 +67,11 @@ public class PolyAdd1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetMouseButton(0))
         if (Input.touchCount > 0 && !tutorial.inactive)
         {
-
-            //Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             Touch touch = Input.GetTouch(0);
             Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-            //if (Input.GetMouseButtonDown(0))
+
             if (touch.phase == TouchPhase.Began)
             {
                 if (!_selected)
@@ -74,6 +79,8 @@ public class PolyAdd1 : MonoBehaviour
                     foreach (GameObject shape in shapes)
                     {
                         var bounds = shape.GetComponent<SpriteRenderer>().bounds;
+
+                        //selects the chosen shape
                         if (bounds.Contains(touchPosition))
                         {
                             _selected = true;
@@ -84,9 +91,9 @@ public class PolyAdd1 : MonoBehaviour
 
                     }
                 }
-
                 else
                 {
+                    //unselects the chosen shape
                     if(EventSystem.current.currentSelectedGameObject == null)
                     {
                         _selected = false;
@@ -98,10 +105,8 @@ public class PolyAdd1 : MonoBehaviour
                 }
 
             }
-
-
-
         }
+
         if (CheckWin() && !tutorial.inactive)
         {
             tutorial.inactive = true;
@@ -169,6 +174,7 @@ public class PolyAdd1 : MonoBehaviour
         messageExit.SetActive(false);
     }
     
+    //Function to get the nodes of the shapes 
     private void GetNodes()
     {
         _selectedNodesLeft = new List<Node>();
@@ -182,6 +188,8 @@ public class PolyAdd1 : MonoBehaviour
                 Vector2 pos = shape.transform.TransformPoint(point);
                 Node node = grid.GetNodeFromWorldPos(pos);
                 grid.GetNodeFromWorldPos(pos).onTop = shape.name;
+
+                //the shapes are divided into to lists, left and right
                 if (node.onTop.Contains("L"))
                 {
                     if (!_selectedNodesLeft.Contains(node))
@@ -204,6 +212,7 @@ public class PolyAdd1 : MonoBehaviour
         
     }
 
+    //Boolean to check if the two final shapes are identical
     private bool SameShape()
     {
         SortList(_selectedNodesLeft);
@@ -227,6 +236,7 @@ public class PolyAdd1 : MonoBehaviour
         return true;
     }
 
+    //Sets the initial shape positions
     private void ShapePos()
     {
         int counter = 0;
@@ -237,14 +247,12 @@ public class PolyAdd1 : MonoBehaviour
             if (shape.name.Contains("L"))
             {
 
-                //shape.transform.position = grid.grid[(1+counter * 2 + (int)(counter / 2)), 10].worldPosition;
                 shape.transform.position = grid.grid[(1+counter * 3), 10].worldPosition;
 
             }
             else
             {
 
-                //shape.transform.position = grid.grid[(2+counter * 3 - (int)(counter / 2)), 10].worldPosition;
                 shape.transform.position = grid.grid[(1+counter * 3), 10].worldPosition;
             }
             
@@ -252,6 +260,7 @@ public class PolyAdd1 : MonoBehaviour
         }
     }
 
+    //Function to move the selected shape down
     public void ButtonDown()
     {
         if (_selected)
@@ -265,6 +274,8 @@ public class PolyAdd1 : MonoBehaviour
             }
         }
     }
+
+    //Function to move the selected shape up
     public void ButtonUp()
     {
         if (_selected)
@@ -278,6 +289,9 @@ public class PolyAdd1 : MonoBehaviour
             }
         }
     }
+
+    //Function to move the selected shape to the left
+    //Shapes on the left must stay on the left side and shapes on the right must stay on the right side
     public void ButtonLeft()
     {
         if (_selected)
@@ -304,6 +318,9 @@ public class PolyAdd1 : MonoBehaviour
             }
         }
     }
+
+    //Function to move the selected shape to the right
+    //Shapes on the left must stay on the left side and shapes on the right must stay on the right side
     public void ButtonRight()
     {
         if (_selected)
@@ -331,6 +348,7 @@ public class PolyAdd1 : MonoBehaviour
         }
     }
 
+    //Function to rotate the selected shape
     public void ButtonRotate()
     {
         if (_selected)
@@ -346,6 +364,7 @@ public class PolyAdd1 : MonoBehaviour
         
     }
 
+    //Function to mirror the selected shape
     public void ButtonMirror()
     {
         if (_selected)
@@ -359,6 +378,7 @@ public class PolyAdd1 : MonoBehaviour
         
     }
 
+    //Function to sort out the list of nodes
     private void SortList(List<Node> list)
     {
         for(int i = 0; i < list.Count; i++)

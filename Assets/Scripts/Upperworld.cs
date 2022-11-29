@@ -1,3 +1,11 @@
+/*
+ * Upperworld.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -374,6 +382,7 @@ public class Upperworld : MonoBehaviour
         return false;
     }
 
+    //Boolean to check if the given node is close to a house
     private bool TreeNext2House(Node node)
     {
         if(node.gridX > 0 && node.gridX < grid.GetGridSizeX() -1 && (grid.grid[node.gridX+1,node.gridY].onTop == "House" || grid.grid[node.gridX - 1, node.gridY].onTop == "House"))

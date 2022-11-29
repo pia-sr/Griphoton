@@ -1,3 +1,11 @@
+/*
+ * Spikes.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +29,7 @@ public class Spikes : MonoBehaviour
         _corountineStart = false;
         _grid = GameObject.Find("Background").GetComponent<GridField>();
         _player = GameObject.Find("Player").GetComponent<Player>();
-        _hitValue = 7.5f * (int.Parse(this.transform.parent.parent.tag) - 1);
+        _hitValue = 5f * (int.Parse(this.transform.parent.parent.tag) - 1);
     }
 
     // Update is called once per frame

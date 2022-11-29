@@ -1,3 +1,11 @@
+/*
+ * CannibalsMissionaries2.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System;
 using System.Collections;
 using System.Collections.Generic;

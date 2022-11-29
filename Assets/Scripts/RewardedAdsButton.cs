@@ -69,7 +69,6 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsListener
             Debug.LogWarning("The ad did not finish due to an error.");
         }
     }
-
     public void OnUnityAdsDidError(string message)
     {
         // Log the error.
@@ -79,4 +78,5 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsListener
     {
         // Optional actions to take when the end-users triggers an ad.
     }
+
 }

@@ -1,3 +1,11 @@
+/*
+ * Skeleton1.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -247,7 +255,7 @@ public class Skeleton1 : MonoBehaviour
         currentNode.SetItemOnTop("Enemy");
     }
 
-
+    //Function to leave a hint after being destroyed
     private void Hint()
     {
         int rand = Random.Range(0, 3);

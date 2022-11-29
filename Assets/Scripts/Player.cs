@@ -1,3 +1,11 @@
+/*
+ * Player.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -580,6 +588,7 @@ public class Player : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
         _coroutineStart = false;
         _targetNode = null;
         _ready2Go = true;
@@ -595,17 +604,20 @@ public class Player : MonoBehaviour
         Application.Quit();
     }
 
+    //Function to make the player not visiable 
     public void PlayerInvisiable()
     {
         this.GetComponent<SpriteRenderer>().enabled = false;
         Pause();
     }
 
+    //Function to make the player visiable
     public void PlayerVisiable()
     {
         this.GetComponent<SpriteRenderer>().enabled = true;
     }
 
+    //Boolean to check if the player is visiable
     public bool isInvisiable()
     {
         if(this.GetComponent<SpriteRenderer>().enabled == true)
@@ -615,13 +627,14 @@ public class Player : MonoBehaviour
         return true;
     }
 
+    //FUnction to switch the camera
     public void SwitchCams()
     {
         playerCam.SetActive(!playerCam.activeSelf);
         centerCam.SetActive(!centerCam.activeSelf);
     }
 
-
+    //List of sentences the ghosts can say after a user has finished a puzzle
     public List<string> WonSentences()
     {
 
@@ -632,8 +645,8 @@ public class Player : MonoBehaviour
             "Goodbye, " + _data.namePlayer + ".\nGood luck with the dungeon!",
             "Brilliant! \nI knew you could help me.",
             "Now I can finally pass on. \nThank you, " + _data.namePlayer + "!",
-            "You did it! \nI cound not have done it without you",
-            "Oh, so that is how you solve it. \nThanks" + _data.namePlayer + "!",
+            "You did it! \nI cound not have done it without you.",
+            "Oh, so that is how you solve it. \nThanks " + _data.namePlayer + "!",
 
         };
 
@@ -641,6 +654,7 @@ public class Player : MonoBehaviour
 
     }
 
+    //Function to heal the player after a certain amount of time
     IEnumerator SelfHeal()
     {
         yield return new WaitForSeconds(4);
@@ -657,31 +671,11 @@ public class Player : MonoBehaviour
 
     }
 
+    //If the user chooses to stay
     public void Stay()
     {
 
         message2Options.transform.parent.parent.gameObject.SetActive(false);
         Unpause();
-    }
-
-    private void OnApplicationFocus(bool focus)
-    {
-        if (upperWorld)
-        {
-            _data.xPos = grid.GetNodeFromWorldPos(transform.position).gridX;
-            _data.yPos = grid.GetNodeFromWorldPos(transform.position).gridY;
-
-        }
-        _data.SaveGame();
-    }
-    private void OnApplicationPause(bool pause)
-    {
-        if (upperWorld)
-        {
-            _data.xPos = grid.GetNodeFromWorldPos(transform.position).gridX;
-            _data.yPos = grid.GetNodeFromWorldPos(transform.position).gridY;
-
-        }
-        _data.SaveGame();
     }
 }

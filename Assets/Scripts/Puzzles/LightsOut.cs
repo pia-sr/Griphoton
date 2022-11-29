@@ -1,17 +1,30 @@
+/*
+ * LightsOut.cs
+ * 
+ * Author: Pia Schroeter
+ * 
+ * Copyright (c) 2022 Pia Schroeter
+ * All rights reserved
+ */
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class LightsOut : MonoBehaviour
 {
+    //public field objects
     public GridField grid;
+    public GameObject book;
+    public GameObject bookManager;
+
+    //Arrays for the books which determine the start state of each book
     public int[] lightsRow1 = new int[5];
     public int[] lightsRow2 = new int[5];
     public int[] lightsRow3 = new int[5];
     public int[] lightsRow4 = new int[5];
     public int[] lightsRow5 = new int[5];
-    public GameObject book;
-    public GameObject bookManager;
+
+    //UI
     public GameObject message;
 
     //public variables to communicate with other scripts
@@ -19,8 +32,10 @@ public class LightsOut : MonoBehaviour
     public GameObject player;
     public LightsOutTutorial tutorial;
 
+    //private 2D arrays for the current and start states of the books
     private int[,] originalLights;
     private int[,] currentLights;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -57,53 +72,14 @@ public class LightsOut : MonoBehaviour
         
     }
 
-    //Function to create a rectagle on top of a given object to set rectangular boundaries for that object
-    private Rect Node2Rect(Vector2 nodePos)
-    {
-        Rect rect = new Rect(nodePos.x - grid.nodeRadius, nodePos.y - grid.nodeRadius, grid.nodeRadius * 2f, grid.nodeRadius * 2);
-        return rect;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-        if (Input.touchCount > 0 && !tutorial.inactive)
-        {
-            foreach (Node node in grid.grid)
-            {
-                Touch touch = Input.GetTouch(0);
-                Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
-                Rect rect = Node2Rect(node.worldPosition);
-                
-                if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
-                {
-                    ChangeLight(node);
-                    foreach(Node neighbour in grid.GetNodeNeighbours(node))
-                    {
-                        ChangeLight(neighbour);
-                    }
-
-
-
-                }
-
-            }
-            if (CheckWin() && !tutorial.inactive)
-            {
-                tutorial.inactive = true;
-                tutorial.WonPuzzle();
-            }
-
-        }
-    }
+    //Sets up the books to their start state
     private void SetUp()
     {
         currentLights = new int[5, 5];
         int counter = 0;
-        foreach(Node node in grid.grid)
+        foreach (Node node in grid.grid)
         {
-            if(originalLights[node.gridX, node.gridY] == 1)
+            if (originalLights[node.gridX, node.gridY] == 1)
             {
                 currentLights[node.gridX, node.gridY] = 1;
                 node.selected = true;
@@ -118,7 +94,49 @@ public class LightsOut : MonoBehaviour
             counter++;
         }
     }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //waits for user's touch to select a book
+        if (Input.touchCount > 0 && !tutorial.inactive)
+        {
+            foreach (Node node in grid.grid)
+            {
+                Touch touch = Input.GetTouch(0);
+                Vector2 touchPosition = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                Rect rect = Node2Rect(node.worldPosition);
+                
+                if (rect.Contains(touchPosition) && touch.phase == TouchPhase.Began)
+                {
+                    //the selected book and its neighbours will either be open or close depending on their previous state
+                    ChangeLight(node);
+                    foreach(Node neighbour in grid.GetNodeNeighbours(node))
+                    {
+                        ChangeLight(neighbour);
+                    }
+
+                }
+            }
+
+            if (CheckWin() && !tutorial.inactive)
+            {
+                tutorial.inactive = true;
+                tutorial.WonPuzzle();
+            }
+
+        }
+    }
     
+    
+    //Function to create a rectagle on top of a given object to set rectangular boundaries for that object
+    private Rect Node2Rect(Vector2 nodePos)
+    {
+        Rect rect = new Rect(nodePos.x - grid.nodeRadius, nodePos.y - grid.nodeRadius, grid.nodeRadius * 2f, grid.nodeRadius * 2);
+        return rect;
+    }
+
+    //Function to check if the player has solved the puzzle
     private bool CheckWin()
     {
         foreach(int light in currentLights)
@@ -130,6 +148,8 @@ public class LightsOut : MonoBehaviour
         }
         return true;
     }
+
+    //Function to change the state of the selected book to either open or closed
     private void ChangeLight(Node node)
     {
         int bookIndex = 5 * node.gridX + node.gridY;
@@ -147,6 +167,7 @@ public class LightsOut : MonoBehaviour
         }
     }
 
+    //Function of the restart button which sets the puzzle to its start state
     public void Restart()
     {
         if (!tutorial.inactive)

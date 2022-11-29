@@ -17,6 +17,7 @@ public class Key : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //the key is deleted when the player collects it
         if (GetComponent<SpriteRenderer>().bounds.Contains(player.transform.position))
         {
             Destroy(this.gameObject);
