@@ -87,7 +87,7 @@ public class Player : MonoBehaviour
         else
         {
             transform.position = grid.grid[_data.xPos, _data.yPos].worldPosition;
-            _speed = 2.75f;
+            _speed = 2.85f;
             
         }
         _xInput = 0;
