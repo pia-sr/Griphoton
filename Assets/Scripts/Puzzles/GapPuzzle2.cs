@@ -125,6 +125,13 @@ public class GapPuzzle2 : MonoBehaviour
             {
                 if (grid.grid[i, j].selected)
                 {
+                    foreach (Node neighbour in grid.GetNodeNeighboursDiagonal(grid.grid[i, j]))
+                    {
+                        if (neighbour.selected)
+                        {
+                            return false;
+                        }
+                    }
                     counter++;
                     selected.Add(grid.grid[i, j]);
                 }
@@ -149,6 +156,13 @@ public class GapPuzzle2 : MonoBehaviour
             {
                 if (grid.grid[j, i].selected)
                 {
+                    foreach (Node neighbour in grid.GetNodeNeighboursDiagonal(grid.grid[j, i]))
+                    {
+                        if (neighbour.selected)
+                        {
+                            return false;
+                        }
+                    }
                     counter++;
                     selected.Add(grid.grid[j, i]);
                 }
