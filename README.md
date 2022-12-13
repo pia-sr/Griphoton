@@ -50,7 +50,7 @@ The player can use a map to orientate themself. The map will initially be empty 
    <img src="https://github.com/pia-sr/Griphoton/blob/main/Pictures_Git/photo_2022-12-13_17-00-42.jpg" width=33% height=33%/>
 <p/>
 
-There are 15 different puzzle types. Except for two, every puzzle type appears twice. The zebra puzzle only appears once, and the replacement puzzle appears three times. Most of the puzzles came from [Erich Friedman's Website](https://erich-friedman.github.io/puzzle/). The others are either personal implementations of known puzzles (e.g. river crossing puzzles) or came from other websites (check out the credits in the game for more information).
+There are 15 different puzzle types. Except for two, every puzzle type appears twice. The zebra puzzle only appears once, and the replacement puzzle appears three times. Most of the puzzles came from [Erich Friedman's Website](https://erich-friedman.github.io/puzzle/). The others are either personal implementations of known puzzles (e.g. river crossing puzzles) or came from other websites ([Matchstick Puzzles](https://matchstickpuzzles.net), [Water Pouring Puzzle](http://brainden.com/weighing-puzzles.htm), [LightsOut Puzzle](https://logicgamesonline.com/lightsout/) and [Zebra Puzzle](https://www.sporcle.com/games/PatentExaminer/zebraclick-3x5-10?playlist=zebra-puzzles&creator=PatentExaminer&pid=pn81e42e5)).
 
 ## The Dungeon
 <p align="center">
