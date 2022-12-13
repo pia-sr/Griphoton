@@ -1,11 +1,12 @@
 # Griphoton
 *by Pia Schroeter*
 
-**The game started out as university project for the course Games Programming (2. Semester 2022)**
+**The game started out as an university project for the course Games Programming (2. Semester 2022)**
 
-The game was published on the Google Play Store: https://play.google.com/store/apps/details?id=com.hexagonpuzzles.griphoton
-
-*In this game, the player ends up in a parallel world called Griphoton and has to fight monsters in dungeon levels to return to the player's world. The player has to solve puzzles given by ghosts living in Griphoton to get more vital for the dungeon. The game is a 2D mobile game, and the player walks around the world to find houses with ghosts and their puzzles.*
+The game was published on the Google Play Store: https://play.google.com/store/apps/details?id=com.hexagonpuzzles.griphoton  
+   
+## Premise
+*In this game, the player ends up in a parallel world called Griphoton and has to fight monsters in dungeon levels to return to the player's world. The player has to solve puzzles given by ghosts living in Griphoton to get stronger for the dungeon. The game is a 2D mobile game, and the player walks around the world to find houses with ghosts and their puzzles.*
 
 ## Griphoton - The World  
 
@@ -30,12 +31,12 @@ Every house is connected to another random house via a path, and the player can 
 The player can use a map to orientate themself. The map will initially be empty except for the dungeon house and the player. Whenever the player enters a house for the first time, the house will (magically) appear on the map. The house will be crossed out on the map when the player solves a puzzle.
 
 ## The Puzzles
-There are 15 different puzzle types. Except for two, every puzzle type appears twice. The zebra puzzle only appears once, and the replacement puzzle appears three times. Most of the puzzles came from [Erich Friedman's Website](https://erich-friedman.github.io/puzzle/). The others are either personal implementations of know puzzles (e.g. river crossing puzzles) or came from other websites (check out the credits in the game for more information).
+There are 15 different puzzle types. Except for two, every puzzle type appears twice. The zebra puzzle only appears once, and the replacement puzzle appears three times. Most of the puzzles came from [Erich Friedman's Website](https://erich-friedman.github.io/puzzle/). The others are either personal implementations of known puzzles (e.g. river crossing puzzles) or came from other websites (check out the credits in the game for more information).
 
 ## The Dungeon
 
 ### The Levels
-There are a total of 20 levels. Every level consists of a room with at least one monster and sometimes some spikes which are coming from the ground. Once the player has defeated all the monsters, they can enter the next room. The last room contains all the monsters and a portal through which the player can return home. When the player reaches the portal, they can end the game and return home. If the player has not solved all the puzzles, they can choose to stay and solve them first. 
+There are a total of 20 levels. Every level consists of a room with at least one monster and sometimes some spikes which are coming from the ground. Once the player has defeated all the monsters, they can enter the next room. The last room contains all the monsters and a portal through which the player can return home. When the player reaches the portal, they can end the game and return home. If the player still needs to solve some puzzles, they can choose to stay and solve them first.
 
 ### The Monsters
 There are five different types of monsters, and every monster has its own pattern. The "Reaper of the Unsolvable" is only in the last level and protects the portal. The other four monsters appear multiple times in the dungeons, depending on the level's difficulty.
