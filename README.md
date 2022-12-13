@@ -11,7 +11,7 @@ The game was published on the Google Play Store: https://play.google.com/store/a
 ## Griphoton - The World  
    
 <p align="center">
-   <img src="https://github.com/pia-sr/Griphoton/blob/main/Pictures_Git/photo_2022-12-08_10-42-59.jpg" width=65% height=65%/>
+   <img src="https://github.com/pia-sr/Griphoton/blob/main/Pictures_Git/photo_2022-12-13_14-34-55.jpg" width=50% height=50%/>
 <p/>
 
 <p align="center">
@@ -45,15 +45,16 @@ The player can use a map to orientate themself. The map will initially be empty 
 
 ## The Puzzles
 <p align="center">
-   <img src="https://github.com/pia-sr/Griphoton/blob/main/Pictures_Git/photo_2022-12-08_11-15-51.jpg" width=49% height=49%>
-   <img src="https://github.com/pia-sr/Griphoton/blob/main/Pictures_Git/photo_2022-12-08_11-15-55.jpg" width=49% height=49%/>
+   <img src="https://github.com/pia-sr/Griphoton/blob/main/Pictures_Git/photo_2022-12-08_11-15-51.jpg" width=33% height=33%>
+   <img src="https://github.com/pia-sr/Griphoton/blob/main/Pictures_Git/photo_2022-12-08_11-15-55.jpg" width=33% height=33%>
+   <img src="https://github.com/pia-sr/Griphoton/blob/main/Pictures_Git/photo_2022-12-13_17-00-42.jpg" width=33% height=33%/>
 <p/>
 
 There are 15 different puzzle types. Except for two, every puzzle type appears twice. The zebra puzzle only appears once, and the replacement puzzle appears three times. Most of the puzzles came from [Erich Friedman's Website](https://erich-friedman.github.io/puzzle/). The others are either personal implementations of known puzzles (e.g. river crossing puzzles) or came from other websites (check out the credits in the game for more information).
 
 ## The Dungeon
 <p align="center">
-   <img src="https://github.com/pia-sr/Griphoton/blob/main/Pictures_Git/photo_2022-12-08_11-16-09.jpg" width=65% height=65%/>
+   <img src="https://github.com/pia-sr/Griphoton/blob/main/Pictures_Git/photo_2022-12-13_17-00-27.jpg" width=65% height=65%/>
 <p/>
 
 ### The Levels
