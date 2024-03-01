@@ -70,4 +70,7 @@ There are a total of 20 levels. Every level consists of a room with at least one
 <p/>
 There are five different types of monsters, and every monster has its own pattern. The "Reaper of the Unsolvable" is only in the last level and protects the portal. The other four monsters appear multiple times in the dungeons, depending on the level's difficulty.
 
+### Missing Assets
+Some assets are missing in this repository because they were paid for. Every asset except for [the player](https://noiracide.itch.io/df-characterspart2) and [the GUI](https://teamhumbleshop.itch.io/super-gui-bundle-1-wood-pack) is included.
+
  
